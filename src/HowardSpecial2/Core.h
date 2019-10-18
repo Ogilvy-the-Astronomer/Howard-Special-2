@@ -1,0 +1,6 @@
+struct Core {
+private:
+
+
+
+};
