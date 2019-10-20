@@ -5,3 +5,7 @@
 TestComp::TestComp() {
 	std::cout << "Hello World" << std::endl;
 }
+
+TestComp::OnUpdate(){
+
+}
