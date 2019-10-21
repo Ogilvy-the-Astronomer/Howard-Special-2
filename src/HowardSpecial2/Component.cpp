@@ -1,11 +1,10 @@
-#include "Component.h"
 #include <iostream>
+#include "Component.h"
 
-
-TestComp::TestComp() {
-	std::cout << "Hello World" << std::endl;
+void Component::OnUpdate()
+{
 }
 
-TestComp::OnUpdate(){
-
+void Component::OnRender()
+{
 }

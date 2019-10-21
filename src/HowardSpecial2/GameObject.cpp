@@ -1,8 +1,20 @@
 #include "GameObject.h"
 
+GameObject::GameObject()
+{
+}
+
+GameObject::~GameObject()
+{
+}
+
 void GameObject::Update(){
-	for(std::list<Component>::iterator it=components.begin(); it != components.end(); ++it)
+	for(int i = 0; i < (int)components.size(); i++)
 	{
-		*it.OnUpdate();
+		components.at(i)->OnUpdate();
 	}
+}
+
+void GameObject::Render()
+{
 }

@@ -1,7 +1,8 @@
+#include<memory>
+#include<vector>
+
 #include"Component.h"
 
-#include<memory>
-#include<list>
 
 struct GameObject {
 	GameObject();
@@ -13,7 +14,7 @@ struct GameObject {
 	void Render();
 	uint32_t id;
 
-	std::list < std::shared_ptr<Component>> components;
+	std::vector < std::shared_ptr<Component>> components;
 };
 
 template<class T>
