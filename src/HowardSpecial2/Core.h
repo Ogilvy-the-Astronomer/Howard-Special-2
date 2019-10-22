@@ -1,5 +1,7 @@
 #include<gl/glew.h>
 #include<SDL2/SDL.h>
+#include<vector>
+#include "GameObject.h"
 
 struct NonCopyable {
 protected:
@@ -13,11 +15,11 @@ private:
 
 struct Core : private NonCopyable {
 	Core();
-	~Core();
 	SDL_Window *window;
 	int window_h;
 	int window_w;
-private:
+	std::vector<std::shared_ptr<GameObject>> gameObjects;
+	std::shared_ptr<GameObject> AddObject();
 	void Start();
 	void Stop();
 };

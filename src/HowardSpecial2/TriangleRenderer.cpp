@@ -12,7 +12,9 @@ TriangleRenderer::TriangleRenderer() {
 	// Upload a copy of the data from memory into the new VBO
 	glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
 	// Reset the state
-	glBindBuffer(GL_ARRAY_BUFFER, 0);	GLuint vaoId = 0;
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	GLuint vaoId = 0;
 	// Create a new VAO on the GPU and bind it
 	glGenVertexArrays(1, &vaoId);
 	if (!vaoId)
@@ -28,6 +30,8 @@ TriangleRenderer::TriangleRenderer() {
 	glEnableVertexAttribArray(0);
 	// Reset the state
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+	glBindVertexArray(0);
+
+
 
 }

@@ -1,6 +1,16 @@
 #include "Core.h"
 #include<exception>
 
+Core::Core()
+{
+}
+
+std::shared_ptr<GameObject> Core::AddObject(){
+	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>();
+	gameObjects.push_back(gameObject);
+	return gameObject;
+}
+
 void Core::Start() {
 	window_h = 300;
 	window_w = 300;
@@ -12,9 +22,14 @@ void Core::Start() {
 	if (glewInit() != GLEW_OK) {
 		throw std::exception();
 	}
+
+	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	SDL_GL_SwapWindow(window);
 }
 
 void Core::Stop() {
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
+
