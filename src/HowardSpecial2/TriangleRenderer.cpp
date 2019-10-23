@@ -1,7 +1,8 @@
 #include "TriangleRenderer.h"
+#include "SDL2/SDL.h"
 
 TriangleRenderer::TriangleRenderer() {
-	GLuint positionsVboId = 0;
+	positionsVboId = 0;
 	// Create a new VBO on the GPU and bind it
 	glGenBuffers(1, &positionsVboId);
 	if (!positionsVboId)
@@ -14,7 +15,7 @@ TriangleRenderer::TriangleRenderer() {
 	// Reset the state
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	GLuint vaoId = 0;
+	vaoId = 0;
 	// Create a new VAO on the GPU and bind it
 	glGenVertexArrays(1, &vaoId);
 	if (!vaoId)
@@ -34,4 +35,19 @@ TriangleRenderer::TriangleRenderer() {
 
 
 
+}
+
+void TriangleRenderer::OnUpdate(){
+	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glUseProgram(shader.programId);
+	glBindVertexArray(vaoId);
+
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	glBindVertexArray(0);
+	glUseProgram(0);
+
+	SDL_GL_SwapWindow(window);
 }

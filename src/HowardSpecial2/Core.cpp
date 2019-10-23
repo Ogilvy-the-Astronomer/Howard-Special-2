@@ -22,14 +22,16 @@ void Core::Start() {
 	if (glewInit() != GLEW_OK) {
 		throw std::exception();
 	}
-
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-	SDL_GL_SwapWindow(window);
 }
 
 void Core::Stop() {
 	SDL_DestroyWindow(window);
 	SDL_Quit();
+}
+
+void Core::Update(){
+	for (int i = 0; i < (int)gameObjects.size(); i++) {
+		gameObjects.at(i)->Update();
+	}
 }
 

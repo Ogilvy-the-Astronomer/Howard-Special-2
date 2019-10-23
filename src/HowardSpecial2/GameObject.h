@@ -12,8 +12,8 @@ struct GameObject {
 	std::shared_ptr<T> AddComponent();
 	void Update();
 	void Render();
-	uint32_t id;
 
+	uint32_t id;
 	std::vector < std::shared_ptr<Component>> components;
 };
 

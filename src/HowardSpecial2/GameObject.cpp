@@ -9,8 +9,7 @@ GameObject::~GameObject()
 }
 
 void GameObject::Update(){
-	for(int i = 0; i < (int)components.size(); i++)
-	{
+	for(int i = 0; i < (int)components.size(); i++){
 		components.at(i)->OnUpdate();
 	}
 }

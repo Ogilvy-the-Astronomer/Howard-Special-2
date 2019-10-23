@@ -22,4 +22,5 @@ struct Core : private NonCopyable {
 	std::shared_ptr<GameObject> AddObject();
 	void Start();
 	void Stop();
+	void Update();
 };
