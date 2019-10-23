@@ -1,30 +1,42 @@
-#include <GL/glew.h>
+#pragma once
+#include<string>
+#include<GL\glew.h>
+#include<glm\glm.hpp>
+#include<vector>
+#include<memory>
+#include<fstream>
 
-struct ShaderProgram {
-	GLuint vertexShaderId;
-	GLuint fragmentShaderId;
-	GLuint programId;
-	const GLchar *vertexShaderSrc =
-		"attribute vec3 in_Position;" \
-		"attribute vec4 in_Color;" \
-		"" \
-		"varying vec4 ex_Color;" \
-		"" \
-		"void main()" \
-		"{" \
-		" gl_Position = vec4(in_Position, 1.0);" \
-		" ex_Color = in_Color;" \
-		"}" \
-		"";
+class Texture;
+class VertexArray;
+class RenderTexture;
 
-	const GLchar *fragmentShaderSrc =
-		"varying vec4 ex_Color;" \
-		"void main()" \
-		"{" \
-		" gl_FragColor = ex_Color;" \
-		"}" \
-		"";
+struct Sampler
+{
+	GLint id;
+	std::shared_ptr <Texture> texture;
+};
+
+class ShaderProgram
+{
+private:
+	GLuint id;
+	std::vector<Sampler> samplers;
+public:
 	ShaderProgram();
+	ShaderProgram(std::string vert, std::string frag);
+	~ShaderProgram();
+	void Draw(std::shared_ptr<VertexArray> vertextArray);
+	void SetUniform(std::string uniform, std::shared_ptr<Texture> texture);
+	//void SetUniform(std::string uniform, std::shared_ptr<RenderTexture> texture);
+	void SetUniform(std::string uniform, glm::vec4 value);
+	void SetUniform(std::string uniform, glm::vec3 value);
+	void SetUniform(std::string uniform, glm::mat4 value);
+	void SetUniform(std::string uniform, float value);
+	void SetUniform(std::string uniform, int value);
 	void printShaderInfoLog(GLuint obj);
 	void printProgramInfoLog(GLuint obj);
+	GLuint GetId();
+
+
 };
+
