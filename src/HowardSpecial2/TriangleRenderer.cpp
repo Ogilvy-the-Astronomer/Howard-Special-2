@@ -2,6 +2,17 @@
 #include "SDL2/SDL.h"
 
 TriangleRenderer::TriangleRenderer() {
+	/*
+	positions = std::make_shared<VertexBuffer>();
+	positions->add(glm::vec3(-0.5f, 0.5f, 0.0f));
+	positions->add(glm::vec3(-0.5f, -0.5f, 0.0f));
+	positions->add(glm::vec3(0.5f, -0.5f, 0.0f));
+
+	colours = std::make_shared<VertexBuffer>();
+	colours->add(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	colours->add(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+	colours->add(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+	*/
 	positionsVboId = 0;
 	// Create a new VBO on the GPU and bind it
 	glGenBuffers(1, &positionsVboId);
@@ -31,9 +42,25 @@ TriangleRenderer::TriangleRenderer() {
 	glEnableVertexAttribArray(0);
 	// Reset the state
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	colorsVboId = 0;
+	// Create a colors VBO on the GPU and bind it
+	glGenBuffers(1, &colorsVboId);
+	if (!colorsVboId)
+	{
+		throw std::exception();
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, colorsVboId);
+	// Upload a copy of the data from memory into the new VBO
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+	// Bind the color VBO, assign it to position 1 on the bound VAO
+	// and flag it to be used
+	glBindBuffer(GL_ARRAY_BUFFER, colorsVboId);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE,
+		4 * sizeof(GLfloat), (void *)0);
+	glEnableVertexAttribArray(1);
+
 	glBindVertexArray(0);
-
-
 
 }
 

@@ -12,6 +12,10 @@ add_library(HowardSpecial2
 	src/HowardSpecial2/TriangleRenderer.h
 	src/HowardSpecial2/ShaderProgram.cpp
 	src/HowardSpecial2/ShaderProgram.h
+	src/HowardSpecial2/VertexArray.cpp
+	src/HowardSpecial2/VertexArray.h
+	src/HowardSpecial2/VertexBuffer.cpp
+	src/HowardSpecial2/VertexBuffer.h
 )
 target_link_libraries(HowardSpecial2 SDL2 opengl32 glew32)
 
