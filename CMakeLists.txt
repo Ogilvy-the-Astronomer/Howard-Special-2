@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.6)
 project(HOWARDSPECIAL2)
 
+include_directories(src)
+
 add_library(HowardSpecial2
 	src/HowardSpecial2/GameObject.h
 	src/HowardSpecial2/GameObject.cpp
@@ -14,6 +16,11 @@ add_library(HowardSpecial2
 	src/HowardSpecial2/VertexArray.h
 	src/HowardSpecial2/VertexBuffer.cpp
 	src/HowardSpecial2/VertexBuffer.h
+	src/HowardSpecial2/HowardSpecial2.h
+	src/HowardSpecial2/Texture.h
+	src/HowardSpecial2/Texture.cpp
+	src/HowardSpecial2/stb_image.h
+	src/HowardSpecial2/stb_image.cpp
 )
 target_link_libraries(HowardSpecial2 SDL2 opengl32 glew32)
 

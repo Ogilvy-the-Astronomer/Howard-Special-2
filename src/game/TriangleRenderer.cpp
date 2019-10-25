@@ -3,6 +3,11 @@
 #include <glm/ext.hpp>
 
 TriangleRenderer::TriangleRenderer() {
+
+	texCoords = std::make_shared<VertexBuffer>();
+	texCoords->add(glm::vec2(0.5f, 0.0f));
+	texCoords->add(glm::vec2(0.0f, 1.0f));
+	texCoords->add(glm::vec2(1.0f, 1.0f));
 	
 	positions = std::make_shared<VertexBuffer>();
 	positions->add(glm::vec3(-0.5f, 0.5f, 0.0f));
@@ -17,6 +22,7 @@ TriangleRenderer::TriangleRenderer() {
 	shape = std::make_shared<VertexArray>();
 	shape->SetBuffer("in_Position", positions);
 	shape->SetBuffer("in_Color", colors);
+	shape->SetBuffer("in_TexCoord", texCoords);
 
 	angle = 0;
 }
@@ -29,6 +35,7 @@ void TriangleRenderer::OnUpdate(){
 	model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
 
 	shader->SetUniform("in_Model", model);
+	shader->SetUniform("in_Texture", tex);
 	shader->Draw(shape);
 
 	angle += 1.0f;
