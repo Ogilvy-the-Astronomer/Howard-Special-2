@@ -30,8 +30,11 @@ void Core::Stop() {
 }
 
 void Core::Update(){
+	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
 	for (int i = 0; i < (int)gameObjects.size(); i++) {
 		gameObjects.at(i)->Update();
 	}
+	SDL_GL_SwapWindow(window);
 }
 

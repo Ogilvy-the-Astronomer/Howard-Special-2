@@ -22,8 +22,6 @@ TriangleRenderer::TriangleRenderer() {
 }
 
 void TriangleRenderer::OnUpdate(){
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
 	shader->SetUniform("in_Projection", glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f));
 
 	glm::mat4 model(1.0f);
@@ -33,6 +31,6 @@ void TriangleRenderer::OnUpdate(){
 	shader->SetUniform("in_Model", model);
 	shader->Draw(shape);
 
-	angle += 0.1f;
-	SDL_GL_SwapWindow(window);
+	angle += 1.0f;
+
 }

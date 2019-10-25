@@ -15,8 +15,6 @@ struct TriangleRenderer : public Component{
 	std::shared_ptr<VertexBuffer> colors;
 	std::shared_ptr<VertexArray> shape;
 
-	SDL_Window *window;
-
 	float angle;
 
 };
