@@ -17,8 +17,15 @@ Core::Core()
 
 std::shared_ptr<GameObject> Core::AddObject(){
 	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>();
+	gameObject->core = self;
 	gameObjects.push_back(gameObject);
 	return gameObject;
+}
+
+std::shared_ptr<Core> Core::Initialize() {
+	std::shared_ptr<Core> rtn = std::make_shared<Core>();
+	rtn->self = rtn;
+	return rtn;
 }
 
 void Core::Start() {

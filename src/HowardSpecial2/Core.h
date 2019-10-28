@@ -23,4 +23,7 @@ struct Core : private NonCopyable {
 	void Start();
 	void Stop();
 	void Update();
+	std::shared_ptr<Core> Initialize();
+private:
+	std::weak_ptr<Core> self;
 };

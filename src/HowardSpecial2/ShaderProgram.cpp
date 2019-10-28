@@ -1,6 +1,6 @@
 #include "ShaderProgram.h"
 #include "VertexArray.h"
-//#include "Texture.h"
+#include "Texture.h"
 //#include "RenderTexture.h"
 
 
@@ -183,7 +183,7 @@ void ShaderProgram::Draw(std::shared_ptr<VertexArray> vertexArray)
 {
 	glUseProgram(id);
 	glBindVertexArray(vertexArray->GetId());
-	/*
+	
 	for (size_t i = 0; i < samplers.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
@@ -205,8 +205,7 @@ void ShaderProgram::Draw(std::shared_ptr<VertexArray> vertexArray)
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
-	*/
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	
 	glBindVertexArray(0);
 	glUseProgram(0);
 }
