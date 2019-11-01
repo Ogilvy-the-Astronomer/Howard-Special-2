@@ -21,6 +21,12 @@ add_library(HowardSpecial2
 	src/HowardSpecial2/Texture.cpp
 	src/HowardSpecial2/stb_image.h
 	src/HowardSpecial2/stb_image.cpp
+	src/HowardSpecial2/Transform.cpp
+	src/HowardSpecial2/Transform.h
+	src/HowardSpecial2/Renderer.cpp
+	src/HowardSpecial2/Renderer.h
+	src/HowardSpecial2/Camera.h
+	src/HowardSpecial2/Camera.cpp
 )
 target_link_libraries(HowardSpecial2 SDL2 opengl32 glew32)
 

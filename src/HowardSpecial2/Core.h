@@ -2,6 +2,7 @@
 #include<SDL2/SDL.h>
 #include<vector>
 #include "GameObject.h"
+#include "Camera.h"
 
 struct NonCopyable {
 protected:
@@ -18,11 +19,13 @@ struct Core : private NonCopyable {
 	SDL_Window *window;
 	int window_h;
 	int window_w;
+	std::shared_ptr<Camera> mainCamera;
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
 	std::shared_ptr<GameObject> AddObject();
 	void Start();
 	void Stop();
 	void Update();
+	void Display();
 	std::shared_ptr<Core> Initialize();
 private:
 	std::weak_ptr<Core> self;

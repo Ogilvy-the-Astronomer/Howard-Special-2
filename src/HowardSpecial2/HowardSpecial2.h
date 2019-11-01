@@ -7,3 +7,6 @@
 #include "VertexBuffer.h"
 #include "stb_image.h"
 #include "Texture.h"
+#include "Transform.h"
+#include "Camera.h"
+#include "Renderer.h"

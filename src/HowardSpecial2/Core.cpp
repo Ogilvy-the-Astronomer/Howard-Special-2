@@ -38,6 +38,13 @@ void Core::Stop() {
 }
 
 void Core::Update(){
+	for (int i = 0; i < (int)gameObjects.size(); i++) {
+		gameObjects.at(i)->Update();
+	}
+}
+
+void Core::Display(){
+	//TODO: Get component renderer, get camera
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	for (int i = 0; i < (int)gameObjects.size(); i++) {
