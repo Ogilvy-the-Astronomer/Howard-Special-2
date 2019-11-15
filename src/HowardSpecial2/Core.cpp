@@ -19,6 +19,7 @@ std::shared_ptr<GameObject> Core::AddObject(){
 	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>();
 	gameObject->core = self;
 	gameObjects.push_back(gameObject);
+	gameObject->self = gameObject;
 	return gameObject;
 }
 
@@ -44,9 +45,9 @@ void Core::Update(){
 }
 
 void Core::Display(){
-	//TODO: Get component renderer, get camera
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//TODO: Get component renderer, get camera
 	for (int i = 0; i < (int)gameObjects.size(); i++) {
 		gameObjects.at(i)->Update();
 	}

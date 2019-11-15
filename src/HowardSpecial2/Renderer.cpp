@@ -20,3 +20,12 @@ void Renderer::OnDisplay() {
 	shader->SetUniform("in_Texture", texture);
 	shader->Draw(shape);
 }
+
+void Renderer::OnUpdate(){
+	shader->SetUniform("in_Projection", glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f)); //TODO: Add camera projection
+	shader->SetUniform("in_Model", GetGameObject()->GetComponent<Transform>()->GetModel());
+	shader->SetUniform("in_Texture", texture);
+	shader->Draw(shape);
+
+	//SDL_GL_SwapWindow(window); //REMOVE
+}

@@ -5,16 +5,23 @@
 
 int main(){
 	std::shared_ptr<Core> core = core->Initialize();
-	std::shared_ptr<GameObject> cam = core->AddObject();
-	core->mainCamera = cam->AddComponent<Camera>();
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+
+	core->mainCamera = core->AddObject();
+	core->mainCamera->AddComponent<Camera>();
 
 	std::shared_ptr<GameObject> object = core->AddObject();
 	object->AddComponent<Transform>();
-	object->AddComponent<Renderer>("../src/game/textures/fighter.obj", "../src/game/textures/fighter.png");
+	object->AddComponent<Renderer>("../src/game/models/fighter.obj", "../src/game/textures/fighter.png");
+	//rend->window = core->window; //REMOVE
+
+	//std::shared_ptr<GameObject> triangle = core->AddObject();
 	//triangle->AddComponent<TriangleRenderer>();
 	
 	for (int i = 0; i < 1000; i++) {
 		core->Update();
+		core->Display();
 	}
 
 	core->Stop();
