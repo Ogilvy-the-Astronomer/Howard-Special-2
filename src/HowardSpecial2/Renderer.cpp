@@ -3,6 +3,8 @@
 #include <glm/ext.hpp>
 #include "GameObject.h"
 #include "Transform.h"
+#include "Camera.h"
+#include "Core.h"
 
 Renderer::Renderer() {
 
@@ -22,9 +24,11 @@ void Renderer::OnDisplay() {
 }
 
 void Renderer::OnUpdate(){
-	shader->SetUniform("in_Projection", glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f)); //TODO: Add camera projection
+	cam = GetCore()->mainCamera;
+	shader->SetUniform("in_Projection", cam.lock()->GetComponent<Camera>()->GetProjection()); //TODO: Add camera projection
 	shader->SetUniform("in_Model", GetGameObject()->GetComponent<Transform>()->GetModel());
 	shader->SetUniform("in_Texture", texture);
+	shader->SetUniform("in_View", cam.lock()->GetComponent<Camera>()->GetView());
 	shader->Draw(shape);
 
 	//SDL_GL_SwapWindow(window); //REMOVE

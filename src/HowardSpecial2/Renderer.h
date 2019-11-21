@@ -3,6 +3,8 @@
 #include "Component.h"
 #include "ShaderProgram.h"
 
+struct Camera;
+
 struct Renderer : public Component{
 	Renderer();
 	Renderer(std::string _shape, std::string _texture);
@@ -14,4 +16,6 @@ struct Renderer : public Component{
 private:
 	std::shared_ptr<VertexArray> shape;
 	std::shared_ptr<Texture> texture;
+
+	std::weak_ptr<GameObject> cam;
 };
