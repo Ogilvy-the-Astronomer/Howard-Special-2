@@ -1,6 +1,7 @@
 #include<gl/glew.h>
 #include<SDL2/SDL.h>
 #include<vector>
+
 #include "GameObject.h"
 #include "Camera.h"
 

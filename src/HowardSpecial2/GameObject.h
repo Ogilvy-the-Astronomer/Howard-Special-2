@@ -4,7 +4,7 @@
 #include <typeinfo>
 #include"Component.h"
 
-class Core;
+struct Core;
 
 struct GameObject {
 	GameObject();

@@ -1,5 +1,8 @@
 #include "Core.h"
 #include<exception>
+#include<AL/al.h>
+#include<AL/alc.h>
+#include "stb_vorbis.h"
 
 Core::Core()
 {
@@ -13,6 +16,39 @@ Core::Core()
 	if (glewInit() != GLEW_OK) {
 		throw std::exception();
 	}
+
+	/*
+   * Initialize OpenAL audio system
+   */
+
+   // Open up the OpenAL device
+	ALCdevice* device = alcOpenDevice(NULL);
+
+	if (device == NULL)
+	{
+		throw std::exception();
+	}
+
+	// Create audio context
+	ALCcontext* context = alcCreateContext(device, NULL);
+
+	if (context == NULL)
+	{
+		alcCloseDevice(device);
+		throw std::exception();
+	}
+
+	// Set as current context
+	if (!alcMakeContextCurrent(context))
+	{
+		alcDestroyContext(context);
+		alcCloseDevice(device);
+		throw std::exception();
+	}
+
+	// Generally not needed. Translate sources instead
+	alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
+	
 }
 
 std::shared_ptr<GameObject> Core::AddObject(){

@@ -1,8 +1,8 @@
 #pragma once
 #include <memory>
 
-class GameObject;
-class Core;
+struct GameObject;
+struct Core;
 
 struct Component {
 	virtual void OnUpdate();

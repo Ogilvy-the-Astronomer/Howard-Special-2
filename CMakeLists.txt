@@ -27,8 +27,11 @@ add_library(HowardSpecial2
 	src/HowardSpecial2/Renderer.h
 	src/HowardSpecial2/Camera.h
 	src/HowardSpecial2/Camera.cpp
+	src/HowardSpecial2/stb_vorbis.h
+	src/HowardSpecial2/SoundBuffer.h
+	src/HowardSpecial2/SoundBuffer.cpp
 )
-target_link_libraries(HowardSpecial2 SDL2 opengl32 glew32)
+target_link_libraries(HowardSpecial2 SDL2 opengl32 openal32 glew32)
 
 add_executable(game
 	src/game/main.cpp
