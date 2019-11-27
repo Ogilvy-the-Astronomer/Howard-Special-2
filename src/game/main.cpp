@@ -11,6 +11,7 @@ int main(){
 	core->mainCamera = core->AddObject();
 	core->mainCamera->AddComponent<Transform>();
 	core->mainCamera->AddComponent<Camera>();
+	core->mainCamera->AddComponent<SoundSource>();
 
 	std::shared_ptr<GameObject> object = core->AddObject();
 	object->AddComponent<Transform>();
@@ -29,6 +30,8 @@ int main(){
 
 		if (state[SDL_SCANCODE_RIGHT]) core->mainCamera->GetComponent<Transform>()->rotation.y -= 0.05f;
 		if (state[SDL_SCANCODE_LEFT]) core->mainCamera->GetComponent<Transform>()->rotation.y += 0.05f;
+
+		if (state[SDL_SCANCODE_P]) core->mainCamera->GetComponent<SoundSource>()->Play();
 		SDL_Event event = { 0 };
 
 		while (SDL_PollEvent(&event))

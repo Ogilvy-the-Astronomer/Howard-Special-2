@@ -10,3 +10,6 @@
 #include "Transform.h"
 #include "Camera.h"
 #include "Renderer.h"
+#include "SoundSource.h"
+#include "NonCopyable.h"
+#include "Resource.h"

@@ -1,23 +1,17 @@
 #include<gl/glew.h>
 #include<SDL2/SDL.h>
 #include<vector>
-
+#include<AL/al.h>
+#include<AL/alc.h>
 #include "GameObject.h"
 #include "Camera.h"
-
-struct NonCopyable {
-protected:
-	NonCopyable() {}
-	~NonCopyable() {}
-private:
-	NonCopyable(const NonCopyable &);
-	NonCopyable& operator=(const NonCopyable &);
-
-};
+#include "NonCopyable.h"
 
 struct Core : private NonCopyable {
 	Core();
 	SDL_Window *window;
+	ALCcontext *context;
+	ALCdevice *device;
 	int window_h;
 	int window_w;
 	std::shared_ptr<GameObject> mainCamera;

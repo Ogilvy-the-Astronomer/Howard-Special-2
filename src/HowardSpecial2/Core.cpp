@@ -1,8 +1,6 @@
 #include "Core.h"
 #include<exception>
-#include<AL/al.h>
-#include<AL/alc.h>
-#include "stb_vorbis.h"
+//#include "stb_vorbis.h"
 
 Core::Core()
 {
@@ -22,7 +20,7 @@ Core::Core()
    */
 
    // Open up the OpenAL device
-	ALCdevice* device = alcOpenDevice(NULL);
+	device = alcOpenDevice(NULL);
 
 	if (device == NULL)
 	{
@@ -30,7 +28,7 @@ Core::Core()
 	}
 
 	// Create audio context
-	ALCcontext* context = alcCreateContext(device, NULL);
+	context = alcCreateContext(device, NULL);
 
 	if (context == NULL)
 	{
@@ -70,6 +68,9 @@ void Core::Start() {
 }
 
 void Core::Stop() {
+	alcMakeContextCurrent(NULL);
+	alcDestroyContext(context);
+	alcCloseDevice(device);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 }

@@ -28,8 +28,12 @@ add_library(HowardSpecial2
 	src/HowardSpecial2/Camera.h
 	src/HowardSpecial2/Camera.cpp
 	src/HowardSpecial2/stb_vorbis.h
-	src/HowardSpecial2/SoundBuffer.h
-	src/HowardSpecial2/SoundBuffer.cpp
+	src/HowardSpecial2/SoundSource.h
+	src/HowardSpecial2/SoundSource.cpp
+	src/HowardSpecial2/Resource.h
+	src/HowardSpecial2/NonCopyable.h
+	src/HowardSpecial2/Resources.h
+	src/HowardSpecial2/Resources.cpp
 )
 target_link_libraries(HowardSpecial2 SDL2 opengl32 openal32 glew32)
 

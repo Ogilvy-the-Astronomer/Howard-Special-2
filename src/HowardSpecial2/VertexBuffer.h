@@ -2,7 +2,9 @@
 #include<glm/glm.hpp>
 #include<vector>
 #include<GL\glew.h>
-class VertexBuffer
+#include "NonCopyable.h"
+#include "Resource.h"
+class VertexBuffer : private NonCopyable, public Resource
 {
 private:
 	GLuint id;
