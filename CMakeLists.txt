@@ -12,8 +12,8 @@ add_library(HowardSpecial2
 	src/HowardSpecial2/Component.h
 	src/HowardSpecial2/ShaderProgram.cpp
 	src/HowardSpecial2/ShaderProgram.h
-	src/HowardSpecial2/VertexArray.cpp
-	src/HowardSpecial2/VertexArray.h
+	src/HowardSpecial2/Mesh.cpp
+	src/HowardSpecial2/Mesh.h
 	src/HowardSpecial2/VertexBuffer.cpp
 	src/HowardSpecial2/VertexBuffer.h
 	src/HowardSpecial2/HowardSpecial2.h
@@ -30,6 +30,8 @@ add_library(HowardSpecial2
 	src/HowardSpecial2/stb_vorbis.h
 	src/HowardSpecial2/SoundSource.h
 	src/HowardSpecial2/SoundSource.cpp
+	src/HowardSpecial2/Sound.cpp
+	src/HowardSpecial2/Sound.h
 	src/HowardSpecial2/Resource.h
 	src/HowardSpecial2/NonCopyable.h
 	src/HowardSpecial2/Resources.h

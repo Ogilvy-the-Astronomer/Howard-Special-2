@@ -12,7 +12,7 @@ Renderer::Renderer() {
 
 Renderer::Renderer(std::string _shape, std::string _texture)
 {
-	shape = std::make_shared<VertexArray>(_shape);
+	shape = std::make_shared<Mesh>(_shape);
 	texture = std::make_shared<Texture>(_texture);
 }
 
@@ -32,4 +32,12 @@ void Renderer::OnUpdate(){
 	shader->Draw(shape);
 
 	//SDL_GL_SwapWindow(window); //REMOVE
+}
+
+void Renderer::SetMesh(std::shared_ptr<Mesh> mesh){
+	shape = mesh;
+}
+
+void Renderer::SetTexture(std::shared_ptr<Texture> image){
+	texture = image;
 }

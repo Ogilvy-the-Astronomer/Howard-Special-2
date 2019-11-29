@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 struct Resource {
-private:
+	friend struct Resources;
+protected:
 	std::string path;
 };

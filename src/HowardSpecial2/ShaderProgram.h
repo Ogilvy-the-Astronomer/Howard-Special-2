@@ -7,7 +7,7 @@
 #include<fstream>
 
 class Texture;
-class VertexArray;
+class Mesh;
 class RenderTexture;
 
 struct Sampler
@@ -25,7 +25,7 @@ public:
 	ShaderProgram();
 	ShaderProgram(std::string vert, std::string frag);
 	~ShaderProgram();
-	void Draw(std::shared_ptr<VertexArray> vertextArray);
+	void Draw(std::shared_ptr<Mesh> vertextArray);
 	void SetUniform(std::string uniform, std::shared_ptr<Texture> texture);
 	//void SetUniform(std::string uniform, std::shared_ptr<RenderTexture> texture);
 	void SetUniform(std::string uniform, glm::vec4 value);

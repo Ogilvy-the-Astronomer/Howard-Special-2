@@ -1,6 +1,6 @@
 #include <glm/ext.hpp>
 #include <string>
-#include "VertexArray.h"
+#include "Mesh.h"
 #include "VertexBuffer.h"
 #include "Component.h"
 #include "Texture.h"

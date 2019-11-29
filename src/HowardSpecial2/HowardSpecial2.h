@@ -3,7 +3,7 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "ShaderProgram.h"
-#include "VertexArray.h"
+#include "Mesh.h"
 #include "VertexBuffer.h"
 #include "stb_image.h"
 #include "Texture.h"
@@ -13,3 +13,4 @@
 #include "SoundSource.h"
 #include "NonCopyable.h"
 #include "Resource.h"
+#include "Sound.h"

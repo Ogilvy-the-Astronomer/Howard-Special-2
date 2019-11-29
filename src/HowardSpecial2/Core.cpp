@@ -6,9 +6,9 @@ Core::Core()
 {
 	window_h = 300;
 	window_w = 300;
-	window = SDL_CreateWindow("Triangle", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+	graphicsContext = SDL_CreateWindow("Triangle", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
-	if (!SDL_GL_CreateContext(window)) {
+	if (!SDL_GL_CreateContext(graphicsContext)) {
 		throw std::exception();
 	}
 	if (glewInit() != GLEW_OK) {
@@ -28,18 +28,18 @@ Core::Core()
 	}
 
 	// Create audio context
-	context = alcCreateContext(device, NULL);
+	soundContext = alcCreateContext(device, NULL);
 
-	if (context == NULL)
+	if (soundContext == NULL)
 	{
 		alcCloseDevice(device);
 		throw std::exception();
 	}
 
 	// Set as current context
-	if (!alcMakeContextCurrent(context))
+	if (!alcMakeContextCurrent(soundContext))
 	{
-		alcDestroyContext(context);
+		alcDestroyContext(soundContext);
 		alcCloseDevice(device);
 		throw std::exception();
 	}
@@ -69,9 +69,9 @@ void Core::Start() {
 
 void Core::Stop() {
 	alcMakeContextCurrent(NULL);
-	alcDestroyContext(context);
+	alcDestroyContext(soundContext);
 	alcCloseDevice(device);
-	SDL_DestroyWindow(window);
+	SDL_DestroyWindow(graphicsContext);
 	SDL_Quit();
 }
 
@@ -88,6 +88,6 @@ void Core::Display(){
 	for (int i = 0; i < (int)gameObjects.size(); i++) {
 		gameObjects.at(i)->Update();
 	}
-	SDL_GL_SwapWindow(window);
+	SDL_GL_SwapWindow(graphicsContext);
 }
 

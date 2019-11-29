@@ -1,5 +1,5 @@
 #include "ShaderProgram.h"
-#include "VertexArray.h"
+#include "Mesh.h"
 #include "Texture.h"
 //#include "RenderTexture.h"
 
@@ -179,7 +179,7 @@ ShaderProgram::~ShaderProgram()
 {
 }
 
-void ShaderProgram::Draw(std::shared_ptr<VertexArray> vertexArray)
+void ShaderProgram::Draw(std::shared_ptr<Mesh> vertexArray)
 {
 	glUseProgram(id);
 	glBindVertexArray(vertexArray->GetId());

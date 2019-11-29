@@ -21,7 +21,7 @@ TriangleRenderer::TriangleRenderer() {
 	colors->add(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 	colors->add(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
-	shape = std::make_shared<VertexArray>();
+	shape = std::make_shared<Mesh>();
 	shape->SetBuffer("in_Position", positions);
 	//shape->SetBuffer("in_Color", colors);
 	shape->SetBuffer("in_TexCoord", texCoords);

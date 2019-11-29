@@ -45,6 +45,7 @@ Texture::Texture(std::string image)
 std::shared_ptr<Texture> Texture::load(std::string image)
 {
 	std::shared_ptr<Texture> rtn = std::make_shared<Texture>(image);
+	return rtn;
 }
 
 Texture::~Texture()

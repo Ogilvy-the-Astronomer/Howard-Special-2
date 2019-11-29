@@ -1,4 +1,4 @@
-#include "VertexArray.h"
+#include "Mesh.h"
 #include "VertexBuffer.h"
 
 #include <fstream>
@@ -6,7 +6,7 @@
 #include <sstream>
 
 
-VertexArray::VertexArray()
+Mesh::Mesh()
 {
 	dirty = false;
 
@@ -20,7 +20,7 @@ VertexArray::VertexArray()
 
 }
 
-VertexArray::VertexArray(std::string path) : dirty(false)
+Mesh::Mesh(std::string path) : dirty(false)
 {
 	glGenVertexArrays(1, &id);
 
@@ -119,7 +119,12 @@ VertexArray::VertexArray(std::string path) : dirty(false)
 	if (normalBuffer) SetBuffer("in_Normal", normalBuffer);
 }
 
-void VertexArray::splitStringWhitespace(std::string& input, std::vector<std::string>& output)
+std::shared_ptr<Mesh> Mesh::load(std::string path){
+	std::shared_ptr<Mesh> rtn = std::make_shared<Mesh>(path);
+	return rtn;
+}
+
+void Mesh::splitStringWhitespace(std::string& input, std::vector<std::string>& output)
 {
 	std::string curr;
 
@@ -150,7 +155,7 @@ void VertexArray::splitStringWhitespace(std::string& input, std::vector<std::str
 	}
 }
 
-void VertexArray::splitString(std::string& input, char splitter, std::vector<std::string>& output)
+void Mesh::splitString(std::string& input, char splitter, std::vector<std::string>& output)
 {
 	std::string curr;
 
@@ -175,16 +180,16 @@ void VertexArray::splitString(std::string& input, char splitter, std::vector<std
 	}
 }
 
-VertexArray::~VertexArray()
+Mesh::~Mesh()
 {
 }
 
-std::shared_ptr<VertexBuffer> VertexArray::GetBuffers(int _pos)
+std::shared_ptr<VertexBuffer> Mesh::GetBuffers(int _pos)
 {
 	return buffers.at(_pos);
 }
 
-void VertexArray::SetBuffer(std::string attribute, std::shared_ptr<VertexBuffer> buffer)
+void Mesh::SetBuffer(std::string attribute, std::shared_ptr<VertexBuffer> buffer)
 {
 	if (attribute == "in_Position")
 	{
@@ -210,7 +215,7 @@ void VertexArray::SetBuffer(std::string attribute, std::shared_ptr<VertexBuffer>
 	dirty = true;
 }
 
-int VertexArray::GetVertexCount()
+int Mesh::GetVertexCount()
 {
 	if (!buffers.at(0)) {
 		throw std::exception();
@@ -218,12 +223,12 @@ int VertexArray::GetVertexCount()
 	return buffers.at(0)->GetDataSize() / buffers.at(0)->GetComponents();
 }
 
-GLuint VertexArray::GetId()
+GLuint Mesh::GetId()
 {
 	if (dirty) {
 		glBindVertexArray(id);
 
-		for (int i = 0; i < buffers.size(); i++) {
+		for (int i = 0; i < (int)buffers.size(); i++) {
 			if (buffers.at(i) != nullptr) {
 				glBindBuffer(GL_ARRAY_BUFFER, buffers.at(i)->GetId());
 				glVertexAttribPointer(i, buffers.at(i)->GetComponents(), GL_FLOAT, GL_FALSE, buffers.at(i)->GetComponents() * sizeof(GLfloat), (void *)0);

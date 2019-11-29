@@ -11,10 +11,11 @@ struct Renderer : public Component{
 	void OnDisplay();
 	void OnUpdate();
 	std::shared_ptr<ShaderProgram> shader = std::make_shared<ShaderProgram>("../shaders/text.vert", "../shaders/text.frag");
-
+	void SetMesh(std::shared_ptr<Mesh> mesh);
+	void SetTexture(std::shared_ptr<Texture> image);
 	//SDL_Window *window; //REMOVE
 private:
-	std::shared_ptr<VertexArray> shape;
+	std::shared_ptr<Mesh> shape;
 	std::shared_ptr<Texture> texture;
 
 	std::weak_ptr<GameObject> cam;

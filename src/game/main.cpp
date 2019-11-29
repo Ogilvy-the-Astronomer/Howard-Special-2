@@ -2,7 +2,6 @@
 #include <HowardSpecial2/HowardSpecial2.h>
 #include "TriangleRenderer.h"
 
-
 int main(){
 	std::shared_ptr<Core> core = core->Initialize();
 	glEnable(GL_CULL_FACE);
@@ -12,10 +11,14 @@ int main(){
 	core->mainCamera->AddComponent<Transform>();
 	core->mainCamera->AddComponent<Camera>();
 	core->mainCamera->AddComponent<SoundSource>();
+	core->mainCamera->GetComponent<SoundSource>()->SetSound(core->resources->load<Sound>("../src/game/models/dixie_horn.ogg"));
 
 	std::shared_ptr<GameObject> object = core->AddObject();
 	object->AddComponent<Transform>();
-	object->AddComponent<Renderer>("../src/game/models/fighter.obj", "../src/game/textures/fighter.png");
+	//object->AddComponent<Renderer>("../src/game/models/fighter.obj", "../src/game/textures/fighter.png");
+	object->AddComponent<Renderer>();
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/fighter.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/fighter.png"));
 	object->GetComponent<Transform>()->position.z = -5.0f;
 
 	const Uint8 *state = SDL_GetKeyboardState(NULL);

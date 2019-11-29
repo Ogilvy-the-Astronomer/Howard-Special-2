@@ -10,7 +10,7 @@ struct TriangleRenderer : public Component{
 	std::shared_ptr<VertexBuffer> positions;
 	std::shared_ptr<VertexBuffer> texCoords;
 	std::shared_ptr<VertexBuffer> colors;
-	std::shared_ptr<VertexArray> shape;
+	std::shared_ptr<Mesh> shape;
 	std::shared_ptr<Texture> tex;
 
 	float angle;

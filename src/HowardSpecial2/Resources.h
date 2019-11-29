@@ -8,7 +8,12 @@ struct Resources {
 };
 
 template<class T>
-inline std::shared_ptr<T> Resources::load(std::string path)
-{
+inline std::shared_ptr<T> Resources::load(std::string path){
+	std::shared_ptr<T> rtn = std::make_shared<T>();
+	rtn->path = path;
+	// core
+	rtn->load(path);
+	resources.push_back(rtn);
+	return rtn;
 
 }
