@@ -13,7 +13,7 @@ public:
 	GLuint GetId();
 	Texture();
 	Texture(std::string image);
-	std::shared_ptr<Texture> load(std::string image);
+	void load(std::string image);
 	~Texture();
 };
 

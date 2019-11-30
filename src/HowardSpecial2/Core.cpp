@@ -46,7 +46,8 @@ Core::Core()
 
 	// Generally not needed. Translate sources instead
 	alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
-	
+	resources = std::make_shared<Resources>();
+	resources->resources.clear();
 }
 
 std::shared_ptr<GameObject> Core::AddObject(){

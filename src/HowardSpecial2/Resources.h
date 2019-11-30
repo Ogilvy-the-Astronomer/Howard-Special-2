@@ -9,6 +9,14 @@ struct Resources {
 
 template<class T>
 inline std::shared_ptr<T> Resources::load(std::string path){
+	for (int i = 0; i < (int)resources.size(); i++) {
+		if (resources.at(i)->path == path) {
+			std::shared_ptr<T> rtn;
+			if (rtn = std::static_pointer_cast<T>(resources.at(i))) {
+				return rtn;
+			}
+		}
+	}
 	std::shared_ptr<T> rtn = std::make_shared<T>();
 	rtn->path = path;
 	// core

@@ -1,6 +1,5 @@
 #include <iostream>
 #include <HowardSpecial2/HowardSpecial2.h>
-#include "TriangleRenderer.h"
 
 int main(){
 	std::shared_ptr<Core> core = core->Initialize();
@@ -19,6 +18,7 @@ int main(){
 	object->AddComponent<Renderer>();
 	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/fighter.obj"));
 	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/fighter.png"));
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/fighter.obj"));
 	object->GetComponent<Transform>()->position.z = -5.0f;
 
 	const Uint8 *state = SDL_GetKeyboardState(NULL);

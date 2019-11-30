@@ -10,8 +10,7 @@ Sound::Sound(){
 	std::vector<char> bufferData;
 	load_ogg("../src/game/models/dixie_horn.ogg", bufferData, format, freq);
 
-	alBufferData(bufferId, format, &bufferData.at(0),
-		static_cast<ALsizei>(bufferData.size()), freq);
+	alBufferData(bufferId, format, &bufferData.at(0), static_cast<ALsizei>(bufferData.size()), freq);
 }
 
 Sound::Sound(std::string path){
@@ -23,17 +22,23 @@ Sound::Sound(std::string path){
 	std::vector<char> bufferData;
 	load_ogg(path, bufferData, format, freq);
 
-	alBufferData(bufferId, format, &bufferData.at(0),
-		static_cast<ALsizei>(bufferData.size()), freq);
+	alBufferData(bufferId, format, &bufferData.at(0), static_cast<ALsizei>(bufferData.size()), freq);
 }
 
 Sound::~Sound()
 {
 }
 
-std::shared_ptr<Sound> Sound::load(std::string path){
-	std::shared_ptr<Sound> rtn = std::make_shared<Sound>(path);
-	return rtn;
+void Sound::load(std::string path){
+	bufferId = 0;
+	alGenBuffers(1, &bufferId);
+
+	ALenum format = 0;
+	ALsizei freq = 0;
+	std::vector<char> bufferData;
+	load_ogg(path, bufferData, format, freq);
+
+	alBufferData(bufferId, format, &bufferData.at(0), static_cast<ALsizei>(bufferData.size()), freq);
 }
 
 void Sound::load_ogg(const std::string & fileName, std::vector<char>& buffer, ALenum & format, ALsizei & freq){

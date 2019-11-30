@@ -15,7 +15,7 @@ private:
 public:
 	Mesh();
 	Mesh(std::string path);
-	std::shared_ptr<Mesh> load(std::string path);
+	void load(std::string path);
 	void splitStringWhitespace(std::string & input, std::vector<std::string>& output);
 	void splitString(std::string & input, char splitter, std::vector<std::string>& output);
 	~Mesh();
