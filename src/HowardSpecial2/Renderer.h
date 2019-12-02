@@ -10,7 +10,7 @@ struct Renderer : public Component{
 	Renderer(std::string _shape, std::string _texture);
 	void OnDisplay();
 	void OnUpdate();
-	std::shared_ptr<ShaderProgram> shader = std::make_shared<ShaderProgram>("../shaders/text.vert", "../shaders/text.frag");
+	std::shared_ptr<ShaderProgram> shader = std::make_shared<ShaderProgram>("../shaders/light.vert", "../shaders/light.frag");
 	void SetMesh(std::shared_ptr<Mesh> mesh);
 	void SetTexture(std::shared_ptr<Texture> image);
 	//SDL_Window *window; //REMOVE

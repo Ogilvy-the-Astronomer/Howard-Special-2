@@ -4,8 +4,8 @@
 
 Core::Core()
 {
-	window_h = 300;
-	window_w = 300;
+	window_h = 600;
+	window_w = 600;
 	graphicsContext = SDL_CreateWindow("Triangle", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
 	if (!SDL_GL_CreateContext(graphicsContext)) {
