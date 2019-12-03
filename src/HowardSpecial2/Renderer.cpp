@@ -27,9 +27,24 @@ void Renderer::OnUpdate(){
 	shader->SetUniform("in_Texture", texture);
 	shader->SetUniform("in_View", cam.lock()->GetComponent<Camera>()->GetView());
 
-	shader->SetUniform("in_Emissive", glm::vec3(0.0f, 0.0f, 0.0f));
-	shader->SetUniform("in_Ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-	shader->SetUniform("in_LightPos", glm::vec3(0.0f, 5.0f, 0.5f));
+	//shader->SetUniform("in_Emissive", glm::vec3(0.0f, 0.0f, 0.0f));
+	//shader->SetUniform("in_Ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+	//shader->SetUniform("in_LightPos", glm::vec3(0.0f, 5.0f, 0.5f));
+
+	shader->SetUniform("lights[0].emissive", glm::vec3(0.0f, 0.0f, 0.0f));
+	shader->SetUniform("lights[0].ambient", glm::vec3(0.2f, 0.7f, 0.2f));
+	shader->SetUniform("lights[0].pos", glm::vec3(0.0f, 1.0f, 0.5f));
+	shader->SetUniform("lights[0].constant", 1.0f);
+	shader->SetUniform("lights[0].linear", 0.09f);
+	shader->SetUniform("lights[0].quadratic", 0.032f);
+
+	shader->SetUniform("lights[1].emissive", glm::vec3(0.0f, 0.0f, 0.0f));
+	shader->SetUniform("lights[1].ambient", glm::vec3(0.2f, 0.2f, 0.7f));
+	shader->SetUniform("lights[1].pos", glm::vec3(0.0f, 1.0f, -7.5f));
+	shader->SetUniform("lights[1].constant", 1.0f);
+	shader->SetUniform("lights[1].linear", 0.09f);
+	shader->SetUniform("lights[1].quadratic", 0.032f);
+
 	//shader->SetUniform("in_ViewPos", cam.lock()->GetComponent<Transform>()->position);
 
 	shader->Draw(shape);
