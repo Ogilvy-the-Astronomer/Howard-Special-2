@@ -6,9 +6,9 @@
 #include<memory>
 #include<fstream>
 
-class Texture;
-class Mesh;
-class RenderTexture;
+struct Texture;
+struct Mesh;
+struct RenderTexture;
 
 struct Sampler
 {

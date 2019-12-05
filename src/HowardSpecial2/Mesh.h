@@ -4,9 +4,9 @@
 #include<memory>
 #include "Resource.h"
 
-class VertexBuffer;
+struct VertexBuffer;
 
-class Mesh : public Resource
+struct Mesh : public Resource
 {
 private:
 	GLuint id;

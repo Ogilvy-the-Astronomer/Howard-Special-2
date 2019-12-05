@@ -36,6 +36,10 @@ add_library(HowardSpecial2
 	src/HowardSpecial2/NonCopyable.h
 	src/HowardSpecial2/Resources.h
 	src/HowardSpecial2/Resources.cpp
+	src/HowardSpecial2/RenderTexture.h
+	src/HowardSpecial2/RenderTexture.cpp
+	src/HowardSpecial2/Light.cpp
+	src/HowardSpecial2/Light.h
 )
 target_link_libraries(HowardSpecial2 SDL2 opengl32 openal32 glew32)
 

@@ -15,20 +15,48 @@ int main(){
 	std::shared_ptr<GameObject> object = core->AddObject();
 	object->AddComponent<Transform>();
 	//object->AddComponent<Renderer>("../src/game/models/fighter.obj", "../src/game/textures/fighter.png");
-	object->AddComponent<Renderer>();
+	core->renderers.push_back(object->AddComponent<Renderer>());
 	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/fighter.obj"));
 	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/fighter.png"));
 	object->GetComponent<Transform>()->position.z = -5.0f;
+
+	object = core->AddObject();
+	object->AddComponent<Transform>();
+	core->renderers.push_back(object->AddComponent<Renderer>());
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/desert.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/alientex.png"));
+	object->GetComponent<Transform>()->position.y = -5.0f;
+	object->GetComponent<Transform>()->scale = glm::vec3(5, 5, 5);
+
+	object = core->AddObject();
+	object->AddComponent<Transform>();
+	core->dLights.push_back(object->AddComponent<DirectionalLight>());
+	core->dLights[0]->diffuse = glm::vec3(0.3f, 0.3f, 0.3f);
+	core->dLights[0]->specular = glm::vec3(0.3f, 0.3f, 0.3f);
+	object->GetComponent<Transform>()->rotation = glm::vec3(glm::radians(-45.0f), glm::radians(-40.0f), 0.0f);
+
+	object = core->AddObject();
+	object->AddComponent<Transform>();
+	core->lights.push_back(object->AddComponent<PointLight>());
+	core->lights[0]->diffuse = glm::vec3(10.0f, 10.0f, 10.0f);
+	core->lights[0]->specular = glm::vec3(0.3f, 0.3f, 0.3f);
+	object->GetComponent<Transform>()->position = glm::vec3(0.0f, 5.0f, -5.5f);
 
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	bool quit = false;
 	while (!quit)
 	{
 		state = SDL_GetKeyboardState(NULL);
-		if (state[SDL_SCANCODE_W]) core->mainCamera->GetComponent<Transform>()->position -= core->mainCamera->GetComponent<Transform>()->forward;
-		if (state[SDL_SCANCODE_S]) core->mainCamera->GetComponent<Transform>()->position += core->mainCamera->GetComponent<Transform>()->forward;
-		if (state[SDL_SCANCODE_A]) core->mainCamera->GetComponent<Transform>()->position -= core->mainCamera->GetComponent<Transform>()->right;
-		if (state[SDL_SCANCODE_D]) core->mainCamera->GetComponent<Transform>()->position += core->mainCamera->GetComponent<Transform>()->right;
+		if (state[SDL_SCANCODE_I]) object->GetComponent<Transform>()->position.z += 0.2f;
+		if (state[SDL_SCANCODE_K]) object->GetComponent<Transform>()->position.z -= 0.2f;
+		if (state[SDL_SCANCODE_J]) object->GetComponent<Transform>()->position.x -= 0.2f;
+		if (state[SDL_SCANCODE_L]) object->GetComponent<Transform>()->position.x += 0.2f;
+
+
+		if (state[SDL_SCANCODE_W]) core->mainCamera->GetComponent<Transform>()->position -= core->mainCamera->GetComponent<Transform>()->forward * 0.2f;
+		if (state[SDL_SCANCODE_S]) core->mainCamera->GetComponent<Transform>()->position += core->mainCamera->GetComponent<Transform>()->forward * 0.2f;
+		if (state[SDL_SCANCODE_A]) core->mainCamera->GetComponent<Transform>()->position -= core->mainCamera->GetComponent<Transform>()->right * 0.2f;
+		if (state[SDL_SCANCODE_D]) core->mainCamera->GetComponent<Transform>()->position += core->mainCamera->GetComponent<Transform>()->right * 0.2f;
 		if (state[SDL_SCANCODE_SPACE]) core->mainCamera->GetComponent<Transform>()->position.y += 0.5f;
 		if (state[SDL_SCANCODE_LCTRL]) core->mainCamera->GetComponent<Transform>()->position.y -= 0.5f;
 

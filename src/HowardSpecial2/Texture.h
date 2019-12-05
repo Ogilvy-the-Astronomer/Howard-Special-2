@@ -6,8 +6,9 @@
 #include "NonCopyable.h"
 #include "Resource.h"
 
-class Texture : private NonCopyable, public Resource
+struct Texture : private NonCopyable, public Resource
 {
+protected:
 	GLuint id;
 public:
 	GLuint GetId();

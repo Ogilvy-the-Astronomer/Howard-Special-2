@@ -4,7 +4,7 @@
 #include<GL\glew.h>
 #include "NonCopyable.h"
 #include "Resource.h"
-class VertexBuffer : private NonCopyable, public Resource
+struct VertexBuffer : private NonCopyable, public Resource
 {
 private:
 	GLuint id;

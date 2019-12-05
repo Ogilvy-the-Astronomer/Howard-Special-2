@@ -14,3 +14,5 @@
 #include "NonCopyable.h"
 #include "Resource.h"
 #include "Sound.h"
+#include "RenderTexture.h"
+#include "Light.h"
