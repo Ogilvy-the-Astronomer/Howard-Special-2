@@ -12,9 +12,10 @@ int main(){
 	core->mainCamera->AddComponent<SoundSource>();
 	core->mainCamera->GetComponent<SoundSource>()->SetSound(core->resources->load<Sound>("../src/game/models/dixie_horn.ogg"));
 
-	std::shared_ptr<GameObject> object = core->AddObject();
+	std::shared_ptr<GameObject> object;
+
+	object = core->AddObject();
 	object->AddComponent<Transform>();
-	//object->AddComponent<Renderer>("../src/game/models/fighter.obj", "../src/game/textures/fighter.png");
 	core->renderers.push_back(object->AddComponent<Renderer>());
 	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/fighter.obj"));
 	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/fighter.png"));
@@ -30,17 +31,26 @@ int main(){
 
 	object = core->AddObject();
 	object->AddComponent<Transform>();
-	core->dLights.push_back(object->AddComponent<DirectionalLight>());
-	core->dLights[0]->diffuse = glm::vec3(0.3f, 0.3f, 0.3f);
-	core->dLights[0]->specular = glm::vec3(0.3f, 0.3f, 0.3f);
+	object->AddComponent<DirectionalLight>();
+	object->GetComponent<DirectionalLight>()->diffuse = glm::vec3(0.3f, 0.3f, 0.3f);
+	object->GetComponent<DirectionalLight>()->specular = glm::vec3(0.3f, 0.3f, 0.3f);
 	object->GetComponent<Transform>()->rotation = glm::vec3(glm::radians(-45.0f), glm::radians(-40.0f), 0.0f);
 
 	object = core->AddObject();
 	object->AddComponent<Transform>();
-	core->lights.push_back(object->AddComponent<PointLight>());
-	core->lights[0]->diffuse = glm::vec3(10.0f, 10.0f, 10.0f);
-	core->lights[0]->specular = glm::vec3(0.3f, 0.3f, 0.3f);
+	object->AddComponent<PointLight>();
+	object->GetComponent<PointLight>()->diffuse = glm::vec3(10.0f, 10.0f, 10.0f);
+	object->GetComponent<PointLight>()->specular = glm::vec3(0.3f, 0.3f, 0.3f);
 	object->GetComponent<Transform>()->position = glm::vec3(0.0f, 5.0f, -5.5f);
+
+	object = core->AddObject();
+	object->AddComponent<Transform>();
+	object->AddComponent<PointLight>();
+	object->GetComponent<PointLight>()->diffuse = glm::vec3(10.0f, 10.0f, 10.0f);
+	object->GetComponent<PointLight>()->specular = glm::vec3(0.3f, 0.3f, 0.3f);
+	object->GetComponent<Transform>()->position = glm::vec3(0.0f, 5.0f, 3.5f);
+
+	core->lights = core->GetComponents<PointLight>();
 
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	bool quit = false;

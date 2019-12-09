@@ -16,7 +16,7 @@ struct Renderer : public Component{
 	void SetMesh(std::shared_ptr<Mesh> mesh);
 	void SetTexture(std::shared_ptr<Texture> image);
 	
-	std::shared_ptr<RenderTexture> depthTexture;
+	std::vector<std::shared_ptr<RenderTexture>> depthTextures;
 private:
 	std::shared_ptr<Mesh> shape;
 	std::shared_ptr<Texture> texture;

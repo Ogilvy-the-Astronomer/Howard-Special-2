@@ -67,9 +67,10 @@ inline std::shared_ptr<T> GameObject::GetComponent()
 		if (typeid(std::shared_ptr<T>) == typeid(std::dynamic_pointer_cast<T>(components.at(i)))) {
 			foundComponent = std::dynamic_pointer_cast<T>(components.at(i));
 			if (foundComponent.get() != NULL) {
+				return foundComponent;
 				i = (int)components.size();
 			}
 		}
 	}
-	return foundComponent;
+	return nullptr;
 }

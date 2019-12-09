@@ -10,14 +10,16 @@ varying vec2 ex_TexCoord;
 varying vec3 ex_FragPos;
 varying vec3 ex_Normal;
 
-uniform mat4 in_LightSpaceMatrix;
-varying vec4 ex_FragPosLightSpace;
+#define NO_POINT_LIGHTS 2
+uniform mat4 in_LightSpaces[NO_POINT_LIGHTS];
+varying vec4 ex_FragPosLightSpaces[NO_POINT_LIGHTS];
 
-void main()
-{
-gl_Position = in_Projection * in_View * in_Model * vec4(in_Position, 1.0);
-ex_TexCoord = in_TexCoord;
-ex_Normal = mat3(in_Model) * in_Normal;
-ex_FragPos = vec3(in_Model * vec4(in_Position, 1.0));
-ex_FragPosLightSpace = in_LightSpaceMatrix * vec4(ex_FragPos, 1.0);
+void main(){
+  gl_Position = in_Projection * in_View * in_Model * vec4(in_Position, 1.0);
+  ex_TexCoord = in_TexCoord;
+  ex_Normal = mat3(in_Model) * in_Normal;
+  ex_FragPos = vec3(in_Model * vec4(in_Position, 1.0));
+  for(int i = 0; i < NO_POINT_LIGHTS; i++){
+    ex_FragPosLightSpaces[i] = in_LightSpaces[i] * vec4(ex_FragPos, 1.0);
+  }
 }

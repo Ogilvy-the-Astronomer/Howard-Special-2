@@ -57,9 +57,7 @@ Core::Core()
 
 	shadowRender = std::make_shared<ShaderProgram>("../shaders/shadows.vert", "../shaders/shadows.frag");
 	depthMapRender = std::make_shared<ShaderProgram>("../shaders/rendtex.vert", "../shaders/rendtex.frag");
-	depthTexture = std::make_shared<RenderTexture>();
 	frameBuffer = std::make_shared<RenderTexture>(1);
-	square = std::make_shared<Mesh>("../src/game/models/square.obj");
 }
 
 std::shared_ptr<GameObject> Core::AddObject(){
@@ -99,31 +97,38 @@ void Core::Display(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//REDO SHADOW STUFF
 	glEnable(GL_DEPTH_TEST);
-
+	glViewport(0, 0, 2048, 2048);
 	glm::mat4 lightProjection = glm::ortho(100.0f, -100.0f, 100.0f, -100.0f, 1.0f, 500.0f);
-	glm::mat4 lightView = glm::lookAt(lights[0]->GetGameObject()->GetComponent<Transform>()->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 lightSpaceMatrix = lightProjection * lightView; //light mvp matrix
-
-	glViewport(0, 0, 4096, 4096);
-	glUseProgram(shadowRender->GetId());
-	glBindFramebuffer(GL_FRAMEBUFFER, depthTexture->rtFBO); //bind the correct fbo
-	glClear(GL_DEPTH_BUFFER_BIT);
-	glActiveTexture(GL_TEXTURE0);
-	shadowRender->SetUniform("lightSpaceMatrix", lightSpaceMatrix); //set the light mvp matrix
-	glUseProgram(shadowRender->GetId()); //set uniform unbinds the current program so rebind it
-	glBindFramebuffer(GL_FRAMEBUFFER, depthTexture->rtFBO);
-	//TODO: Get component renderer, get camera
-	for (int i = 0; i < (int)renderers.size(); i++) {
-		shadowRender->SetUniform("in_Model", renderers[i]->GetGameObject()->GetComponent<Transform>()->GetModel());
-		glUseProgram(shadowRender->GetId());
-		glBindVertexArray(renderers[i]->shape->GetId());
-		glDrawArrays(GL_TRIANGLES, 0, renderers[i]->shape->GetVertexCount());
-		glBindVertexArray(0);
-
-		renderers[i]->depthTexture = depthTexture;
+	if (lights.size() != depthTextures.size()) {
+		for (int i = 0; i < lights.size(); i++) {
+			depthTextures.push_back(std::make_shared <RenderTexture>());
+		}
 	}
-	glUseProgram(0);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	for (int i = 0; i < (int)lights.size(); i++) {
+		glm::mat4 lightView = glm::lookAt(lights[i]->GetGameObject()->GetComponent<Transform>()->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::mat4 lightSpaceMatrix = lightProjection * lightView; //light mvp matrix
+		//depthTextures.push_back(std::make_shared <RenderTexture>());
+		glUseProgram(shadowRender->GetId());
+		glBindFramebuffer(GL_FRAMEBUFFER, depthTextures[i]->rtFBO); //bind the correct fbo
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glActiveTexture(GL_TEXTURE0);
+		shadowRender->SetUniform("lightSpaceMatrix", lightSpaceMatrix); //set the light mvp matrix
+		glUseProgram(shadowRender->GetId()); //set uniform unbinds the current program so rebind it
+		glBindFramebuffer(GL_FRAMEBUFFER, depthTextures[i]->rtFBO);
+		//TODO: Get component renderer, get camera
+		for (int j = 0; j < (int)renderers.size(); j++) {
+			shadowRender->SetUniform("in_Model", renderers[j]->GetGameObject()->GetComponent<Transform>()->GetModel());
+			glUseProgram(shadowRender->GetId());
+			glBindVertexArray(renderers[j]->shape->GetId());
+			glDrawArrays(GL_TRIANGLES, 0, renderers[j]->shape->GetVertexCount());
+			glBindVertexArray(0);
+
+			renderers[j]->depthTextures = depthTextures;
+		}
+		glUseProgram(0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+	//depthTextures.clear();
 
 	glViewport(0, 0, window_h, window_w);
 	//glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer->rtFBO); //bind the correct fbo

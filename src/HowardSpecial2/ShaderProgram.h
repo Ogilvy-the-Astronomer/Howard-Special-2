@@ -24,6 +24,7 @@ private:
 public:
 	ShaderProgram();
 	ShaderProgram(std::string vert, std::string frag);
+	ShaderProgram(std::string vert, std::string frag, std::string geom);
 	~ShaderProgram();
 	void Draw(std::shared_ptr<Mesh> vertextArray);
 	void SetUniform(std::string uniform, std::shared_ptr<Texture> texture);

@@ -1,9 +1,10 @@
 #pragma once
-#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
 #include "Component.h"
 //TODO: make pointlight derive from dir light
 struct PointLight : public Component {
 	PointLight();
+	void OnUpdate();
 
 	glm::vec3 emissive;
 	glm::vec3 ambient;
@@ -13,6 +14,8 @@ struct PointLight : public Component {
 	float constant;
 	float linear;
 	float quadratic;
+	
+	glm::mat4 view;
 };
 
 struct DirectionalLight : public Component {

@@ -16,3 +16,4 @@
 #include "Sound.h"
 #include "RenderTexture.h"
 #include "Light.h"
+#include "DepthCubemap.h"

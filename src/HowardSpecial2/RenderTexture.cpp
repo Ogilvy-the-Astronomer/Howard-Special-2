@@ -1,9 +1,8 @@
 #include "RenderTexture.h"
 
-RenderTexture::RenderTexture()
-{  //depth map constructor
+RenderTexture::RenderTexture(){  //depth map constructor
 	glGenFramebuffers(1, &rtFBO);
-	const unsigned int SHADOW_WIDTH = 4096, SHADOW_HEIGHT = 4096;
+	const unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
 	glGenTextures(1, &id);
 	glBindTexture(GL_TEXTURE_2D, id);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
@@ -19,8 +18,7 @@ RenderTexture::RenderTexture()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-RenderTexture::RenderTexture(int _o)
-{   //frame buffer constructor
+RenderTexture::RenderTexture(int _o){   //frame buffer constructor
 	const unsigned int TEXTURE_WIDTH = 1280, TEXTURE_HEIGHT = 720;
 	glGenFramebuffers(1, &rtFBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, rtFBO);
@@ -47,8 +45,7 @@ RenderTexture::RenderTexture(int _o)
 }
 
 
-RenderTexture::~RenderTexture()
-{
+RenderTexture::~RenderTexture(){
 }
 
 
