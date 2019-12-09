@@ -1,9 +1,5 @@
 #include "DepthCubemap.h"
 
-GLuint DepthCubemap::GetId(){
-	return id;
-}
-
 DepthCubemap::DepthCubemap(){
 	glGenTextures(1, &id);
 

@@ -10,7 +10,7 @@ varying vec2 ex_TexCoord;
 varying vec3 ex_FragPos;
 varying vec3 ex_Normal;
 
-#define NO_POINT_LIGHTS 2
+#define NO_POINT_LIGHTS 1
 uniform mat4 in_LightSpaces[NO_POINT_LIGHTS];
 varying vec4 ex_FragPosLightSpaces[NO_POINT_LIGHTS];
 

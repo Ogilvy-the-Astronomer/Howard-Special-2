@@ -98,7 +98,8 @@ void Core::Display(){
 	//REDO SHADOW STUFF
 	glEnable(GL_DEPTH_TEST);
 	glViewport(0, 0, 2048, 2048);
-	glm::mat4 lightProjection = glm::ortho(100.0f, -100.0f, 100.0f, -100.0f, 1.0f, 500.0f);
+	//glm::mat4 lightProjection = glm::ortho(100.0f, -100.0f, 100.0f, -100.0f, 1.0f, 500.0f);
+	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 100.0f);
 	if (lights.size() != depthTextures.size()) {
 		for (int i = 0; i < lights.size(); i++) {
 			depthTextures.push_back(std::make_shared <RenderTexture>());
@@ -107,7 +108,6 @@ void Core::Display(){
 	for (int i = 0; i < (int)lights.size(); i++) {
 		glm::mat4 lightView = glm::lookAt(lights[i]->GetGameObject()->GetComponent<Transform>()->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		glm::mat4 lightSpaceMatrix = lightProjection * lightView; //light mvp matrix
-		//depthTextures.push_back(std::make_shared <RenderTexture>());
 		glUseProgram(shadowRender->GetId());
 		glBindFramebuffer(GL_FRAMEBUFFER, depthTextures[i]->rtFBO); //bind the correct fbo
 		glClear(GL_DEPTH_BUFFER_BIT);
@@ -115,7 +115,6 @@ void Core::Display(){
 		shadowRender->SetUniform("lightSpaceMatrix", lightSpaceMatrix); //set the light mvp matrix
 		glUseProgram(shadowRender->GetId()); //set uniform unbinds the current program so rebind it
 		glBindFramebuffer(GL_FRAMEBUFFER, depthTextures[i]->rtFBO);
-		//TODO: Get component renderer, get camera
 		for (int j = 0; j < (int)renderers.size(); j++) {
 			shadowRender->SetUniform("in_Model", renderers[j]->GetGameObject()->GetComponent<Transform>()->GetModel());
 			glUseProgram(shadowRender->GetId());
@@ -128,22 +127,15 @@ void Core::Display(){
 		glUseProgram(0);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
-	//depthTextures.clear();
 
 	glViewport(0, 0, window_h, window_w);
-	//glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer->rtFBO); //bind the correct fbo
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the color and depth buffer
 	//REDO
 
 	for (int i = 0; i < (int)gameObjects.size(); i++) {
 		gameObjects.at(i)->Update();
 	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDisable(GL_DEPTH_TEST);
-	glBindVertexArray(0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glUseProgram(0);
-
 	SDL_GL_SwapWindow(graphicsContext);
 }
 

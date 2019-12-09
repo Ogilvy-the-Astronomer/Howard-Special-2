@@ -5,6 +5,7 @@
 
 struct Camera;
 struct RenderTexture;
+struct DepthCubemap;
 
 struct Renderer : public Component{
 	friend struct Core;
@@ -17,6 +18,7 @@ struct Renderer : public Component{
 	void SetTexture(std::shared_ptr<Texture> image);
 	
 	std::vector<std::shared_ptr<RenderTexture>> depthTextures;
+	std::vector<std::shared_ptr<DepthCubemap>> depthCubeTextures;
 private:
 	std::shared_ptr<Mesh> shape;
 	std::shared_ptr<Texture> texture;

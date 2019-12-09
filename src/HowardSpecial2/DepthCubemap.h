@@ -1,11 +1,9 @@
-#include "Resource.h"
+#pragma once
+#include "Texture.h"
 #include <GL/glew.h>
 
-struct DepthCubemap : public Resource {
-protected:
-	GLuint id;
+struct DepthCubemap : public Texture {
 public:
 	GLuint rtFBO;
-	GLuint GetId();
 	DepthCubemap();
 };

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <HowardSpecial2/HowardSpecial2.h>
 
-int main(){
+int main(){	
 	std::shared_ptr<Core> core = core->Initialize();
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
@@ -41,14 +41,7 @@ int main(){
 	object->AddComponent<PointLight>();
 	object->GetComponent<PointLight>()->diffuse = glm::vec3(10.0f, 10.0f, 10.0f);
 	object->GetComponent<PointLight>()->specular = glm::vec3(0.3f, 0.3f, 0.3f);
-	object->GetComponent<Transform>()->position = glm::vec3(0.0f, 5.0f, -5.5f);
-
-	object = core->AddObject();
-	object->AddComponent<Transform>();
-	object->AddComponent<PointLight>();
-	object->GetComponent<PointLight>()->diffuse = glm::vec3(10.0f, 10.0f, 10.0f);
-	object->GetComponent<PointLight>()->specular = glm::vec3(0.3f, 0.3f, 0.3f);
-	object->GetComponent<Transform>()->position = glm::vec3(0.0f, 5.0f, 3.5f);
+	object->GetComponent<Transform>()->position = glm::vec3(0.0f, 7.0f, 3.5f);
 
 	core->lights = core->GetComponents<PointLight>();
 
@@ -61,6 +54,8 @@ int main(){
 		if (state[SDL_SCANCODE_K]) object->GetComponent<Transform>()->position.z -= 0.2f;
 		if (state[SDL_SCANCODE_J]) object->GetComponent<Transform>()->position.x -= 0.2f;
 		if (state[SDL_SCANCODE_L]) object->GetComponent<Transform>()->position.x += 0.2f;
+		if (state[SDL_SCANCODE_U]) object->GetComponent<Transform>()->position.y -= 0.2f;
+		if (state[SDL_SCANCODE_H]) object->GetComponent<Transform>()->position.y += 0.2f;
 
 
 		if (state[SDL_SCANCODE_W]) core->mainCamera->GetComponent<Transform>()->position -= core->mainCamera->GetComponent<Transform>()->forward * 0.2f;
@@ -96,5 +91,6 @@ int main(){
 	}
 
 	core->Stop();
+
 	return 0;
 }

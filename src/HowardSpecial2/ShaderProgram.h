@@ -9,6 +9,7 @@
 struct Texture;
 struct Mesh;
 struct RenderTexture;
+struct DepthCubemap;
 
 struct Sampler
 {

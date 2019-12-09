@@ -9,6 +9,7 @@
 #include "Resources.h"
 #include "RenderTexture.h"
 #include "ShaderProgram.h"
+#include "DepthCubemap.h"
 
 struct Renderer;
 struct Mesh;
@@ -38,6 +39,7 @@ struct Core : private NonCopyable {
 	std::shared_ptr<ShaderProgram> shadowRender;
 	std::shared_ptr<ShaderProgram> depthMapRender;
 	std::vector<std::shared_ptr<RenderTexture>> depthTextures;
+	std::vector<std::shared_ptr<DepthCubemap>> depthCubeTextures;
 	std::shared_ptr<RenderTexture> frameBuffer;
 private:
 	std::weak_ptr<Core> self;

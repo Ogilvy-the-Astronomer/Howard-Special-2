@@ -5,7 +5,7 @@ varying vec2 ex_TexCoord;
 varying vec3 ex_FragPos;
 varying vec3 ex_Normal;
 
-#define NO_POINT_LIGHTS 2
+#define NO_POINT_LIGHTS 1
 varying vec4 ex_FragPosLightSpaces[NO_POINT_LIGHTS];
 uniform sampler2D in_ShadowMaps[NO_POINT_LIGHTS];
 
@@ -101,18 +101,23 @@ vec3 CalcDirLights(DirectionalLight light, vec3 norm){
 
 
 float ShadowCalculation(vec4 fragPosLightSpace, vec3 lightDir, sampler2D shadowMap){
-    // perform perspective divide
-    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
-    // transform to [0,1] range
-    projCoords = projCoords * 0.5 + 0.5;
-    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
-    float closestDepth = texture(shadowMap, projCoords.xy).r; 
-    // get depth of current fragment from light's perspective
-    float currentDepth = projCoords.z;
-    // check whether current frag pos is in shadow
-    float bias = max(0.05 * (1.0 - dot(ex_Normal, lightDir)), 0.005); ;
-    if(currentDepth - bias > closestDepth){
-    return 0.1;
-    }
-    else return 1;
+  // perform perspective divide
+  vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+  // transform to [0,1] range
+  projCoords = projCoords * 0.5 + 0.5;
+  // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+  float closestDepth = texture(shadowMap, projCoords.xy).r; 
+  // get depth of current fragment from light's perspective
+  float currentDepth = projCoords.z;
+  // check whether current frag pos is in shadow
+  float bias = max(0.05 * (1.0 - dot(ex_Normal, lightDir)), 0.005); ;
+  float shadow;
+  if(currentDepth - bias > closestDepth){
+    shadow = 0.1;
+  }
+  else shadow = 1;
+  if(projCoords.z > 1.0){
+    shadow = 0.0;
+  }
+  return shadow;
 }
