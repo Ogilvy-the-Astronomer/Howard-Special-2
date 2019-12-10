@@ -97,7 +97,6 @@ void Core::Display(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//REDO SHADOW STUFF
 	glEnable(GL_DEPTH_TEST);
-	glViewport(0, 0, 2048, 2048);
 	//glm::mat4 lightProjection = glm::ortho(100.0f, -100.0f, 100.0f, -100.0f, 1.0f, 500.0f);
 	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 100.0f);
 	if (lights.size() != depthCubeTextures.size()) {
@@ -108,22 +107,33 @@ void Core::Display(){
 	for (int i = 0; i < (int)lights.size(); i++) {
 		glm::vec3 pos = lights[i]->GetGameObject()->GetComponent<Transform>()->position;
 		std::vector<glm::mat4> cubeDirs;
-		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f,-1.0f, 0.0f)));
+		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f,  0.0f, 1.0f)));
+		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f,-1.0f)));
+		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f,-1.0f, 0.0f)));
 		//glm::mat4 lightView = glm::lookAt(pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		//glm::mat4 lightSpaceMatrix = lightProjection * lightView; //light mvp matrix
 		for (int k = 0; k < 6; k++) {
-			glClear(GL_DEPTH_BUFFER_BIT);
 			glActiveTexture(GL_TEXTURE0);
 			glUseProgram(shadowRender->GetId());
 			shadowRender->SetUniform("lightSpaceMatrix", cubeDirs[i]); //set the light mvp matrix
 			glUseProgram(shadowRender->GetId()); //set uniform unbinds the current program so rebind it
 			glBindFramebuffer(GL_FRAMEBUFFER, depthCubeTextures[i]->rtFBO); //bind the correct fbo
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, depthCubeTextures[i]->rtFBO, 0); //use the correct face
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + k, depthCubeTextures[i]->GetId(), 0); //use the correct face
+
+			glClear(GL_DEPTH_BUFFER_BIT);
+			glViewport(0, 0, 2048, 2048);
+
+
+
+			GLenum res = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+			//if (res != GL_FRAMEBUFFER_COMPLETE)
+			//	std::cout << "Framebuffer not complete! Value = " << res << std::endl;
+
+
+
 			for (int j = 0; j < (int)renderers.size(); j++) {
 				shadowRender->SetUniform("in_Model", renderers[j]->GetGameObject()->GetComponent<Transform>()->GetModel());
 				glUseProgram(shadowRender->GetId());

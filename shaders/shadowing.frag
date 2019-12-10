@@ -57,11 +57,11 @@ void main(){
     lighting += CalcDirLights(dlights[i], norm);
   }
 
-  vec3 fragToLight = ex_FragPos - lights[0].pos;
-  float closestDepth = texture(in_ShadowMaps[0], fragToLight).r;
-  closestDepth *= in_FarPlane;
-  gl_FragColor = vec4(vec3(closestDepth), 1.0) + (vec4(lighting,1.0) * 0.001);
-  //gl_FragColor = vec4(lighting,1) * tex;
+  //vec3 fragToLight = ex_FragPos - lights[0].pos;
+  //float closestDepth = texture(in_ShadowMaps[0], fragToLight).r;
+  //closestDepth *= in_FarPlane;
+  //gl_FragColor = vec4(vec3(closestDepth), 1.0) + (vec4(lighting,1.0) * 0.001);
+  gl_FragColor = vec4(lighting,1) * tex;
 }
 
 vec3 CalcPointLights(PointLight light, vec3 norm, samplerCube shadowMap){
