@@ -52,9 +52,10 @@ void Renderer::OnUpdate(){
 
 		glm::mat4 lightView = glm::lookAt(lights[i]->GetGameObject()->GetComponent<Transform>()->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		glm::mat4 lightSpace = lightProjection * lightView;
-		shader->SetUniform("in_LightSpaces[" + std::to_string(i) + "]", lightSpace);
-		shader->SetUniform("in_ShadowMaps[" + std::to_string(i) + "]", depthTextures[i]);
+
+		shader->SetUniform("in_ShadowMaps[" + std::to_string(i) + "]", depthCubeTextures[i]);
 	}
+	shader->SetUniform("in_FarPlane", 100.0f);
 	shader->Draw(shape);
 }
 

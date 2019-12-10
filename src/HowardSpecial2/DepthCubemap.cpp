@@ -2,6 +2,7 @@
 
 DepthCubemap::DepthCubemap(){
 	glGenTextures(1, &id);
+	glGenFramebuffers(1, &rtFBO);
 
 	const unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
 	glBindTexture(GL_TEXTURE_CUBE_MAP, id);

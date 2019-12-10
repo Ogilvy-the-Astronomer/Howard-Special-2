@@ -31,6 +31,51 @@ int main(){
 
 	object = core->AddObject();
 	object->AddComponent<Transform>();
+	core->renderers.push_back(object->AddComponent<Renderer>());
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/desert.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/alientex.png"));
+	object->GetComponent<Transform>()->position.y = 15.0f;
+	object->GetComponent<Transform>()->rotation.z = glm::radians(180.0f);
+	object->GetComponent<Transform>()->scale = glm::vec3(5, 5, 5);
+
+	object = core->AddObject();
+	object->AddComponent<Transform>();
+	core->renderers.push_back(object->AddComponent<Renderer>());
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/desert.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/alientex.png"));
+	object->GetComponent<Transform>()->position.x = 20;
+	object->GetComponent<Transform>()->rotation.z = glm::radians(90.0f);
+	object->GetComponent<Transform>()->scale = glm::vec3(5, 5, 5);
+
+	object = core->AddObject();
+	object->AddComponent<Transform>();
+	core->renderers.push_back(object->AddComponent<Renderer>());
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/desert.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/alientex.png"));
+	object->GetComponent<Transform>()->position.x = -20;
+	object->GetComponent<Transform>()->rotation.z = glm::radians(-90.0f);
+	object->GetComponent<Transform>()->scale = glm::vec3(5, 5, 5);
+
+	object = core->AddObject();
+	object->AddComponent<Transform>();
+	core->renderers.push_back(object->AddComponent<Renderer>());
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/desert.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/alientex.png"));
+	object->GetComponent<Transform>()->position.z = -20;
+	object->GetComponent<Transform>()->rotation.x = glm::radians(90.0f);
+	object->GetComponent<Transform>()->scale = glm::vec3(5, 5, 5);
+
+	object = core->AddObject();
+	object->AddComponent<Transform>();
+	core->renderers.push_back(object->AddComponent<Renderer>());
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/desert.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/alientex.png"));
+	object->GetComponent<Transform>()->position.z = 20;
+	object->GetComponent<Transform>()->rotation.x = glm::radians(-90.0f);
+	object->GetComponent<Transform>()->scale = glm::vec3(5, 5, 5);
+
+	object = core->AddObject();
+	object->AddComponent<Transform>();
 	object->AddComponent<DirectionalLight>();
 	object->GetComponent<DirectionalLight>()->diffuse = glm::vec3(0.3f, 0.3f, 0.3f);
 	object->GetComponent<DirectionalLight>()->specular = glm::vec3(0.3f, 0.3f, 0.3f);
