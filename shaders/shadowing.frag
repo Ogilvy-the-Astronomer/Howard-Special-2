@@ -105,13 +105,26 @@ vec3 CalcDirLights(DirectionalLight light, vec3 norm){
 
 
 float ShadowCalculation(vec3 fragPos, samplerCube shadowMap, vec3 lightPos){
-  vec3 fragToLight = fragPos - lightPos;
-  float closestDepth = texture(shadowMap, fragToLight).r;
-  closestDepth *= in_FarPlane;
+  vec3 fragToLight = (fragPos - lightPos);
+  float shadowDepth = texture(shadowMap, (fragToLight)).r;
+  //shadowDepth *= 1000;//in_FarPlane;
+  //shadowDepth = (shadowDepth * (999) / (-1));
   float currentDepth = length(fragToLight);
+  //currentDepth = (currentDepth - 1.0) / (999.0);
+
+  float near = 1;
+  float far = 1000;
+  float z = shadowDepth;// * 2.0 - 1.0; 
+  float linearShadowDepth = (2.0 * near * far) / (far + near - z * (far - near));
+
   // check whether current frag pos is in shadow
-  float bias = 0.05; 
-  float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
+  float bias = 0.001; 
+  float shadow = currentDepth  -  bias > linearShadowDepth ? 0.0 : 1.0;
+  //float shadow = shadowDepth;//
+  //float shadow = linearShadowDepth * 0.01;//
+  //float shadow = currentDepth * 0.01;//
+
+ //float shadow = currentDepth - linearShadowDepth;
 
   return shadow;
 }

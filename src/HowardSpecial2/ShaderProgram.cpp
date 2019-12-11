@@ -304,7 +304,14 @@ void ShaderProgram::Draw(std::shared_ptr<Mesh> vertexArray)
 
 		if (samplers.at(i).texture)
 		{
-			glBindTexture(GL_TEXTURE_2D, samplers.at(i).texture->GetId());
+			if (i == 1)
+			{
+				glBindTexture(GL_TEXTURE_CUBE_MAP, samplers.at(i).texture->GetId());
+			}
+			else
+			{
+				glBindTexture(GL_TEXTURE_2D, samplers.at(i).texture->GetId());
+			}
 		}
 		else
 		{
@@ -329,7 +336,7 @@ void ShaderProgram::SetUniform(std::string uniform, glm::vec4 value)
 	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
 	if (uniformId == -1)
 	{
-		throw std::exception();
+		//throw std::exception();
 	}
 
 	glUseProgram(id);
@@ -341,7 +348,7 @@ void ShaderProgram::SetUniform(std::string uniform, glm::vec3 value) {
 	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
 	if (uniformId == -1)
 	{
-		throw std::exception();
+		//throw std::exception();
 	}
 
 	glUseProgram(id);
@@ -354,7 +361,7 @@ void ShaderProgram::SetUniform(std::string uniform, glm::mat4 value)
 	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
 	if (uniformId == -1)
 	{
-		throw std::exception();
+		//throw std::exception();
 	}
 
 	glUseProgram(id);
@@ -369,7 +376,7 @@ void ShaderProgram::SetUniform(std::string uniform, std::shared_ptr<Texture> tex
 
 	if (uniformId == -1)
 	{
-		throw std::exception();
+		//throw std::exception();
 	}
 
 	for (size_t i = 0; i < samplers.size(); i++)
@@ -433,7 +440,7 @@ void ShaderProgram::SetUniform(std::string uniform, float value)
 	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
 	if (uniformId == -1)
 	{
-		throw std::exception();
+		//throw std::exception();
 	}
 
 	glUseProgram(id);
@@ -446,7 +453,7 @@ void ShaderProgram::SetUniform(std::string uniform, int value)
 	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
 	if (uniformId == -1)
 	{
-		throw std::exception();
+		//throw std::exception();
 	}
 
 	glUseProgram(id);

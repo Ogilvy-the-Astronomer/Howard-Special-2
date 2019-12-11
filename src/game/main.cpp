@@ -88,6 +88,15 @@ int main(){
 	object->GetComponent<PointLight>()->specular = glm::vec3(0.3f, 0.3f, 0.3f);
 	object->GetComponent<Transform>()->position = glm::vec3(0.0f, 7.0f, 3.5f);
 
+	/*
+	object = core->AddObject();
+	object->AddComponent<Transform>();
+	object->AddComponent<PointLight>();
+	object->GetComponent<PointLight>()->diffuse = glm::vec3(0.0f, 10.0f, 0.0f);
+	object->GetComponent<PointLight>()->specular = glm::vec3(0.3f, 0.3f, 0.3f);
+	object->GetComponent<Transform>()->position = glm::vec3(0.0f, 1.0f, 0.5f);
+	*/
+
 	core->lights = core->GetComponents<PointLight>();
 
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
