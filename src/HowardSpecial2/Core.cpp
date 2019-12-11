@@ -98,7 +98,8 @@ void Core::Display(){
 	//REDO SHADOW STUFF
 	glEnable(GL_DEPTH_TEST);
 	//glm::mat4 lightProjection = glm::ortho(100.0f, -100.0f, 100.0f, -100.0f, 1.0f, 500.0f);
-	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 100.0f);
+
+	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 500.0f);
 	if (lights.size() != depthCubeTextures.size()) {
 		for (int i = 0; i < lights.size(); i++) {
 			depthCubeTextures.push_back(std::make_shared <DepthCubemap>());
@@ -118,7 +119,7 @@ void Core::Display(){
 		for (int k = 0; k < 6; k++) {
 			glActiveTexture(GL_TEXTURE0);
 			glUseProgram(shadowRender->GetId());
-			shadowRender->SetUniform("lightSpaceMatrix", cubeDirs[i]); //set the light mvp matrix
+			shadowRender->SetUniform("lightSpaceMatrix", cubeDirs[k]); //set the light mvp matrix
 			glUseProgram(shadowRender->GetId()); //set uniform unbinds the current program so rebind it
 			glBindFramebuffer(GL_FRAMEBUFFER, depthCubeTextures[i]->rtFBO); //bind the correct fbo
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + k, depthCubeTextures[i]->GetId(), 0); //use the correct face
@@ -128,7 +129,8 @@ void Core::Display(){
 
 
 
-			GLenum res = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+			//GLenum res = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+			//GLenum res = glGetError();
 			//if (res != GL_FRAMEBUFFER_COMPLETE)
 			//	std::cout << "Framebuffer not complete! Value = " << res << std::endl;
 

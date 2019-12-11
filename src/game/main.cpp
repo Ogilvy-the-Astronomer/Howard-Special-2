@@ -21,6 +21,7 @@ int main(){
 	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/fighter.png"));
 	object->GetComponent<Transform>()->position.z = -5.0f;
 
+
 	object = core->AddObject();
 	object->AddComponent<Transform>();
 	core->renderers.push_back(object->AddComponent<Renderer>());
@@ -107,8 +108,8 @@ int main(){
 		if (state[SDL_SCANCODE_S]) core->mainCamera->GetComponent<Transform>()->position += core->mainCamera->GetComponent<Transform>()->forward * 0.2f;
 		if (state[SDL_SCANCODE_A]) core->mainCamera->GetComponent<Transform>()->position -= core->mainCamera->GetComponent<Transform>()->right * 0.2f;
 		if (state[SDL_SCANCODE_D]) core->mainCamera->GetComponent<Transform>()->position += core->mainCamera->GetComponent<Transform>()->right * 0.2f;
-		if (state[SDL_SCANCODE_SPACE]) core->mainCamera->GetComponent<Transform>()->position.y += 0.5f;
-		if (state[SDL_SCANCODE_LCTRL]) core->mainCamera->GetComponent<Transform>()->position.y -= 0.5f;
+		if (state[SDL_SCANCODE_R]) core->mainCamera->GetComponent<Transform>()->position.y += 0.5f;
+		if (state[SDL_SCANCODE_F]) core->mainCamera->GetComponent<Transform>()->position.y -= 0.5f;
 
 		if (state[SDL_SCANCODE_RIGHT]) core->mainCamera->GetComponent<Transform>()->rotation.y -= 0.05f;
 		if (state[SDL_SCANCODE_LEFT]) core->mainCamera->GetComponent<Transform>()->rotation.y += 0.05f;

@@ -29,7 +29,6 @@ public:
 	~ShaderProgram();
 	void Draw(std::shared_ptr<Mesh> vertextArray);
 	void SetUniform(std::string uniform, std::shared_ptr<Texture> texture);
-	//void SetUniform(std::string uniform, std::shared_ptr<RenderTexture> texture);
 	void SetUniform(std::string uniform, glm::vec4 value);
 	void SetUniform(std::string uniform, glm::vec3 value);
 	void SetUniform(std::string uniform, glm::mat4 value);

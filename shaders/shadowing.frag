@@ -60,7 +60,10 @@ void main(){
   //vec3 fragToLight = ex_FragPos - lights[0].pos;
   //float closestDepth = texture(in_ShadowMaps[0], fragToLight).r;
   //closestDepth *= in_FarPlane;
-  //gl_FragColor = vec4(vec3(closestDepth), 1.0) + (vec4(lighting,1.0) * 0.001);
+  //float currentDepth = length(fragToLight);
+  //gl_FragColor = vec4(vec3(currentDepth), 1.0) + (vec4(lighting,1.0) * 0.001);
+  
+
   gl_FragColor = vec4(lighting,1) * tex;
 }
 
@@ -112,6 +115,5 @@ float ShadowCalculation(vec3 fragPos, samplerCube shadowMap, vec3 lightPos){
   // check whether current frag pos is in shadow
   float bias = 0.05; 
   float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
-
   return shadow;
 }
