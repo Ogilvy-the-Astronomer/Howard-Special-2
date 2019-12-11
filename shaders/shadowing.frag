@@ -120,9 +120,9 @@ float ShadowCalculation(vec3 fragPos, samplerCube shadowMap, vec3 lightPos){
   // check whether current frag pos is in shadow
   float bias = 0.001; 
   float shadow = currentDepth  -  bias > linearShadowDepth ? 0.0 : 1.0;
-  //float shadow = shadowDepth;//
-  //float shadow = linearShadowDepth * 0.01;//
-  //float shadow = currentDepth * 0.01;//
+ // float shadow = shadowDepth;//
+// float shadow = linearShadowDepth * 0.01;//
+ //  float shadow = currentDepth * 0.01;//
 
  //float shadow = currentDepth - linearShadowDepth;
 
