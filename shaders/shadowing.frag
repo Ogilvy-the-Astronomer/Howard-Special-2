@@ -1,12 +1,13 @@
 uniform sampler2D in_Texture;
 uniform mat4 in_View;
 uniform float in_FarPlane;
+uniform float in_NearPlane;
 
 varying vec2 ex_TexCoord;
 varying vec3 ex_FragPos;
 varying vec3 ex_Normal;
 
-#define NO_POINT_LIGHTS 1
+#define NO_POINT_LIGHTS 2
 uniform samplerCube in_ShadowMaps[NO_POINT_LIGHTS];
 
 struct PointLight{
@@ -115,14 +116,14 @@ float ShadowCalculation(vec3 fragPos, samplerCube shadowMap, vec3 lightPos){
   float near = 1;
   float far = 1000;
   float z = shadowDepth;// * 2.0 - 1.0; 
-  float linearShadowDepth = (2.0 * near * far) / (far + near - z * (far - near));
+  float linearShadowDepth = (2.0 * in_NearPlane * in_FarPlane) / (in_FarPlane + in_NearPlane - z * (in_FarPlane - in_NearPlane));
 
   // check whether current frag pos is in shadow
   float bias = 0.001; 
   float shadow = currentDepth  -  bias > linearShadowDepth ? 0.0 : 1.0;
- // float shadow = shadowDepth;//
-// float shadow = linearShadowDepth * 0.01;//
- //  float shadow = currentDepth * 0.01;//
+  //float shadow = shadowDepth;//
+  //float shadow = linearShadowDepth * 0.01;//
+  //float shadow = currentDepth * 0.01;//
 
  //float shadow = currentDepth - linearShadowDepth;
 

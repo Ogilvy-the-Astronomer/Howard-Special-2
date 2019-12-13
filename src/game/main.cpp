@@ -16,7 +16,7 @@ int main(){
 
 	object = core->AddObject();
 	object->AddComponent<Transform>();
-	core->renderers.push_back(object->AddComponent<Renderer>());
+	object->AddComponent<Renderer>();
 	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/fighter.obj"));
 	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/fighter.png"));
 	object->GetComponent<Transform>()->position.z = -5.0f;
@@ -24,7 +24,7 @@ int main(){
 
 	object = core->AddObject();
 	object->AddComponent<Transform>();
-	core->renderers.push_back(object->AddComponent<Renderer>());
+	object->AddComponent<Renderer>();
 	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/desert.obj"));
 	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/alientex.png"));
 	object->GetComponent<Transform>()->position.y = -5.0f;
@@ -32,7 +32,7 @@ int main(){
 
 	object = core->AddObject();
 	object->AddComponent<Transform>();
-	core->renderers.push_back(object->AddComponent<Renderer>());
+	object->AddComponent<Renderer>();
 	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/desert.obj"));
 	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/alientex.png"));
 	object->GetComponent<Transform>()->position.y = 15.0f;
@@ -41,7 +41,7 @@ int main(){
 
 	object = core->AddObject();
 	object->AddComponent<Transform>();
-	core->renderers.push_back(object->AddComponent<Renderer>());
+	object->AddComponent<Renderer>();
 	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/desert.obj"));
 	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/alientex.png"));
 	object->GetComponent<Transform>()->position.x = 20;
@@ -50,7 +50,7 @@ int main(){
 
 	object = core->AddObject();
 	object->AddComponent<Transform>();
-	core->renderers.push_back(object->AddComponent<Renderer>());
+	object->AddComponent<Renderer>();
 	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/desert.obj"));
 	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/alientex.png"));
 	object->GetComponent<Transform>()->position.x = -20;
@@ -59,7 +59,7 @@ int main(){
 
 	object = core->AddObject();
 	object->AddComponent<Transform>();
-	core->renderers.push_back(object->AddComponent<Renderer>());
+	object->AddComponent<Renderer>();
 	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/desert.obj"));
 	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/alientex.png"));
 	object->GetComponent<Transform>()->position.z = -20;
@@ -68,7 +68,7 @@ int main(){
 
 	object = core->AddObject();
 	object->AddComponent<Transform>();
-	core->renderers.push_back(object->AddComponent<Renderer>());
+	object->AddComponent<Renderer>();
 	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/desert.obj"));
 	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/alientex.png"));
 	object->GetComponent<Transform>()->position.z = 20;
@@ -84,21 +84,29 @@ int main(){
 
 	object = core->AddObject();
 	object->AddComponent<Transform>();
+	object->AddComponent<Renderer>();
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/dice.png"));
 	object->AddComponent<PointLight>();
 	object->GetComponent<PointLight>()->diffuse = glm::vec3(10.0f, 10.0f, 10.0f);
 	object->GetComponent<PointLight>()->specular = glm::vec3(0.3f, 0.3f, 0.3f);
 	object->GetComponent<Transform>()->position = glm::vec3(0.0f, 7.0f, 3.5f);
 
-	/*
+
+	
 	object = core->AddObject();
 	object->AddComponent<Transform>();
+	object->AddComponent<Renderer>();
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/dice.png"));
 	object->AddComponent<PointLight>();
-	object->GetComponent<PointLight>()->diffuse = glm::vec3(0.0f, 10.0f, 0.0f);
+	object->GetComponent<PointLight>()->diffuse = glm::vec3(10.0f, 10.0f, 10.0f);
 	object->GetComponent<PointLight>()->specular = glm::vec3(0.3f, 0.3f, 0.3f);
 	object->GetComponent<Transform>()->position = glm::vec3(0.0f, 1.0f, 0.5f);
-	*/
+	
 
 	core->lights = core->GetComponents<PointLight>();
+	core->renderers = core->GetComponents<Renderer>();
 
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	bool quit = false;
