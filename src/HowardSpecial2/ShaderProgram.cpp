@@ -304,7 +304,8 @@ void ShaderProgram::Draw(std::shared_ptr<Mesh> vertexArray)
 
 		if (samplers.at(i).texture)
 		{
-			if (i == 1)
+			/*
+			if (samplers.at(i).type == 1)
 			{
 				glBindTexture(GL_TEXTURE_CUBE_MAP, samplers.at(i).texture->GetId());
 			}
@@ -312,6 +313,8 @@ void ShaderProgram::Draw(std::shared_ptr<Mesh> vertexArray)
 			{
 				glBindTexture(GL_TEXTURE_2D, samplers.at(i).texture->GetId());
 			}
+			*/
+			glBindTexture(samplers.at(i).type, samplers.at(i).texture->GetId());
 		}
 		else
 		{
@@ -394,6 +397,40 @@ void ShaderProgram::SetUniform(std::string uniform, std::shared_ptr<Texture> tex
 
 	Sampler s;
 	s.id = uniformId;
+	s.type = GL_TEXTURE_2D;
+	s.texture = texture;
+	samplers.push_back(s);
+
+	glUseProgram(id);
+	glUniform1i(uniformId, samplers.size() - 1);
+	glUseProgram(0);
+}
+
+void ShaderProgram::SetUniform(std::string uniform, std::shared_ptr<DepthCubemap> texture)
+{
+	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
+
+	if (uniformId == -1)
+	{
+		//throw std::exception();
+	}
+
+	for (size_t i = 0; i < samplers.size(); i++)
+	{
+		if (samplers.at(i).id == uniformId)
+		{
+			samplers.at(i).texture = texture;
+
+			glUseProgram(id);
+			glUniform1i(uniformId, i);
+			glUseProgram(0);
+			return;
+		}
+	}
+
+	Sampler s;
+	s.id = uniformId;
+	s.type = GL_TEXTURE_CUBE_MAP;
 	s.texture = texture;
 	samplers.push_back(s);
 

@@ -51,17 +51,15 @@ void main(){
 
   vec3 norm = normalize(ex_Normal);
   vec3 lighting = vec3(0,0,0);
+  float shadow = 0;
   for(int i = 0; i < NO_POINT_LIGHTS; i++){
     lighting += CalcPointLights(lights[i], norm, in_ShadowMaps[i]);
+	shadow += ShadowCalculation(ex_FragPos, in_ShadowMaps[i], lights[i].pos);
   }
+  lighting += shadow;
   for(int i = 0; i < NO_DIR_LIGHTS; i++){
     lighting += CalcDirLights(dlights[i], norm);
   }
-
-  //vec3 fragToLight = ex_FragPos - lights[0].pos;
-  //float closestDepth = texture(in_ShadowMaps[0], fragToLight).r;
-  //closestDepth *= in_FarPlane;
-  //gl_FragColor = vec4(vec3(closestDepth), 1.0) + (vec4(lighting,1.0) * 0.001);
   gl_FragColor = vec4(lighting,1) * tex;
 }
 
@@ -82,8 +80,8 @@ vec3 CalcPointLights(PointLight light, vec3 norm, samplerCube shadowMap){
   float attentuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
   vec3 lighting = light.emissive + ((light.ambient + light.diffuse + light.specular) * attentuation);
-  float shadow = ShadowCalculation(ex_FragPos, shadowMap, light.pos);
-  return lighting * shadow;
+  //float shadow = ShadowCalculation(ex_FragPos, shadowMap, light.pos);
+  return lighting;// * shadow;
 }
 
 vec3 CalcDirLights(DirectionalLight light, vec3 norm){
@@ -104,28 +102,40 @@ vec3 CalcDirLights(DirectionalLight light, vec3 norm){
   return lighting;
 }
 
+vec3 sampleOffsetDirections[20] = vec3[]
+(
+   vec3( 1,  1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1,  1,  1), 
+   vec3( 1,  1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1,  1, -1),
+   vec3( 1,  1,  0), vec3( 1, -1,  0), vec3(-1, -1,  0), vec3(-1,  1,  0),
+   vec3( 1,  0,  1), vec3(-1,  0,  1), vec3( 1,  0, -1), vec3(-1,  0, -1),
+   vec3( 0,  1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0,  1, -1)
+);  
 
 float ShadowCalculation(vec3 fragPos, samplerCube shadowMap, vec3 lightPos){
   vec3 fragToLight = (fragPos - lightPos);
-  float shadowDepth = texture(shadowMap, (fragToLight)).r;
-  //shadowDepth *= 1000;//in_FarPlane;
-  //shadowDepth = (shadowDepth * (999) / (-1));
   float currentDepth = length(fragToLight);
-  //currentDepth = (currentDepth - 1.0) / (999.0);
+  int samples  = 20;
+  float diskRadius = 0.05;
+  float bias = 0.001; 
 
-  float near = 1;
-  float far = 1000;
+  /*
+  float shadowDepth = texture(shadowMap, (fragToLight)).r;
   float z = shadowDepth;// * 2.0 - 1.0; 
   float linearShadowDepth = (2.0 * in_NearPlane * in_FarPlane) / (in_FarPlane + in_NearPlane - z * (in_FarPlane - in_NearPlane));
 
   // check whether current frag pos is in shadow
-  float bias = 0.001; 
   float shadow = currentDepth  -  bias > linearShadowDepth ? 0.0 : 1.0;
-  //float shadow = shadowDepth;//
-  //float shadow = linearShadowDepth * 0.01;//
-  //float shadow = currentDepth * 0.01;//
-
- //float shadow = currentDepth - linearShadowDepth;
-
+  */
+  float shadow = 0;
+  for(int i = 0; i < samples; ++i){
+    float shadowDepth = texture(shadowMap, fragToLight + sampleOffsetDirections[i] * diskRadius).r;
+	float z = shadowDepth;// * 2.0 - 1.0; 
+    float linearShadowDepth = (2.0 * in_NearPlane * in_FarPlane) / (in_FarPlane + in_NearPlane - z * (in_FarPlane - in_NearPlane));
+    if(currentDepth - bias > linearShadowDepth){
+      shadow -= 1.0;
+	}
+  }
+  shadow /= float(samples); 
+  
   return shadow;
 }

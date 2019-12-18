@@ -131,8 +131,6 @@ void Core::Display(){
 			glViewport(0, 0, 2048, 2048);
 
 			glClear(GL_DEPTH_BUFFER_BIT);
-
-
 			GLenum res = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 			//if (res != GL_FRAMEBUFFER_COMPLETE)
 			//	std::cout << "Framebuffer not complete! Value = " << res << std::endl;

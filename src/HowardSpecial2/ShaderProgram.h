@@ -14,6 +14,7 @@ struct DepthCubemap;
 struct Sampler
 {
 	GLint id;
+	int type;
 	std::shared_ptr <Texture> texture;
 };
 
@@ -29,6 +30,7 @@ public:
 	~ShaderProgram();
 	void Draw(std::shared_ptr<Mesh> vertextArray);
 	void SetUniform(std::string uniform, std::shared_ptr<Texture> texture);
+	void SetUniform(std::string uniform, std::shared_ptr<DepthCubemap> texture);
 	void SetUniform(std::string uniform, glm::vec4 value);
 	void SetUniform(std::string uniform, glm::vec3 value);
 	void SetUniform(std::string uniform, glm::mat4 value);

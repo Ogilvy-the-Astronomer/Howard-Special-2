@@ -37,9 +37,6 @@ void Renderer::OnUpdate(){
 		shader->SetUniform("dlights[" + std::to_string(i) + "].specular", dLights[i]->specular);
 		shader->SetUniform("dlights[" + std::to_string(i) + "].dir", dLights[i]->GetGameObject()->GetComponent<Transform>()->rotation);
 	}
-	//glm::mat4 lightProjection = glm::ortho(100.0f, -100.0f, 100.0f, -100.0f, 1.0f, 500.0f);
-	//glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 100.0f);
-
 	for (int i = 0; i < (int)lights.size(); i++) {
 		shader->SetUniform("lights[" + std::to_string(i) + "].emissive", lights[i]->emissive);
 		shader->SetUniform("lights[" + std::to_string(i) + "].ambient", lights[i]->ambient);
@@ -50,11 +47,11 @@ void Renderer::OnUpdate(){
 		shader->SetUniform("lights[" + std::to_string(i) + "].linear", lights[i]->linear);
 		shader->SetUniform("lights[" + std::to_string(i) + "].quadratic", lights[i]->quadratic);
 
-		//glm::mat4 lightView = glm::lookAt(lights[i]->GetGameObject()->GetComponent<Transform>()->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		//glm::mat4 lightSpace = lightProjection * lightView;
-
 		shader->SetUniform("in_ShadowMaps[" + std::to_string(i) + "]", depthCubeTextures[i]);
 	}
+	//shader->SetUniform("in_ShadowMap1", depthCubeTextures[0]);
+	//shader->SetUniform("in_ShadowMap2", depthCubeTextures[0]);
+
 	shader->SetUniform("in_FarPlane", 1000.0f);
 	shader->SetUniform("in_NearPlane", 1.0f);
 	shader->Draw(shape);
