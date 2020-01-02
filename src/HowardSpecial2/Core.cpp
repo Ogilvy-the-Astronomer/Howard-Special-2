@@ -97,8 +97,9 @@ void Core::Display(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//REDO SHADOW STUFF
 	glEnable(GL_DEPTH_TEST);
+
 	//glm::mat4 lightProjection = glm::ortho(100.0f, -100.0f, 100.0f, -100.0f, 1.0f, 500.0f);
-	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 1000.0f);
+	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 2.0f, 65.0f);
 	if (lights.size() != depthCubeTextures.size()) {
 		for (int i = 0; i < lights.size(); i++) {
 			depthCubeTextures.push_back(std::make_shared <DepthCubemap>());
@@ -113,10 +114,6 @@ void Core::Display(){
 		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f,-1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
 		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-		//cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f,  0.0f, 1.0f)));
-		//cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f,-1.0f)));
-		//cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-		//cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f,-1.0f, 0.0f)));
 		//glm::mat4 lightView = glm::lookAt(pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		//glm::mat4 lightSpaceMatrix = lightProjection * lightView; //light mvp matrix
 		//glViewport(0, 0, 2048, 2048);
@@ -154,7 +151,6 @@ void Core::Display(){
 	glViewport(0, 0, window_h, window_w);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the color and depth buffer
 	//REDO
-
 	for (int i = 0; i < (int)gameObjects.size(); i++) {
 		gameObjects.at(i)->Update();
 	}

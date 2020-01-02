@@ -49,11 +49,8 @@ void Renderer::OnUpdate(){
 
 		shader->SetUniform("in_ShadowMaps[" + std::to_string(i) + "]", depthCubeTextures[i]);
 	}
-	//shader->SetUniform("in_ShadowMap1", depthCubeTextures[0]);
-	//shader->SetUniform("in_ShadowMap2", depthCubeTextures[0]);
-
-	shader->SetUniform("in_FarPlane", 1000.0f);
-	shader->SetUniform("in_NearPlane", 1.0f);
+	shader->SetUniform("in_FarPlane", 65.0f);
+	shader->SetUniform("in_NearPlane", 2.0f);
 	shader->Draw(shape);
 }
 
