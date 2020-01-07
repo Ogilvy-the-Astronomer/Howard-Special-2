@@ -23,13 +23,16 @@ int main(){
 	//object->GetComponent<Transform>()->position.z = 100.0f;
 
 
-	/*
+	
 	object = core->AddObject();
 	object->AddComponent<Transform>();
 	object->AddComponent<Renderer>();
-	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/fighter.obj"));
-	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/fighter.png"));
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/campsite.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/campsite.png"));
+	object->GetComponent<Transform>()->position.z = 70.0f;
+	object->GetComponent<Transform>()->scale = glm::vec3(2.0f);
 
+	/*
 	object = core->AddObject();
 	object->AddComponent<Transform>();
 	object->AddComponent<Renderer>();
@@ -91,27 +94,29 @@ int main(){
 	//object->GetComponent<DirectionalLight>()->specular = glm::vec3(0.1f, 0.1f, 0.1f);
 	object->GetComponent<Transform>()->rotation = glm::vec3(glm::radians(40.0f), glm::radians(40.0f), glm::radians(40.0f));
 
-	/*
+	
 	std::shared_ptr<GameObject> object2;
 	object2 = core->AddObject();
 	object2->AddComponent<Transform>();
-	//object->AddComponent<Renderer>();
-	//object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
-	//object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/dice.png"));
+	object2->AddComponent<Renderer>();
+	object2->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
+	object2->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/dice.png"));
 	object2->AddComponent<PointLight>();
-	object2->GetComponent<PointLight>()->diffuse = glm::vec3(0.0f, 0.0f, 0.0f);
-	object2->GetComponent<PointLight>()->specular = glm::vec3(0.3f, 0.3f, 0.3f);
-	object2->GetComponent<Transform>()->position = glm::vec3(10.0f, 100.5f, -11.0f);
-    */
+	object2->GetComponent<PointLight>()->diffuse = glm::vec3(10.0f, 10.0f, 10.0f);
+	//object2->GetComponent<PointLight>()->specular = glm::vec3(0.3f, 0.3f, 0.3f);
+	object2->GetComponent<Transform>()->position = glm::vec3(0.0f, 1.0f, 70.0f);
+   
 
 	
 	object = core->AddObject();
 	object->AddComponent<Transform>();
-	object->AddComponent<Renderer>();
-	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
-	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/dice.png"));
+	//object->AddComponent<Renderer>();
+	//object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
+	//object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/dice.png"));
 	object->AddComponent<PointLight>();
-	object->GetComponent<PointLight>()->diffuse = glm::vec3(10.0f, 10.0f, 10.0f);
+	object->GetComponent<PointLight>()->diffuse = glm::vec3(5.0f, 5.0f, 5.0f);
+	object->GetComponent<PointLight>()->linear = 0.022f;
+	object->GetComponent<PointLight>()->quadratic = 0.0019f;
 	//object->GetComponent<PointLight>()->specular = glm::vec3(0.3f, 0.3f, 0.3f);
 	object->GetComponent<Transform>()->position = glm::vec3(0.0f, 0.0f, 0.0f);
 	
@@ -122,17 +127,17 @@ int main(){
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	bool quit = false;
 
-	float spinpos = 0;
-	float spinpos2 = 0;
+	float spinPos = 6.2f;
+	float spinCounter = -1;
 	while (!quit)
 	{
 		state = SDL_GetKeyboardState(NULL);
-		if (state[SDL_SCANCODE_I]) object->GetComponent<Transform>()->position.z += 0.2f;
-		if (state[SDL_SCANCODE_K]) object->GetComponent<Transform>()->position.z -= 0.2f;
-		if (state[SDL_SCANCODE_J]) object->GetComponent<Transform>()->position.x -= 0.2f;
-		if (state[SDL_SCANCODE_L]) object->GetComponent<Transform>()->position.x += 0.2f;
-		if (state[SDL_SCANCODE_U]) object->GetComponent<Transform>()->position.y -= 0.2f;
-		if (state[SDL_SCANCODE_H]) object->GetComponent<Transform>()->position.y += 0.2f;
+		if (state[SDL_SCANCODE_I]) object2->GetComponent<Transform>()->position.z += 0.2f;
+		if (state[SDL_SCANCODE_K]) object2->GetComponent<Transform>()->position.z -= 0.2f;
+		if (state[SDL_SCANCODE_J]) object2->GetComponent<Transform>()->position.x -= 0.2f;
+		if (state[SDL_SCANCODE_L]) object2->GetComponent<Transform>()->position.x += 0.2f;
+		if (state[SDL_SCANCODE_U]) object2->GetComponent<Transform>()->position.y -= 0.2f;
+		if (state[SDL_SCANCODE_H]) object2->GetComponent<Transform>()->position.y += 0.2f;
 
 
 		if (state[SDL_SCANCODE_W]) core->mainCamera->GetComponent<Transform>()->position -= core->mainCamera->GetComponent<Transform>()->forward * 0.2f;
@@ -163,28 +168,24 @@ int main(){
 				}
 			}
 		}
-		//core->Update();
-		if (spinpos == 0 || spinpos > 1.7f && spinpos < 1.73f) {
-			if (spinpos2 < 300) {
-				spinpos2++;
+		
+		if (spinPos > 6.28f && spinPos < 6.3f || spinPos > 1.55f && spinPos < 1.57f) {
+			if (spinCounter < 300) {
+				spinCounter++;
 			}
 			else{
-				spinpos2 = -1;
+				spinCounter = -1;
 				
 			}
 		}
-		if (spinpos2 < 0) spinpos += 0.02f;
+		if (spinCounter < 0) spinPos += 0.02f;
 
-		if (spinpos > 6.3f) {
-			spinpos = 0;
+		if (spinPos > 6.3f) {
+			spinPos = 0;
 		}
+		
+		object->GetComponent<Transform>()->position = glm::vec3(glm::sin(spinPos) * 15.0f ,0.0f, glm::cos(spinPos) * 15.0f );
 
-		object->GetComponent<Transform>()->position = glm::vec3(glm::sin(spinpos) * 15.0f ,0.0f, glm::cos(spinpos) * 15.0f );
-		//spinpos += 0.002f;
-		/*
-		object2->GetComponent<Transform>()->position = glm::vec3(glm::sin(spinpos2), -2.5f, glm::cos(spinpos2) - 11.0f);
-		spinpos2 -= 0.08f;
-		*/
 		core->Display();
 	}
 

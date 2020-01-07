@@ -97,9 +97,10 @@ void Core::Display(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//REDO SHADOW STUFF
 	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
 
 	//glm::mat4 lightProjection = glm::ortho(100.0f, -100.0f, 100.0f, -100.0f, 1.0f, 500.0f);
-	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 2.0f, 65.0f);
+	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 2.0f, 45.0f);
 	if (lights.size() != depthCubeTextures.size()) {
 		for (int i = 0; i < lights.size(); i++) {
 			depthCubeTextures.push_back(std::make_shared <DepthCubemap>());
@@ -147,7 +148,7 @@ void Core::Display(){
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
 	}
-
+	glEnable(GL_CULL_FACE);
 	glViewport(0, 0, window_h, window_w);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the color and depth buffer
 	//REDO
