@@ -1,0 +1,6 @@
+Difficult & Necessary - Platform agnosticism (exe detection n stuff), documentation, on screen text, delta time, UI
+Easy & Necessary - Better exceptions, collision detection, finishing sound, keyboard management, 
+Difficuly & Helpful - Physics, animation, lua scripting (?), touch support
+Easy & Helpful - 
+
+Very Difficult & probably not very helpful -  VR, AI, scenes, saving,

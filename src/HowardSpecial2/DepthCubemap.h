@@ -4,6 +4,6 @@
 
 struct DepthCubemap : public Texture {
 public:
-	GLuint rtFBO;
+	GLuint rtFBO; ///< frame buffer id
 	DepthCubemap();
 };

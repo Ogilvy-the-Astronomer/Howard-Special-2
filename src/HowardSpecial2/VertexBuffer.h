@@ -4,12 +4,15 @@
 #include<GL\glew.h>
 #include "NonCopyable.h"
 #include "Resource.h"
+/**
+ * A buffer for storing vertex data
+ */
 struct VertexBuffer : private NonCopyable, public Resource
 {
 private:
-	GLuint id;
-	int components;
-	std::vector<GLfloat> data;
+	GLuint id; ///< vertex buffer id
+	int components; ///< amount of components in the buffer
+	std::vector<GLfloat> data; ///< list of values
 	bool dirty;
 
 public:

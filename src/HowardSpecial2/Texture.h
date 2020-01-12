@@ -5,11 +5,13 @@
 #include <string>
 #include "NonCopyable.h"
 #include "Resource.h"
-
+/**
+ * A texture 
+ */
 struct Texture : private NonCopyable, public Resource
 {
 protected:
-	GLuint id;
+	GLuint id; ///< texture id
 public:
 	GLuint GetId();
 	Texture();

@@ -93,13 +93,13 @@ ShaderProgram::ShaderProgram(std::string vert, std::string frag)
 	std::string vertShader;
 	std::string fragShader;
 
-	std::ifstream file(vert);
+	std::ifstream file(vert); //load the vertex shader
 
 	if (!file.is_open()) {
 		throw std::exception();
 	}
 	else {
-		while (!file.eof()) {
+		while (!file.eof()) { //go through every line of the vertex sjader and write it to a string
 			std::string line;
 			std::getline(file, line);
 			vertShader += line + "\n";
@@ -107,7 +107,7 @@ ShaderProgram::ShaderProgram(std::string vert, std::string frag)
 	}
 	file.close();
 
-	file.open(frag);
+	file.open(frag); //load the fragment shader
 
 	if (!file.is_open()) {
 		throw std::exception();
@@ -124,8 +124,8 @@ ShaderProgram::ShaderProgram(std::string vert, std::string frag)
 	const char *vertex = vertShader.c_str();
 	const char *fragment = fragShader.c_str();
 
-	GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShaderId, 1, &vertex, NULL);
+	GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER); //assign vertex shader id
+	glShaderSource(vertexShaderId, 1, &vertex, NULL); //create the shader from the source
 	glCompileShader(vertexShaderId);
 	GLint success = 0;
 	glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &success);
@@ -135,8 +135,8 @@ ShaderProgram::ShaderProgram(std::string vert, std::string frag)
 		throw std::exception();
 	}
 
-	GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShaderId, 1, &fragment, NULL);
+	GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);//assign fragment shader id
+	glShaderSource(fragmentShaderId, 1, &fragment, NULL);//create the shader from the source
 	glCompileShader(fragmentShaderId);
 	glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &success);
 	if (!success)
@@ -145,7 +145,8 @@ ShaderProgram::ShaderProgram(std::string vert, std::string frag)
 		throw std::exception();
 	}
 
-	id = glCreateProgram();
+	id = glCreateProgram(); //assign program id
+	//attach shaders to the program
 	glAttachShader(id, vertexShaderId);
 	glAttachShader(id, fragmentShaderId);
 	// Ensure the VAO "position" attribute stream gets set as the first position
@@ -295,42 +296,32 @@ ShaderProgram::~ShaderProgram()
 
 void ShaderProgram::Draw(std::shared_ptr<Mesh> vertexArray)
 {
-	glUseProgram(id);
-	glBindVertexArray(vertexArray->GetId());
+	glUseProgram(id); //bind the shader
+	glBindVertexArray(vertexArray->GetId()); //bind the mesh
 	
-	for (size_t i = 0; i < samplers.size(); i++)
+	for (size_t i = 0; i < samplers.size(); i++) //go through list of samplers
 	{
-		glActiveTexture(GL_TEXTURE0 + i);
+		glActiveTexture(GL_TEXTURE0 + i); //set the active texture equal to the position in the list of samplers
 
-		if (samplers.at(i).texture)
+		if (samplers.at(i).texture) //if a texture exists at this position, bind it 
 		{
-			/*
-			if (samplers.at(i).type == 1)
-			{
-				glBindTexture(GL_TEXTURE_CUBE_MAP, samplers.at(i).texture->GetId());
-			}
-			else
-			{
-				glBindTexture(GL_TEXTURE_2D, samplers.at(i).texture->GetId());
-			}
-			*/
 			glBindTexture(samplers.at(i).type, samplers.at(i).texture->GetId());
 		}
 		else
 		{
-			glBindTexture(GL_TEXTURE_2D, 0);
+			glBindTexture(GL_TEXTURE_2D, 0); //otherwise unbind the current texture
 		}
 	}
 
-	glDrawArrays(GL_TRIANGLES, 0, vertexArray->GetVertexCount());
+	glDrawArrays(GL_TRIANGLES, 0, vertexArray->GetVertexCount()); //draw the mesh
 
-	for (size_t i = 0; i < samplers.size(); i++)
+	for (size_t i = 0; i < samplers.size(); i++) //go through list of samplers and unbind all of the textures
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	
-	glBindVertexArray(0);
+	glBindVertexArray(0); //unbind the mesh and program
 	glUseProgram(0);
 }
 
@@ -382,7 +373,7 @@ void ShaderProgram::SetUniform(std::string uniform, std::shared_ptr<Texture> tex
 		//throw std::exception();
 	}
 
-	for (size_t i = 0; i < samplers.size(); i++)
+	for (size_t i = 0; i < samplers.size(); i++) //go through the list of samplers and if the texture already exists bind that one
 	{
 		if (samplers.at(i).id == uniformId)
 		{
@@ -394,7 +385,7 @@ void ShaderProgram::SetUniform(std::string uniform, std::shared_ptr<Texture> tex
 			return;
 		}
 	}
-
+	//if not create a new sampler of the texture, add it to the list and bind that
 	Sampler s;
 	s.id = uniformId;
 	s.type = GL_TEXTURE_2D;

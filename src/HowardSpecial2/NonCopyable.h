@@ -1,4 +1,7 @@
 #pragma once
+/**
+ * A virtual struct that cannot be copied
+ */
 struct NonCopyable {
 protected:
 	NonCopyable() {}

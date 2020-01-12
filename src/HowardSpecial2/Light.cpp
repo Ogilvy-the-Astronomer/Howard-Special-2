@@ -2,6 +2,9 @@
 #include "Transform.h"
 #include "GameObject.h"
 
+/**
+ * light source component
+ */
 PointLight::PointLight(){
 	emissive, ambient, specular, diffuse = glm::vec3(0.0f);
 	constant = 1.0f;

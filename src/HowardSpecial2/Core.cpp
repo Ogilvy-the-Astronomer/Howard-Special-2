@@ -1,76 +1,66 @@
 #include "Core.h"
-//REDO SHADOW STUFF
+
 #include "Renderer.h"
 #include "Transform.h"
 #include "Mesh.h"
 #include "Light.h"
-//REDO
+
 #include<exception>
-//#include "stb_vorbis.h"
+#include<iostream>
 
 Core::Core()
 {
-	window_h = 600;
-	window_w = 600;
-	graphicsContext = SDL_CreateWindow("Triangle", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+	window_h = 1080;
+	window_w = 1920;
+	graphicsContext = SDL_CreateWindow("Triangle", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL); //create the program window
 
-	if (!SDL_GL_CreateContext(graphicsContext)) {
+	if (!SDL_GL_CreateContext(graphicsContext)) { //throw exceptions if something goes wrong
 		throw std::exception();
 	}
 	if (glewInit() != GLEW_OK) {
 		throw std::exception();
 	}
 
-	/*
-   * Initialize OpenAL audio system
-   */
-
    // Open up the OpenAL device
 	device = alcOpenDevice(NULL);
 
-	if (device == NULL)
-	{
+	if (device == NULL) {
 		throw std::exception();
 	}
 
 	// Create audio context
 	soundContext = alcCreateContext(device, NULL);
 
-	if (soundContext == NULL)
-	{
+	if (soundContext == NULL) {
 		alcCloseDevice(device);
 		throw std::exception();
 	}
 
 	// Set as current context
-	if (!alcMakeContextCurrent(soundContext))
-	{
+	if (!alcMakeContextCurrent(soundContext)) {
 		alcDestroyContext(soundContext);
 		alcCloseDevice(device);
 		throw std::exception();
 	}
 
-	// Generally not needed. Translate sources instead
-	alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
-	resources = std::make_shared<Resources>();
-	resources->resources.clear();
+	alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f); //set the position of the listener.
+	resources = std::make_shared<Resources>(); //create a list for resources (textures, sounds, meshes, etc)
+	resources->resources.clear(); //empty the list
 
-	shadowRender = std::make_shared<ShaderProgram>("../shaders/shadows.vert", "../shaders/shadows.frag");
-	depthMapRender = std::make_shared<ShaderProgram>("../shaders/rendtex.vert", "../shaders/rendtex.frag");
-	frameBuffer = std::make_shared<RenderTexture>(1);
+	shadowRender = std::make_shared<ShaderProgram>("../shaders/shadows.vert", "../shaders/shadows.frag"); //create the shader for rendering the scene to the shadowmap
 }
 
 std::shared_ptr<GameObject> Core::AddObject(){
-	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>();
-	gameObject->core = self;
-	gameObjects.push_back(gameObject);
-	gameObject->self = gameObject;
+	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(); //create a game object
+	gameObject->core = self; //assign a core reference to the game object
+	gameObject->self = gameObject; //assign a reference to itself
+	gameObjects.push_back(gameObject); //add it to the list of gameobjects
 	return gameObject;
 }
 
 std::shared_ptr<Core> Core::Initialize() {
-	std::shared_ptr<Core> rtn = std::make_shared<Core>();
-	rtn->self = rtn;
+	std::shared_ptr<Core> rtn = std::make_shared<Core>();//create the core
+	rtn->self = rtn; //give it a reference to itself
 	return rtn;
 }
 
@@ -79,83 +69,94 @@ void Core::Start() {
 }
 
 void Core::Stop() {
-	alcMakeContextCurrent(NULL);
-	alcDestroyContext(soundContext);
-	alcCloseDevice(device);
-	SDL_DestroyWindow(graphicsContext);
-	SDL_Quit();
+	alcMakeContextCurrent(NULL); //unassign the current audio context
+	alcDestroyContext(soundContext); //destroy the audio context
+	alcCloseDevice(device); //close the audio device
+	SDL_DestroyWindow(graphicsContext); //destroy the graphics context
+	/* Get average fps
+	lowestfps = lowestfps / framecount;
+	std::cout << lowestfps << std::endl;
+	std::cin.get();
+	*/
+	SDL_Quit(); //quit sdl
 }
 
 void Core::Update(){
-	for (int i = 0; i < (int)gameObjects.size(); i++) {
+	for (int i = 0; i < (int)gameObjects.size(); i++) { //go through list of all gameobjects and call update on them
 		gameObjects.at(i)->Update();
 	}
 }
 
 void Core::Display(){
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//REDO SHADOW STUFF
-	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_CULL_FACE);
+	currentTicks = SDL_GetTicks();
+	float fps = glm::round(1000.0f / (currentTicks - lastTicks));
+	/* For getting average fps
+	lowestfps += fps;
+	framecount++;
+	*/
+	std::string tickDif = std::to_string(fps);
+	SDL_SetWindowTitle(graphicsContext, tickDif.c_str());
+	glClearColor(1.0f, 0.0f, 0.0f, 1.0f); //clear the screen red
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the color and depth buffer
 
-	//glm::mat4 lightProjection = glm::ortho(100.0f, -100.0f, 100.0f, -100.0f, 1.0f, 500.0f);
-	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 2.0f, 45.0f);
-	if (lights.size() != depthCubeTextures.size()) {
+	glEnable(GL_DEPTH_TEST); //enable depth testing
+	//glDisable(GL_CULL_FACE); //disable face culling for more accurate shadows
+
+	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 90.0f); //create the projection matrix for the light
+	if (lights.size() != depthCubeTextures.size()) { //create a depth cube map for every light in the scene
 		for (int i = 0; i < lights.size(); i++) {
 			depthCubeTextures.push_back(std::make_shared <DepthCubemap>());
 		}
 	}
-	for (int i = 0; i < (int)lights.size(); i++) {
-		glm::vec3 pos = lights[i]->GetGameObject()->GetComponent<Transform>()->position;
-		std::vector<glm::mat4> cubeDirs;
+	for (int i = 0; i < (int)lights.size(); i++) {//go through every point light
+		glm::vec3 pos = lights[i]->GetGameObject()->GetComponent<Transform>()->position; //get the light position
+		std::vector<glm::mat4> cubeDirs; //create a list of 6 view-projection matrices for each face of the cubemap, multiplying the projection matrix by each of the 6 view matrices
 		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f,-1.0f, 0.0f)));
 		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
 		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f,-1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
 		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-		//glm::mat4 lightView = glm::lookAt(pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		//glm::mat4 lightSpaceMatrix = lightProjection * lightView; //light mvp matrix
-		//glViewport(0, 0, 2048, 2048);
-		for (int k = 0; k < 6; k++) {
-			glActiveTexture(GL_TEXTURE0);
-			glUseProgram(shadowRender->GetId());
-			shadowRender->SetUniform("lightSpaceMatrix", cubeDirs[k]); //set the light mvp matrix
+
+		for (int k = 0; k < 6; k++) {// go through every cube face
+			glActiveTexture(GL_TEXTURE0);//unassign the active texture
+			glUseProgram(shadowRender->GetId());//use the main rendering program
+			shadowRender->SetUniform("lightSpaceMatrix", cubeDirs[k]); //set the light mvp matrix for every face
 			glUseProgram(shadowRender->GetId()); //set uniform unbinds the current program so rebind it
 			glBindFramebuffer(GL_FRAMEBUFFER, depthCubeTextures[i]->rtFBO); //bind the correct fbo
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + k, depthCubeTextures[i]->GetId(), 0); //use the correct face
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + k, depthCubeTextures[i]->GetId(), 0); //assign a depth attachment to the correct face
 
-			glViewport(0, 0, 2048, 2048);
+			glViewport(0, 0, 2048, 2048); //resize the viewport for the shadowmap
 
-			glClear(GL_DEPTH_BUFFER_BIT);
+			glClear(GL_DEPTH_BUFFER_BIT); //clear the depth buffer
 			GLenum res = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 			//if (res != GL_FRAMEBUFFER_COMPLETE)
 			//	std::cout << "Framebuffer not complete! Value = " << res << std::endl;
 
 
 
-			for (int j = 0; j < (int)renderers.size(); j++) {
-				shadowRender->SetUniform("in_Model", renderers[j]->GetGameObject()->GetComponent<Transform>()->GetModel());
+			for (int j = 0; j < (int)renderers.size(); j++) { //go through list of all renderers
+				shadowRender->SetUniform("in_Model", renderers[j]->GetGameObject()->GetComponent<Transform>()->GetModel()); //set the model matrix
 				glUseProgram(shadowRender->GetId());
-				glBindVertexArray(renderers[j]->shape->GetId());
-				glDrawArrays(GL_TRIANGLES, 0, renderers[j]->shape->GetVertexCount());
-				glBindVertexArray(0);
+				glBindVertexArray(renderers[j]->shape->GetId()); //bind the mesh
+				glDrawArrays(GL_TRIANGLES, 0, renderers[j]->shape->GetVertexCount()); //draw the mesh
+				glBindVertexArray(0); //unbind the mesh
 
-				renderers[j]->depthCubeTextures = depthCubeTextures;
+				renderers[j]->depthCubeTextures = depthCubeTextures; //assign the depth map to the renderer
 			}
-			glUseProgram(0);
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glUseProgram(0); //unbind the program
+			glBindFramebuffer(GL_FRAMEBUFFER, 0); //unbind the framebuffer
 		}
 	}
-	glEnable(GL_CULL_FACE);
-	glViewport(0, 0, window_h, window_w);
+	//glEnable(GL_CULL_FACE); //reset values to default
+	glViewport(0, 0, 2 * window_h, window_w);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the color and depth buffer
-	//REDO
-	for (int i = 0; i < (int)gameObjects.size(); i++) {
+
+	for (int i = 0; i < (int)gameObjects.size(); i++) { //go through list of gameobjects and call update on them, including the renderer which draws the object to the context
 		gameObjects.at(i)->Update();
 	}
-	glDisable(GL_DEPTH_TEST);
-	SDL_GL_SwapWindow(graphicsContext);
+	glDisable(GL_DEPTH_TEST); //disable depth testing
+	SDL_GL_SwapWindow(graphicsContext); //display context to screen
+	lastTicks = currentTicks;
 }
 
