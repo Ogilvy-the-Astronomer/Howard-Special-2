@@ -3,17 +3,29 @@
 #include<vector>
 #include<AL/al.h>
 #include<AL/alc.h>
-#include "GameObject.h"
-#include "Camera.h"
 #include "NonCopyable.h"
+
+#include "GameObject.h"
+#include "Resources.h"
+/*
+#include "Camera.h"
+
 #include "Resources.h"
 #include "RenderTexture.h"
 #include "ShaderProgram.h"
 #include "DepthCubemap.h"
+*/
 
 struct Renderer;
 struct Mesh;
 struct PointLight;
+
+struct GameObject;
+struct Camera;
+struct ShaderProgram;
+struct DepthCubemap;
+struct RenderTexture;
+struct Keyboard;
 /**
  * The core of the engine with it's crucial functionalities
  */
@@ -37,6 +49,7 @@ struct Core : private NonCopyable {
 	void Update(); ///<go through all gameobjects and update all their components
 	void Display(); ///< go through all gameobjects and update all their components and also renders shadows
 	std::shared_ptr<Core> Initialize(); ///<intialize dependencies 
+	std::shared_ptr<Keyboard> keyboard;
 
 	std::shared_ptr<ShaderProgram> shadowRender; ///<shader that renders the shadow map
 	//std::shared_ptr<ShaderProgram> depthMapRender; ///<shader that renders the shadow map

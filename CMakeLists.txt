@@ -42,6 +42,8 @@ add_library(HowardSpecial2
 	src/HowardSpecial2/Light.h
 	src/HowardSpecial2/DepthCubemap.h
 	src/HowardSpecial2/DepthCubemap.cpp
+	src/HowardSpecial2/Keyboard.h
+	src/HowardSpecial2/Keyboard.cpp
 )
 target_link_libraries(HowardSpecial2 SDL2 opengl32 openal32 glew32)
 

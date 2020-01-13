@@ -5,13 +5,19 @@
 #include "Mesh.h"
 #include "Light.h"
 
+#include "Camera.h"
+#include "RenderTexture.h"
+#include "ShaderProgram.h"
+#include "DepthCubemap.h"
+#include "Keyboard.h"
+
 #include<exception>
 #include<iostream>
 
 Core::Core()
 {
-	window_h = 1080;
-	window_w = 1920;
+	window_h = 600;
+	window_w = 600;
 	graphicsContext = SDL_CreateWindow("Triangle", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL); //create the program window
 
 	if (!SDL_GL_CreateContext(graphicsContext)) { //throw exceptions if something goes wrong
@@ -48,6 +54,7 @@ Core::Core()
 	resources->resources.clear(); //empty the list
 
 	shadowRender = std::make_shared<ShaderProgram>("../shaders/shadows.vert", "../shaders/shadows.frag"); //create the shader for rendering the scene to the shadowmap
+	keyboard = std::make_shared<Keyboard>();
 }
 
 std::shared_ptr<GameObject> Core::AddObject(){
@@ -82,12 +89,16 @@ void Core::Stop() {
 }
 
 void Core::Update(){
+	keyboard->Update();
 	for (int i = 0; i < (int)gameObjects.size(); i++) { //go through list of all gameobjects and call update on them
 		gameObjects.at(i)->Update();
 	}
 }
 
 void Core::Display(){
+	keyboard->Update();
+
+
 	currentTicks = SDL_GetTicks();
 	float fps = glm::round(1000.0f / (currentTicks - lastTicks));
 	/* For getting average fps
@@ -104,12 +115,12 @@ void Core::Display(){
 
 	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 90.0f); //create the projection matrix for the light
 	if (lights.size() != depthCubeTextures.size()) { //create a depth cube map for every light in the scene
-		for (int i = 0; i < lights.size(); i++) {
+		for (int i = 0; i < (int)lights.size(); i++) {
 			depthCubeTextures.push_back(std::make_shared <DepthCubemap>());
 		}
 	}
 	for (int i = 0; i < (int)lights.size(); i++) {//go through every point light
-		glm::vec3 pos = lights[i]->GetGameObject()->GetComponent<Transform>()->position; //get the light position
+		glm::vec3 pos = lights[i]->GetGameObject()->GetTransform()->position; //get the light position
 		std::vector<glm::mat4> cubeDirs; //create a list of 6 view-projection matrices for each face of the cubemap, multiplying the projection matrix by each of the 6 view matrices
 		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f,-1.0f, 0.0f)));
@@ -136,7 +147,7 @@ void Core::Display(){
 
 
 			for (int j = 0; j < (int)renderers.size(); j++) { //go through list of all renderers
-				shadowRender->SetUniform("in_Model", renderers[j]->GetGameObject()->GetComponent<Transform>()->GetModel()); //set the model matrix
+				shadowRender->SetUniform("in_Model", renderers[j]->GetGameObject()->GetTransform()->GetModel()); //set the model matrix
 				glUseProgram(shadowRender->GetId());
 				glBindVertexArray(renderers[j]->shape->GetId()); //bind the mesh
 				glDrawArrays(GL_TRIANGLES, 0, renderers[j]->shape->GetVertexCount()); //draw the mesh
@@ -149,7 +160,7 @@ void Core::Display(){
 		}
 	}
 	//glEnable(GL_CULL_FACE); //reset values to default
-	glViewport(0, 0, 2 * window_h, window_w);
+	glViewport(0, 0, window_h, window_w);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the color and depth buffer
 
 	for (int i = 0; i < (int)gameObjects.size(); i++) { //go through list of gameobjects and call update on them, including the renderer which draws the object to the context

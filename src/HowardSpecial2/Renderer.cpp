@@ -24,7 +24,7 @@ void Renderer::OnUpdate(){
 	cam = GetCore()->mainCamera; //get the main camera
 	//set uniforms for the projection, model, and view matrices as well as the texture
 	shader->SetUniform("in_Projection", cam.lock()->GetComponent<Camera>()->GetProjection());
-	shader->SetUniform("in_Model", GetGameObject()->GetComponent<Transform>()->GetModel());
+	shader->SetUniform("in_Model", GetGameObject()->GetTransform()->GetModel());
 	shader->SetUniform("in_Texture", texture);
 	shader->SetUniform("in_View", cam.lock()->GetComponent<Camera>()->GetView());
 	//get lists of all point and direction lights
@@ -36,14 +36,14 @@ void Renderer::OnUpdate(){
 		shader->SetUniform("dlights[" + std::to_string(i) + "].ambient", dLights[i]->ambient);
 		shader->SetUniform("dlights[" + std::to_string(i) + "].diffuse", dLights[i]->diffuse);
 		shader->SetUniform("dlights[" + std::to_string(i) + "].specular", dLights[i]->specular);
-		shader->SetUniform("dlights[" + std::to_string(i) + "].dir", dLights[i]->GetGameObject()->GetComponent<Transform>()->rotation);
+		shader->SetUniform("dlights[" + std::to_string(i) + "].dir", dLights[i]->GetGameObject()->GetTransform()->rotation);
 	}
 	for (int i = 0; i < (int)lights.size(); i++) {
 		shader->SetUniform("lights[" + std::to_string(i) + "].emissive", lights[i]->emissive); //go through list of every point light and set corresponding uniforms in the shader
 		shader->SetUniform("lights[" + std::to_string(i) + "].ambient", lights[i]->ambient);
 		shader->SetUniform("lights[" + std::to_string(i) + "].diffuse", lights[i]->diffuse);
 		shader->SetUniform("lights[" + std::to_string(i) + "].specular", lights[i]->specular);
-		shader->SetUniform("lights[" + std::to_string(i) + "].pos", lights[i]->GetGameObject()->GetComponent<Transform>()->position);
+		shader->SetUniform("lights[" + std::to_string(i) + "].pos", lights[i]->GetGameObject()->GetTransform()->position);
 		shader->SetUniform("lights[" + std::to_string(i) + "].constant", lights[i]->constant);
 		shader->SetUniform("lights[" + std::to_string(i) + "].linear", lights[i]->linear);
 		shader->SetUniform("lights[" + std::to_string(i) + "].quadratic", lights[i]->quadratic);

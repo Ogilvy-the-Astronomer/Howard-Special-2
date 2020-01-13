@@ -23,7 +23,7 @@ struct Sampler
 /**
  * Class representing an opengl shader program
  */
-class ShaderProgram
+struct ShaderProgram
 {
 private:
 	GLuint id; ///< id of the shader

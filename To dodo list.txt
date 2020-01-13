@@ -4,3 +4,10 @@ Difficuly & Helpful - Physics, animation, lua scripting (?), touch support
 Easy & Helpful - 
 
 Very Difficult & probably not very helpful -  VR, AI, scenes, saving,
+
+1. Test Sound - done
+2. Keyboard - done
+2a. Collisions
+3. Exceptions
+4. Platforms
+5. Text

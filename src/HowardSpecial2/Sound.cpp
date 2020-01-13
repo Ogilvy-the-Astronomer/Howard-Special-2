@@ -67,8 +67,8 @@ void Sound::load_ogg(const std::string & fileName, std::vector<char>& buffer, AL
 		format = AL_FORMAT_STEREO16;
 
 		// Force format to be mono (Useful for positional audio)
-		// format = AL_FORMAT_MONO16;
-		// freq *= 2;
+		format = AL_FORMAT_MONO16;
+		freq *= 2;
 	}
 
 	// Allocate enough space based on short (two chars) multipled by the number of

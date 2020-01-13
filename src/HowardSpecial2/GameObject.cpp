@@ -1,5 +1,7 @@
 #include "GameObject.h"
 #include "Core.h"
+#include "Transform.h"
+
 
 GameObject::GameObject()
 {
@@ -7,6 +9,10 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
+}
+
+std::shared_ptr<Transform> GameObject::GetTransform(){
+	return GetComponent<Transform>();
 }
 
 std::shared_ptr<Core> GameObject::GetCore()

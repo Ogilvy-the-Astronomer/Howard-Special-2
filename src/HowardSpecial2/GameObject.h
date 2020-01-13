@@ -5,6 +5,7 @@
 #include"Component.h"
 
 struct Core;
+struct Transform;
 
 struct GameObject {
 	GameObject();
@@ -20,7 +21,7 @@ struct GameObject {
 	std::shared_ptr<T> GetComponent();
 
 
-
+	std::shared_ptr<Transform> GetTransform();
 	std::shared_ptr<Core> GetCore();
 	void Update();
 	void Render();
@@ -74,3 +75,4 @@ inline std::shared_ptr<T> GameObject::GetComponent()
 	}
 	return nullptr;
 }
+
