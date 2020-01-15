@@ -11,3 +11,8 @@ Very Difficult & probably not very helpful -  VR, AI, scenes, saving,
 3. Exceptions
 4. Platforms
 5. Text
+6. Post processing
+7. Animation
+8. Controller and customizable inputs
+
+... The report

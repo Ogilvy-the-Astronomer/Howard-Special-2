@@ -17,13 +17,13 @@ private:
 public:
 	Mesh();
 	Mesh(std::string path);
+	~Mesh();
 	void load(std::string path); ///< load a mesh from a path
 	void splitStringWhitespace(std::string & input, std::vector<std::string>& output);
 	void splitString(std::string & input, char splitter, std::vector<std::string>& output);
-	~Mesh();
+	
 	std::shared_ptr<VertexBuffer> GetBuffers(int _pos);
 	void SetBuffer(std::string attribute, std::shared_ptr<VertexBuffer> buffer);
-
 	int GetVertexCount();
 	GLuint GetId();
 };

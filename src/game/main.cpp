@@ -14,12 +14,7 @@ Anon., 2012. Tutorial 16 : Shadow mapping [online]. Opengl-tutorial.org. Availab
 int main(){	
 	std::shared_ptr<Core> core = core->Initialize();//initialze the core
 	std::shared_ptr<Keyboard> kb = core->keyboard;
-	//enable face culling for performance and depth testing for shadow maps
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
 
-	
-	
 	core->mainCamera = core->AddObject(); //create the main camera
 	core->mainCamera->AddComponent<Transform>(); //assign position, camera, and sound source components to it
 	core->mainCamera->AddComponent<Camera>();
@@ -27,20 +22,21 @@ int main(){
 
 	//create the game world 
 	std::shared_ptr<GameObject> object;
-	
+	/*
 	object = core->AddObject(); //create the campsite object
 	object->AddComponent<Transform>();
 	object->AddComponent<Renderer>();
 	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/campsite.obj"));
 	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/campsite.png"));
 	object->GetTransform()->scale = glm::vec3(4.0f);
-
+	*/
 	object = core->AddObject(); //create the campsite object
 	object->AddComponent<Transform>();
 	object->AddComponent<Renderer>();
 	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/fighter.obj"));
 	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/fighter.png"));
-	object->GetTransform()->position.y = 10.0f;
+	object->AddComponent<BoxCollider>(glm::vec3(0.5f, 0.5f, 0.5f));
+	object->GetTransform()->position.x = 20.0f;
 
 	object = core->AddObject(); //add a directional light
 	object->AddComponent<Transform>();
@@ -57,14 +53,11 @@ int main(){
 	object->GetComponent<SoundSource>()->SetSound(core->resources->load<Sound>("../src/game/models/dixie_horn.ogg"));
 	object->AddComponent<PointLight>();
 	object->GetComponent<PointLight>()->diffuse = glm::vec3(5.0f, 5.0f, 5.0f);
-	object->GetTransform()->position = glm::vec3(0.0f, 20.0f, 0.0f);
-	
+	object->AddComponent<BoxCollider>(glm::vec3(0.5f, 0.5f, 0.5f));
+	object->GetTransform()->position = glm::vec3(0.0f, 5.0f, 0.0f);
 
-	core->lights = core->GetComponents<PointLight>(); //add a list of lights to the core
-	core->renderers = core->GetComponents<Renderer>(); //add a list of visible objects to the core
-
-	const Uint8 *state = SDL_GetKeyboardState(NULL); //a variable containing the status of all the keys
 	bool quit = false;
+	core->Start();
 	while (!quit)
 	{
 		if (kb->GetKey(SDL_SCANCODE_ESCAPE)) quit = true;
@@ -73,8 +66,8 @@ int main(){
 		if (kb->GetKey(SDL_SCANCODE_K)) object->GetTransform()->position.z -= 0.2f;
 		if (kb->GetKey(SDL_SCANCODE_J)) object->GetTransform()->position.x -= 0.2f;
 		if (kb->GetKey(SDL_SCANCODE_L)) object->GetTransform()->position.x += 0.2f;
-		if (kb->GetKey(SDL_SCANCODE_U)) object->GetTransform()->position.y -= 0.2f;
-		if (kb->GetKey(SDL_SCANCODE_H)) object->GetTransform()->position.y += 0.2f;
+		if (kb->GetKey(SDL_SCANCODE_U)) object->GetTransform()->position.y += 0.2f;
+		if (kb->GetKey(SDL_SCANCODE_H)) object->GetTransform()->position.y -= 0.2f;
 		//controls for camera movement
 		
 		if (kb->GetKey(SDL_SCANCODE_W)) core->mainCamera->GetTransform()->position -= core->mainCamera->GetTransform()->forward * 0.5f;

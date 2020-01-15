@@ -25,8 +25,9 @@ public:
 	int GetComponents();
 	int GetDataSize();
 	glm::fvec3 GetData();
-	float GetData(int vert, int pos);
-	float GetData(int vert, int pos, int tri);
+	glm::vec3 GetVertexData(int tri, int vert);
+	float GetData(int vert, int axis);
+	float GetData(int tri, int vert, int axis);
 	GLuint GetId();
 
 };

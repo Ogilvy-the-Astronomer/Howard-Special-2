@@ -10,6 +10,7 @@
 #include "ShaderProgram.h"
 #include "DepthCubemap.h"
 #include "Keyboard.h"
+#include "BoxCollider.h"
 
 #include<exception>
 #include<iostream>
@@ -73,6 +74,13 @@ std::shared_ptr<Core> Core::Initialize() {
 
 void Core::Start() {
 
+	lights = GetComponents<PointLight>(); //add a list of lights to the core
+	renderers = GetComponents<Renderer>(); //add a list of visible objects to the core
+	boxColliders = GetComponents<BoxCollider>();
+
+	//enable face culling for performance and depth testing for shadow maps
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Core::Stop() {

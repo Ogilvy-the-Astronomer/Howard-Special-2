@@ -25,8 +25,8 @@ Sound::Sound(std::string path){
 	alBufferData(bufferId, format, &bufferData.at(0), static_cast<ALsizei>(bufferData.size()), freq);
 }
 
-Sound::~Sound()
-{
+Sound::~Sound(){
+	
 }
 
 void Sound::load(std::string path){

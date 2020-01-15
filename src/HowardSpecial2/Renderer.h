@@ -16,8 +16,8 @@ struct Renderer : public Component{
 	void OnDisplay();
 	void OnUpdate(); ///< update the component and draw it to the screen
 	std::shared_ptr<ShaderProgram> shader = std::make_shared<ShaderProgram>("../shaders/shadowing.vert", "../shaders/shadowing.frag"); ///< shader used to draw the object
-	void SetMesh(std::shared_ptr<Mesh> mesh); ///< set the object mesh
-	void SetTexture(std::shared_ptr<Texture> image); ///< set the object texture
+	void SetMesh(std::shared_ptr<Mesh> _mesh); ///< set the object mesh
+	void SetTexture(std::shared_ptr<Texture> _texture); ///< set the object texture
 	
 	std::vector<std::shared_ptr<RenderTexture>> depthTextures; ///<list of 2d shadow maps
 	std::vector<std::shared_ptr<DepthCubemap>> depthCubeTextures; ///< list of shadow cubemaps

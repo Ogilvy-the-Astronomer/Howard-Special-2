@@ -70,15 +70,24 @@ glm::fvec3 VertexBuffer::GetData()
 	return tridata;
 }
 
-float VertexBuffer::GetData(int vert, int pos) {
-	return data.at(pos + (vert * 3));
+glm::vec3 VertexBuffer::GetVertexData(int tri, int vert){
+	glm::vec3 rtn;
+	rtn.x = data.at(0 + (vert * 3) + (tri * 9));
+	rtn.y = data.at(1 + (vert * 3) + (tri * 9));
+	rtn.z = data.at(2 + (vert * 3) + (tri * 9));
+
+	return rtn;
+}
+
+float VertexBuffer::GetData(int vert, int axis) {
+	return data.at(axis + (vert * 3));
 }
 
 //int VertexBuffer::GetData(int vert, int pos, int tri) {
 //	return data.at(pos + (vert * 3) + (tri * 9));
 //}
-float VertexBuffer::GetData(int vert, int pos, int tri) {
-	return data.at(pos + (vert * 3) + (tri * 9));
+float VertexBuffer::GetData(int tri, int vert, int axis) {
+	return data.at(axis + (vert * 3) + (tri * 9));
 } 
 GLuint VertexBuffer::GetId()
 {

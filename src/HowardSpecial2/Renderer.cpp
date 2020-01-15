@@ -55,10 +55,10 @@ void Renderer::OnUpdate(){
 	shader->Draw(shape); //draw the object to screen
 }
 
-void Renderer::SetMesh(std::shared_ptr<Mesh> mesh){
-	shape = mesh;
+void Renderer::SetMesh(std::shared_ptr<Mesh> _mesh){
+	shape = _mesh;
 }
 
-void Renderer::SetTexture(std::shared_ptr<Texture> image){
-	texture = image;
+void Renderer::SetTexture(std::shared_ptr<Texture> _texture){
+	texture = _texture;
 }

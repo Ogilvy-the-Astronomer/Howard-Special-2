@@ -26,6 +26,7 @@ struct ShaderProgram;
 struct DepthCubemap;
 struct RenderTexture;
 struct Keyboard;
+struct BoxCollider;
 /**
  * The core of the engine with it's crucial functionalities
  */
@@ -40,6 +41,7 @@ struct Core : private NonCopyable {
 	std::vector<std::shared_ptr<GameObject>> gameObjects; ///<list of game objects
 	std::vector<std::shared_ptr<PointLight>> lights; ///<list of point lights
 	std::vector<std::shared_ptr<Renderer>> renderers; ///<list of renderers (visible objects)
+	std::vector<std::shared_ptr<BoxCollider>> boxColliders; ///<list of renderers (visible objects)
 	std::shared_ptr<Resources> resources; ///<list of resources (textures, meshes, sounds, etc)
 	std::shared_ptr<GameObject> AddObject(); ///<create an object and add it to the list
 	template <class T>
