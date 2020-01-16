@@ -22,17 +22,17 @@ Core::Core()
 	graphicsContext = SDL_CreateWindow("Triangle", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL); //create the program window
 
 	if (!SDL_GL_CreateContext(graphicsContext)) { //throw exceptions if something goes wrong
-		throw std::exception();
+		throw Exception("graphics context didn't get created properly");
 	}
 	if (glewInit() != GLEW_OK) {
-		throw std::exception();
+		throw Exception("glew didn't get initializied properly");;
 	}
 
    // Open up the OpenAL device
 	device = alcOpenDevice(NULL);
 
 	if (device == NULL) {
-		throw std::exception();
+		throw Exception("there's no sound device to opem");
 	}
 
 	// Create audio context
@@ -40,14 +40,14 @@ Core::Core()
 
 	if (soundContext == NULL) {
 		alcCloseDevice(device);
-		throw std::exception();
+		throw Exception("sound context didn't get created properly");
 	}
 
 	// Set as current context
 	if (!alcMakeContextCurrent(soundContext)) {
 		alcDestroyContext(soundContext);
 		alcCloseDevice(device);
-		throw std::exception();
+		throw Exception("sound context machine broke");
 	}
 
 	alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f); //set the position of the listener.
@@ -73,14 +73,24 @@ std::shared_ptr<Core> Core::Initialize() {
 }
 
 void Core::Start() {
-
+	keyboard->core = self.lock();
 	lights = GetComponents<PointLight>(); //add a list of lights to the core
 	renderers = GetComponents<Renderer>(); //add a list of visible objects to the core
 	boxColliders = GetComponents<BoxCollider>();
 
+	if (lights.size() != depthCubeTextures.size()) { //create a depth cube map for every light in the scene
+		for (int i = 0; i < (int)lights.size(); i++) {
+			depthCubeTextures.push_back(std::make_shared <DepthCubemap>());
+		}
+	}
+
 	//enable face culling for performance and depth testing for shadow maps
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
+
+	for (int i = 0; i < (int)gameObjects.size(); i++) { //go through list of all gameobjects and call update on them
+		gameObjects.at(i)->Start();
+	}
 }
 
 void Core::Stop() {
@@ -105,7 +115,7 @@ void Core::Update(){
 
 void Core::Display(){
 	keyboard->Update();
-
+	SDL_WarpMouseInWindow(NULL, window_w / 2, window_h / 2);
 
 	currentTicks = SDL_GetTicks();
 	float fps = glm::round(1000.0f / (currentTicks - lastTicks));
@@ -122,11 +132,7 @@ void Core::Display(){
 	//glDisable(GL_CULL_FACE); //disable face culling for more accurate shadows
 
 	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 90.0f); //create the projection matrix for the light
-	if (lights.size() != depthCubeTextures.size()) { //create a depth cube map for every light in the scene
-		for (int i = 0; i < (int)lights.size(); i++) {
-			depthCubeTextures.push_back(std::make_shared <DepthCubemap>());
-		}
-	}
+
 	for (int i = 0; i < (int)lights.size(); i++) {//go through every point light
 		glm::vec3 pos = lights[i]->GetGameObject()->GetTransform()->position; //get the light position
 		std::vector<glm::mat4> cubeDirs; //create a list of 6 view-projection matrices for each face of the cubemap, multiplying the projection matrix by each of the 6 view matrices

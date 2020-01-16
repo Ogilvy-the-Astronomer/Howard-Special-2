@@ -3,10 +3,15 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Core.h"
+#include "Renderer.h"
+#include "MeshCollider.h"
+#include "TriTriOverlap.h"
 
 #include<vector>
 #include<iostream>
+#include <stdlib.h>
 //https://www.jkh.me/files/tutorials/Separating%20Axis%20Theorem%20for%20Oriented%20Bounding%20Boxes.pdf
+
 BoxCollider::BoxCollider(){
 	dimensions = glm::vec3(1.0f);
 	offset = glm::vec3(0.0f);
@@ -46,18 +51,28 @@ void BoxCollider::BuildDimensionsfromMesh(std::shared_ptr<Mesh> mesh){
 }
 
 void BoxCollider::OnUpdate() {
-	glm::mat4 model = GetGameObject()->GetTransform()->GetModel();
+	glm::mat4 model(1.0f);
+	std::shared_ptr<Transform> t = GetGameObject()->GetTransform();
+	model = glm::rotate(model, t->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+	model = glm::rotate(model, t->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::rotate(model, t->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::scale(model, t->scale);
+
 	Ax = glm::normalize(model * glm::vec4(1, 0, 0, 1));
 	Ay = glm::normalize(model * glm::vec4(0, 1, 0, 1));
 	Az = glm::normalize(model * glm::vec4(0, 0, 1, 1));
-
-	if (isColliding()) {
-		std::cout << "colliding\n";
+	std::shared_ptr<MeshCollider> mc = nullptr;
+	try{
+		mc = GetGameObject()->GetComponent<MeshCollider>();
 	}
-	else {
-		std::cout << "not colliding\n";
+	catch(Exception &e){
+		if (e.what() == "") { //unknown exception means there is no mesh collider component which is probably intentional
+			std::cout << "Exception: " << e.what() << std::endl;
+		}
 	}
-
+	if (mc) mc->CollisionResponse();
+	else CollisionResponse();
+	
 }
 
 using namespace glm;
@@ -77,13 +92,12 @@ using namespace glm;
 #define c14 (abs(dot(T, Ay) * dot(Ax, By) - dot(T, Ax) * dot(Ay, By)) > abs(Wa * dot(Ay, By)) + abs(Ha * dot(Ax, By)) + abs(Wb * dot(Az, Bz)) + abs(Db * dot(Az, Bx)))
 #define c15 (abs(dot(T, Ay) * dot(Ax, Bz) - dot(T, Ax) * dot(Ay, Bz)) > abs(Wa * dot(Ay, Bz)) + abs(Ha * dot(Ax, Bz)) + abs(Wb * dot(Az, By)) + abs(Hb * dot(Az, Bx)))
 
-bool BoxCollider::isColliding(){
+std::shared_ptr<BoxCollider> BoxCollider::isColliding(){
 	std::vector<std::shared_ptr<BoxCollider>> others = GetCore()->boxColliders;
-	mat4 model = GetGameObject()->GetTransform()->GetModel();
 	vec3 Pa = GetGameObject()->GetTransform()->position;
-	float Wa = dimensions.x / 2;
-	float Ha = dimensions.y / 2;
-	float Da = dimensions.z / 2;
+	float Wa = dimensions.x / 2 * GetGameObject()->GetTransform()->scale.x;
+	float Ha = dimensions.y / 2 * GetGameObject()->GetTransform()->scale.y;
+	float Da = dimensions.z / 2 * GetGameObject()->GetTransform()->scale.z;
 	
 	for (int i = 0; i < (int)others.size(); i++) {
 		std::shared_ptr<BoxCollider> other = others.at(i);
@@ -92,15 +106,87 @@ bool BoxCollider::isColliding(){
 			vec3 Bx = other->Ax;
 			vec3 By = other->Ay;
 			vec3 Bz = other->Az;
-			float Wb = other->dimensions.x / 2;
-			float Hb = other->dimensions.y / 2;
-			float Db = other->dimensions.z / 2;
+			float Wb = other->dimensions.x / 2 * other->GetGameObject()->GetTransform()->scale.x;
+			float Hb = other->dimensions.y / 2 * other->GetGameObject()->GetTransform()->scale.y;
+			float Db = other->dimensions.z / 2 * other->GetGameObject()->GetTransform()->scale.z;
 			vec3 T = Pb - Pa;
 			//bool a1 = c1, a2 = c2, a3 = c3, a4 = c4, a5 = c5, a6 = c6, a7 = c7, a8 = c8, a9 = c9, a10 = c10, a11 = c11, a12 = c12, a13 = c13, a14 = c14, a15 = c15;
 			if (c1 || c2 || c3 || c4 || c5 || c6 || c7 || c8 || c9 || c10 || c11 || c12 || c13 || c14 || c15) {
-				return false;
+				//return false;
 			}
 			else {
+				//return true;
+				return other;
+			}
+		}
+	}
+	//return false;
+	return nullptr;
+}
+
+void BoxCollider::CollisionResponse() {
+	std::shared_ptr<BoxCollider> other = isColliding();
+	if (other) {
+		float amount = 0.1f;
+		float step = 0.1f;
+		glm::vec3 position = vec3(0.0f);
+		while (true) {
+			if (!isColliding(other, position)) break;
+			position.x += amount;
+			if (!isColliding(other, position)) break;
+			position.x -= amount;
+			position.x -= amount;
+			if (!isColliding(other, position)) break;
+			position.x += amount;
+			position.z += amount;
+			if (!isColliding(other, position)) break;
+			position.z -= amount;
+			position.z -= amount;
+			if (!isColliding(other, position)) break;
+			position.z += amount;
+			position.y += amount;
+			if (!isColliding(other, position)) break;
+			position.y -= amount;
+			position.y -= amount;
+			if (!isColliding(other, position)) break;
+			position.y += amount;
+			amount += step;
+		}
+		GetGameObject()->GetTransform()->position += position;
+	}
+}
+
+bool BoxCollider::TriTriIntersect(std::shared_ptr<GameObject> _other){
+	int vertexCount = GetGameObject()->GetComponent<Renderer>()->shape->GetVertexCount() / 3;
+	int otherVertexCount = _other->GetComponent<Renderer>()->shape->GetVertexCount() / 3;
+	std::shared_ptr<VertexBuffer> shape = GetGameObject()->GetComponent<Renderer>()->shape->GetBuffers(0);
+	std::shared_ptr<VertexBuffer> otherShape = _other->GetComponent<Renderer>()->shape->GetBuffers(0);
+	glm::mat4 model = GetGameObject()->GetTransform()->GetModel();
+	glm::mat4 otherModel = _other->GetTransform()->GetModel();
+	glm::vec4 tri1Vert1;
+	glm::vec4 tri1Vert2;
+	glm::vec4 tri1Vert3;
+	glm::vec4 tri2Vert1;
+	glm::vec4 tri2Vert2;
+	glm::vec4 tri2Vert3;
+	for (int i = 0; i < vertexCount; i++) {
+		tri1Vert1 = model * glm::vec4(shape->GetData(i, 0, 0), shape->GetData(0, 1), shape->GetData(i, 0, 2), 1);
+		tri1Vert2 = model * glm::vec4(shape->GetData(i, 1, 0), shape->GetData(1, 1), shape->GetData(i, 1, 2), 1);
+		tri1Vert3 = model * glm::vec4(shape->GetData(i, 2, 0), shape->GetData(2, 1), shape->GetData(i, 2, 2), 1);
+		float tri10[] = { tri1Vert1.x, tri1Vert1.y, tri1Vert1.z };
+		float tri11[] = { tri1Vert2.x, tri1Vert2.y, tri1Vert2.z };
+		float tri12[] = { tri1Vert3.x, tri1Vert3.y, tri1Vert3.z };
+		for (int j = 0; j < otherVertexCount; j++) {
+			glm::vec4 a = glm::vec4(otherShape->GetData(j, 0, 0), otherShape->GetData(j, 0, 1), otherShape->GetData(j, 0, 2), 1);
+			glm::vec4 b = glm::vec4(otherShape->GetData(j, 1, 0), otherShape->GetData(j, 1, 1), otherShape->GetData(j, 1, 2), 1);
+
+			tri2Vert1 = otherModel * glm::vec4(otherShape->GetData(j, 0, 0), otherShape->GetData(j, 0, 1), otherShape->GetData(j, 0, 2), 1);
+			tri2Vert2 = otherModel * glm::vec4(otherShape->GetData(j, 1, 0), otherShape->GetData(j, 1, 1), otherShape->GetData(j, 1, 2), 1);
+			tri2Vert3 = otherModel * glm::vec4(otherShape->GetData(j, 2, 0), otherShape->GetData(j, 2, 1), otherShape->GetData(j, 2, 2), 1);
+			float tri20[] = { tri2Vert1.x, tri2Vert1.y, tri2Vert1.z };
+			float tri21[] = { tri2Vert2.x, tri2Vert2.y, tri2Vert2.z };
+			float tri22[] = { tri2Vert3.x, tri2Vert3.y, tri2Vert3.z };
+			if (NoDivTriTriIsect(tri10, tri11, tri12, tri20, tri21, tri22)) {
 				return true;
 			}
 		}
@@ -130,4 +216,29 @@ bool BoxCollider::isColliding(std::shared_ptr<BoxCollider> other){
 		return false;
 	}
 	return false;
+}
+
+bool BoxCollider::isColliding(std::shared_ptr<BoxCollider> other, glm::vec3 position) {
+
+	mat4 model = GetGameObject()->GetTransform()->GetModel();
+	vec3 Pa = GetGameObject()->GetTransform()->position + position;
+	float Wa = dimensions.x / 2;
+	float Ha = dimensions.y / 2;
+	float Da = dimensions.z / 2;
+
+	vec3 Pb = other->GetGameObject()->GetTransform()->position;
+	vec3 Bx = other->Ax;
+	vec3 By = other->Ay;
+	vec3 Bz = other->Az;
+	float Wb = other->dimensions.x / 2;
+	float Hb = other->dimensions.y / 2;
+	float Db = other->dimensions.z / 2;
+	vec3 T = Pb - Pa;
+	if (c1 || c2 || c3 || c4 || c5 || c6 || c7 || c8 || c9 || c10 || c11 || c12 || c13 || c14 || c15) {
+		//return false;
+	}
+	else {
+		return true;
+	}
+	return nullptr;
 }

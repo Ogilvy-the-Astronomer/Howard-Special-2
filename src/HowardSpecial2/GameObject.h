@@ -3,6 +3,7 @@
 #include<vector>
 #include <typeinfo>
 #include"Component.h"
+#include"Exception.h"
 
 struct Core;
 struct Transform;
@@ -25,6 +26,7 @@ struct GameObject {
 	std::shared_ptr<Core> GetCore();
 	void Update();
 	void Render();
+	void Start();
 
 	uint32_t id;
 	
@@ -52,8 +54,7 @@ inline std::shared_ptr<T> GameObject::AddComponent(A a){
 }
 
 template<class T, class A, class B>
-inline std::shared_ptr<T> GameObject::AddComponent(A a, B b)
-{
+inline std::shared_ptr<T> GameObject::AddComponent(A a, B b){
 	std::shared_ptr<T> component = std::make_shared<T>(a,b);
 	component->parent = self;
 	components.push_back(component);
@@ -61,8 +62,7 @@ inline std::shared_ptr<T> GameObject::AddComponent(A a, B b)
 }
 
 template<class T>
-inline std::shared_ptr<T> GameObject::GetComponent()
-{
+inline std::shared_ptr<T> GameObject::GetComponent(){
 	std::shared_ptr<T> foundComponent;
 	for (int i = 0; i < (int)components.size(); i++) {
 		if (typeid(std::shared_ptr<T>) == typeid(std::dynamic_pointer_cast<T>(components.at(i)))) {
@@ -73,6 +73,7 @@ inline std::shared_ptr<T> GameObject::GetComponent()
 			}
 		}
 	}
+	//throw Exception("No component of type found"); //I turned this off because it's more trouble than it's worth
 	return nullptr;
 }
 

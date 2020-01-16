@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include "VertexBuffer.h"
+#include "Exception.h"
 
 #include <fstream>
 #include <iostream>
@@ -15,7 +16,7 @@ Mesh::Mesh()
 	glGenVertexArrays(1, &id);
 
 	if (!id) {
-		throw std::exception();
+		throw Exception("coudln't create vertex array id");
 	}
 
 }
@@ -26,7 +27,7 @@ Mesh::Mesh(std::string path) : dirty(false)
 
 	if (!id)
 	{
-		throw std::exception();
+		throw Exception("coudln't create vertex array id");
 	}
 
 	buffers.resize(10);
@@ -34,7 +35,7 @@ Mesh::Mesh(std::string path) : dirty(false)
 
 	if (!file.is_open())
 	{
-		throw std::exception();
+		throw Exception("couldn't open mesh file");
 	}
 
 	std::string line;
@@ -124,7 +125,7 @@ void Mesh::load(std::string path){
 
 	if (!id)
 	{
-		throw std::exception();
+		throw Exception("couldn't generate vertex array id");
 	}
 
 	buffers.resize(10);
@@ -132,7 +133,7 @@ void Mesh::load(std::string path){
 
 	if (!file.is_open())
 	{
-		throw std::exception();
+		throw Exception("couldn't open mesh file");
 	}
 
 	std::string line;
@@ -302,7 +303,7 @@ void Mesh::SetBuffer(std::string attribute, std::shared_ptr<VertexBuffer> buffer
 	}
 	else
 	{
-		throw std::exception();
+		throw Exception("attribute isn't recognized");
 	}
 
 	dirty = true;
@@ -311,7 +312,7 @@ void Mesh::SetBuffer(std::string attribute, std::shared_ptr<VertexBuffer> buffer
 int Mesh::GetVertexCount()
 {
 	if (!buffers.at(0)) {
-		throw std::exception();
+		throw Exception("mesh machine broke (this mesh has no geometry)");
 	}
 	return buffers.at(0)->GetDataSize() / buffers.at(0)->GetComponents();
 }

@@ -1,5 +1,5 @@
 #include "VertexBuffer.h"
-
+#include "Exception.h"
 
 
 VertexBuffer::VertexBuffer()
@@ -9,7 +9,7 @@ VertexBuffer::VertexBuffer()
 
 	glGenBuffers(1, &id);
 	if (!id) {
-		throw std::exception();
+		throw Exception("coudln't generate buffer id");
 	}
 }
 
@@ -21,7 +21,7 @@ VertexBuffer::~VertexBuffer()
 void VertexBuffer::add(glm::vec2 value)
 {
 	if (components != 2 && components != 0) {
-		throw std::exception();
+		throw Exception("buffer has an incorrect amount of components");
 	}
 	data.push_back(value.x);
 	data.push_back(value.y);
@@ -32,7 +32,7 @@ void VertexBuffer::add(glm::vec2 value)
 void VertexBuffer::add(glm::vec3 value)
 {
 	if (components != 3 && components != 0){
-		throw std::exception();
+		throw Exception("buffer has an incorrect amount of components");
 	}
 	data.push_back(value.x);
 	data.push_back(value.y);
@@ -44,7 +44,7 @@ void VertexBuffer::add(glm::vec3 value)
 void VertexBuffer::add(glm::vec4 value)
 {
 	if (components != 4 && components != 0) {
-		throw std::exception();
+		throw Exception("buffer has an incorrect amount of components");
 	}
 	data.push_back(value.x);
 	data.push_back(value.y);

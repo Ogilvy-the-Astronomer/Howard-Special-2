@@ -1,5 +1,6 @@
 #include "Sound.h"
 #include "stb_vorbis.h"
+#include "Exception.h"
 
 Sound::Sound(){
 	bufferId = 0;
@@ -51,7 +52,7 @@ void Sound::load_ogg(const std::string & fileName, std::vector<char>& buffer, AL
 
 	if (samples == -1)
 	{
-		throw std::exception();
+		throw Exception("coudln't load sound");
 	}
 
 	// Record the sample rate required by OpenAL

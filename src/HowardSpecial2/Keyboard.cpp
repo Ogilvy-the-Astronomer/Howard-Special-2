@@ -1,5 +1,5 @@
 #include "Keyboard.h"
-
+#include "Core.h"
 
 bool Keyboard::GetKey(SDL_Scancode key){
 	SDL_Keycode Key = SDL_GetKeyFromScancode(key);
@@ -82,6 +82,12 @@ bool Keyboard::GetKeyUp(SDL_Keycode key){
 	return false;
 }
 
+glm::vec2 Keyboard::GetMouseMovement() {
+	SDL_GetMouseState(&mousePos.x, &mousePos.y); //get the mouse position
+	mouseMovement = mousePos - glm::ivec2(core->window_w / 2, core->window_h / 2);
+	return mouseMovement;
+}
+
 void Keyboard::Update(){
 	keysDown.clear();
 	keysUp.clear();
@@ -122,6 +128,5 @@ void Keyboard::Update(){
 }
 
 Keyboard::Keyboard() {
-	previousState = new Uint8;
-	state = SDL_GetKeyboardState(NULL);
+
 }

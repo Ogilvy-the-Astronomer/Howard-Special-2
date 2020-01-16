@@ -12,8 +12,12 @@ struct BoxCollider : public Component {
 	void BuildDimensionsfromMesh();
 	void BuildDimensionsfromMesh(std::shared_ptr<Mesh> mesh);
 	void OnUpdate();
-	bool isColliding();
+	//bool isColliding();
 	bool isColliding(std::shared_ptr<BoxCollider> other);
+	bool isColliding(std::shared_ptr<BoxCollider> other, glm::vec3 position);
+	std::shared_ptr<BoxCollider> isColliding();
+	void CollisionResponse();
+	bool TriTriIntersect(std::shared_ptr<GameObject> _other);
 
 	glm::vec3 dimensions;
 	glm::vec3 offset;

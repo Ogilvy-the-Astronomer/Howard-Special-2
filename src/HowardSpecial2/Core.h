@@ -3,18 +3,11 @@
 #include<vector>
 #include<AL/al.h>
 #include<AL/alc.h>
+#include<iostream>
 #include "NonCopyable.h"
 
 #include "GameObject.h"
 #include "Resources.h"
-/*
-#include "Camera.h"
-
-#include "Resources.h"
-#include "RenderTexture.h"
-#include "ShaderProgram.h"
-#include "DepthCubemap.h"
-*/
 
 struct Renderer;
 struct Mesh;
@@ -69,8 +62,17 @@ private:
 template<class T>
 inline std::vector<std::shared_ptr<T>> Core::GetComponents(){
 	std::vector<std::shared_ptr<T>> rtn; //list of components to return
+	std::shared_ptr<T> toAdd;
 	for (int i = 0; i < (int)gameObjects.size(); i++) { //go through all gameobjects
-		std::shared_ptr<T> toAdd = gameObjects.at(i)->GetComponent<T>(); //get component of type from current object
+		toAdd = nullptr;
+		try{
+		toAdd = gameObjects.at(i)->GetComponent<T>(); //get component of type from current object
+		}
+		catch (Exception& e) {
+			if(e.what() == ""){
+				std::cout << "Exception: " << e.what() << std::endl; //getcomponent throws an exception when we look for a component on an object that doesn't have it
+			}														 //which is fine in this case because we have to look for the speciied component on every object 
+		}
 		if (toAdd != nullptr) {
 			rtn.push_back(toAdd); //if there is a component add it to the return list
 		}

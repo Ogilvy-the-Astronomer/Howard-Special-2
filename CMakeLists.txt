@@ -48,6 +48,10 @@ add_library(HowardSpecial2
 	src/HowardSpecial2/TriTriOverlap.h
 	src/HowardSpecial2/BoxCollider.h
 	src/HowardSpecial2/BoxCollider.cpp
+	src/HowardSpecial2/Exception.h
+	src/HowardSpecial2/Exception.cpp
+	src/HowardSpecial2/MeshCollider.h
+	src/HowardSpecial2/MeshCollider.cpp
 )
 target_link_libraries(HowardSpecial2 SDL2 opengl32 openal32 glew32)
 

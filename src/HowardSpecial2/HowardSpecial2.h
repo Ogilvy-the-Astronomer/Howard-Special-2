@@ -18,6 +18,6 @@
 #include "Light.h"
 #include "DepthCubemap.h"
 #include "Keyboard.h"
-#include "TriTriOverlap.h"
-#include "TriBoxOverlap.h"
 #include "BoxCollider.h"
+#include "Exception.h"
+#include "MeshCollider.h"

@@ -16,9 +16,9 @@ struct DepthCubemap;
  */
 struct Sampler
 {
-	GLint id;
-	int type;
-	std::shared_ptr <Texture> texture;
+	GLint id; ///< sampler id
+	int type; ///< sampler type, for distinguishing 2d textures and cubemaps
+	std::shared_ptr <Texture> texture; ///<pointer to a texture
 };
 /**
  * Class representing an opengl shader program
@@ -26,12 +26,11 @@ struct Sampler
 struct ShaderProgram
 {
 private:
-	GLuint id; ///< id of the shader
+	GLuint id; ///<id of the shader
 	std::vector<Sampler> samplers; ///< list of all samplers (textures)
 public:
 	ShaderProgram();
 	ShaderProgram(std::string vert, std::string frag); ///< constructor taking in paths for the vertex and fragment shader sources
-	ShaderProgram(std::string vert, std::string frag, std::string geom);
 	~ShaderProgram();
 	void Draw(std::shared_ptr<Mesh> vertextArray); ///< draws the specified mesh
 	//functions for setting different types of uniforms in the shader

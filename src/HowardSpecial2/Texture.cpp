@@ -1,5 +1,5 @@
 #include "Texture.h"
-
+#include "Exception.h"
 
 GLuint Texture::GetId()
 {
@@ -18,13 +18,13 @@ Texture::Texture(std::string image)
 	unsigned char *data = stbi_load(image.c_str(), &w, &h, &channels, 4);
 	if (!data)
 	{
-		throw std::exception();
+		throw Exception("coudln't load image");
 	}
 	// Create and bind a texture.
 	glGenTextures(1, &id);
 	if (!id)
 	{
-		throw std::exception();
+		throw Exception("coudln't generate texture id");
 	}
 	glBindTexture(GL_TEXTURE_2D, id);
 	// Upload the image data to the bound texture unit in the GPU
@@ -51,13 +51,13 @@ void Texture::load(std::string image)
 	unsigned char *data = stbi_load(image.c_str(), &w, &h, &channels, 4);
 	if (!data)
 	{
-		throw std::exception();
+		throw Exception("coudln't load image");
 	}
 	// Create and bind a texture.
 	glGenTextures(1, &id);
 	if (!id)
 	{
-		throw std::exception();
+		throw Exception("coudln't generate texture id");
 	}
 	glBindTexture(GL_TEXTURE_2D, id);
 	// Upload the image data to the bound texture unit in the GPU

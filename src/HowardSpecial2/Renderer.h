@@ -22,6 +22,8 @@ struct Renderer : public Component{
 	std::vector<std::shared_ptr<RenderTexture>> depthTextures; ///<list of 2d shadow maps
 	std::vector<std::shared_ptr<DepthCubemap>> depthCubeTextures; ///< list of shadow cubemaps
 private:
+	friend struct BoxCollider;
+	friend struct MeshCollider;
 	std::shared_ptr<Mesh> shape; ///< object mesh
 	std::shared_ptr<Texture> texture; ///< object texture
 

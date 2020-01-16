@@ -12,4 +12,5 @@ struct Camera : public Component {
 	void OnUpdate();
 private:
 	glm::mat4 projection; ///< projection matrix
+	const float clampVal = glm::radians(70.0f);
 };

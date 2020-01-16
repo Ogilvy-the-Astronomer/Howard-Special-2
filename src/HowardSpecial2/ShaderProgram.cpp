@@ -2,7 +2,7 @@
 #include "Mesh.h"
 #include "Texture.h"
 #include "DepthCubemap.h"
-
+#include "Exception.h"
 
 
 
@@ -14,7 +14,7 @@ ShaderProgram::ShaderProgram()
 	std::ifstream file("../shaders/simple.vert");
 
 	if (!file.is_open()) {
-		throw std::exception();
+		throw Exception("couldn't open simple vertex shader");
 	}
 	else {
 		while (!file.eof()) {
@@ -28,7 +28,7 @@ ShaderProgram::ShaderProgram()
 	file.open("../shaders/simple.frag");
 
 	if (!file.is_open()) {
-		throw std::exception();
+		throw Exception("couldn't open simple fragment shader");
 	}
 	else {
 		while (!file.eof()) {
@@ -49,7 +49,8 @@ ShaderProgram::ShaderProgram()
 	glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{
-		throw std::exception();
+		printShaderInfoLog(id);
+		throw Exception("vertex shader couldn't compile");
 	}
 
 	GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
@@ -59,7 +60,7 @@ ShaderProgram::ShaderProgram()
 	if (!success)
 	{
 		printShaderInfoLog(id);
-		throw std::exception();
+		throw Exception("fragment shader couldn't compile");
 	}
 
 	id = glCreateProgram();
@@ -71,14 +72,14 @@ ShaderProgram::ShaderProgram()
 	glBindAttribLocation(id, 1, "in_TexCoord");
 
 	if (glGetError() != GL_NO_ERROR) {
-		throw std::exception();
+		throw Exception("shader machine broke");
 	}
 	// Perform the link and check for failure
 	glLinkProgram(id);
 	glGetProgramiv(id, GL_LINK_STATUS, &success);
 	if (!success)
 	{
-		throw std::exception();
+		throw Exception("shader coudln't link");
 	}
 	// Detach and destroy the shader objects. These are no longer needed
 	// because we now have a complete shader program.
@@ -96,7 +97,7 @@ ShaderProgram::ShaderProgram(std::string vert, std::string frag)
 	std::ifstream file(vert); //load the vertex shader
 
 	if (!file.is_open()) {
-		throw std::exception();
+		throw Exception("couldn't open vertex shader at path");
 	}
 	else {
 		while (!file.eof()) { //go through every line of the vertex sjader and write it to a string
@@ -110,7 +111,7 @@ ShaderProgram::ShaderProgram(std::string vert, std::string frag)
 	file.open(frag); //load the fragment shader
 
 	if (!file.is_open()) {
-		throw std::exception();
+		throw Exception("couldn't open fragment shader at path");
 	}
 	else {
 		while (!file.eof()) {
@@ -132,7 +133,7 @@ ShaderProgram::ShaderProgram(std::string vert, std::string frag)
 	if (!success)
 	{
 		printShaderInfoLog(vertexShaderId);
-		throw std::exception();
+		throw Exception("check error log");
 	}
 
 	GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);//assign fragment shader id
@@ -142,7 +143,7 @@ ShaderProgram::ShaderProgram(std::string vert, std::string frag)
 	if (!success)
 	{
 		printShaderInfoLog(fragmentShaderId);
-		throw std::exception();
+		throw Exception("check error log");
 	}
 
 	id = glCreateProgram(); //assign program id
@@ -157,7 +158,8 @@ ShaderProgram::ShaderProgram(std::string vert, std::string frag)
 	glBindAttribLocation(id, 3, "in_Normal");
 
 	if (glGetError() != GL_NO_ERROR) {
-		throw std::exception();
+		printProgramInfoLog(id);
+		throw Exception("check error log");
 	}
 	// Perform the link and check for failure
 	glLinkProgram(id);
@@ -165,7 +167,7 @@ ShaderProgram::ShaderProgram(std::string vert, std::string frag)
 	if (!success)
 	{
 		printProgramInfoLog(id);
-		throw std::exception();
+		throw Exception("check error log");
 	}
 	// Detach and destroy the shader objects. These are no longer needed
 	// because we now have a complete shader program.
@@ -174,121 +176,6 @@ ShaderProgram::ShaderProgram(std::string vert, std::string frag)
 	glDetachShader(id, fragmentShaderId);
 	glDeleteShader(fragmentShaderId);
 }
-
-ShaderProgram::ShaderProgram(std::string vert, std::string frag, std::string geom){
-	std::string vertShader;
-	std::string fragShader;
-	std::string geomShader;
-
-	std::ifstream file(vert);
-
-	if (!file.is_open()) {
-		throw std::exception();
-	}
-	else {
-		while (!file.eof()) {
-			std::string line;
-			std::getline(file, line);
-			vertShader += line + "\n";
-		}
-	}
-	file.close();
-
-	file.open(frag);
-
-	if (!file.is_open()) {
-		throw std::exception();
-	}
-	else {
-		while (!file.eof()) {
-			std::string line;
-			std::getline(file, line);
-			fragShader += line + "\n";
-		}
-	}
-	file.close();
-
-	file.open(geom);
-
-	if (!file.is_open()) {
-		throw std::exception();
-	}
-	else {
-		while (!file.eof()) {
-			std::string line;
-			std::getline(file, line);
-			geomShader += line + "\n";
-		}
-	}
-	file.close();
-
-	const char *vertex = vertShader.c_str();
-	const char *fragment = fragShader.c_str();
-	const char *geometry = geomShader.c_str();
-
-	GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShaderId, 1, &vertex, NULL);
-	glCompileShader(vertexShaderId);
-	GLint success = 0;
-	glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		printShaderInfoLog(vertexShaderId);
-		throw std::exception();
-	}
-
-	GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShaderId, 1, &fragment, NULL);
-	glCompileShader(fragmentShaderId);
-	glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		printShaderInfoLog(fragmentShaderId);
-		throw std::exception();
-	}
-
-	GLuint geometryShaderId = glCreateShader(GL_GEOMETRY_SHADER);
-	glShaderSource(geometryShaderId, 1, &geometry, NULL);
-	glCompileShader(geometryShaderId);
-	glGetShaderiv(geometryShaderId, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		printShaderInfoLog(geometryShaderId);
-		throw std::exception();
-	}
-
-	id = glCreateProgram();
-	glAttachShader(id, vertexShaderId);
-	glAttachShader(id, fragmentShaderId);
-	glAttachShader(id, geometryShaderId);
-	// Ensure the VAO "position" attribute stream gets set as the first position
-	// during the link.
-	glBindAttribLocation(id, 0, "in_Position");
-	glBindAttribLocation(id, 1, "in_Color");
-	glBindAttribLocation(id, 2, "in_TexCoord");
-	glBindAttribLocation(id, 3, "in_Normal");
-
-	if (glGetError() != GL_NO_ERROR) {
-		throw std::exception();
-	}
-	// Perform the link and check for failure
-	glLinkProgram(id);
-	glGetProgramiv(id, GL_LINK_STATUS, &success);
-	if (!success)
-	{
-		printProgramInfoLog(id);
-		throw std::exception();
-	}
-	// Detach and destroy the shader objects. These are no longer needed
-	// because we now have a complete shader program.
-	glDetachShader(id, vertexShaderId);
-	glDeleteShader(vertexShaderId);
-	glDetachShader(id, fragmentShaderId);
-	glDeleteShader(fragmentShaderId);
-	glDetachShader(id, geometryShaderId);
-	glDeleteShader(geometryShaderId);
-}
-
 
 ShaderProgram::~ShaderProgram()
 {
@@ -330,7 +217,7 @@ void ShaderProgram::SetUniform(std::string uniform, glm::vec4 value)
 	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
 	if (uniformId == -1)
 	{
-		//throw std::exception();
+		throw Exception("coudln't set uniform: " + uniform);
 	}
 
 	glUseProgram(id);
@@ -342,7 +229,7 @@ void ShaderProgram::SetUniform(std::string uniform, glm::vec3 value) {
 	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
 	if (uniformId == -1)
 	{
-		//throw std::exception();
+		throw Exception("coudln't set uniform: " + uniform);
 	}
 
 	glUseProgram(id);
@@ -355,7 +242,7 @@ void ShaderProgram::SetUniform(std::string uniform, glm::mat4 value)
 	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
 	if (uniformId == -1)
 	{
-		//throw std::exception();
+		throw Exception("coudln't set uniform: " + uniform);
 	}
 
 	glUseProgram(id);
@@ -370,7 +257,7 @@ void ShaderProgram::SetUniform(std::string uniform, std::shared_ptr<Texture> tex
 
 	if (uniformId == -1)
 	{
-		//throw std::exception();
+		throw Exception("coudln't get uniform: " + uniform);
 	}
 
 	for (size_t i = 0; i < samplers.size(); i++) //go through the list of samplers and if the texture already exists bind that one
@@ -403,7 +290,7 @@ void ShaderProgram::SetUniform(std::string uniform, std::shared_ptr<DepthCubemap
 
 	if (uniformId == -1)
 	{
-		//throw std::exception();
+		throw Exception("coudln't get uniform: " + uniform);
 	}
 
 	for (size_t i = 0; i < samplers.size(); i++)
@@ -435,7 +322,7 @@ void ShaderProgram::SetUniform(std::string uniform, float value)
 	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
 	if (uniformId == -1)
 	{
-		//throw std::exception();
+		throw Exception("coudln't set uniform: " + uniform);
 	}
 
 	glUseProgram(id);
@@ -448,7 +335,7 @@ void ShaderProgram::SetUniform(std::string uniform, int value)
 	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
 	if (uniformId == -1)
 	{
-		//throw std::exception();
+		throw Exception("coudln't set uniform: " + uniform);
 	}
 
 	glUseProgram(id);

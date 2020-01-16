@@ -9,6 +9,7 @@ struct Core;
 struct Component {
 	virtual void OnUpdate(); ///< update function called every frame
 	virtual void OnRender();
+	virtual void OnStart();
 	std::shared_ptr<GameObject> GetGameObject(); ///< get the gameobject the component is attached to
 	std::shared_ptr<Core> GetCore(); ///< get the core
 private:

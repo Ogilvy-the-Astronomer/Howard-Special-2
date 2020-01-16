@@ -29,3 +29,9 @@ void GameObject::Update(){
 void GameObject::Render()
 {
 }
+
+void GameObject::Start(){
+	for (int i = 0; i < (int)components.size(); i++) {
+		components.at(i)->OnStart();
+	}
+}

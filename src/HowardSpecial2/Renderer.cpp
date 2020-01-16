@@ -28,7 +28,7 @@ void Renderer::OnUpdate(){
 	shader->SetUniform("in_Texture", texture);
 	shader->SetUniform("in_View", cam.lock()->GetComponent<Camera>()->GetView());
 	//get lists of all point and direction lights
-	std::vector<std::shared_ptr<PointLight>> lights = GetCore()->GetComponents<PointLight>();
+	std::vector<std::shared_ptr<PointLight>> lights = GetCore()->lights;
 	std::vector<std::shared_ptr<DirectionalLight>> dLights = GetCore()->GetComponents<DirectionalLight>();
 
 	for (int i = 0; i < (int)dLights.size(); i++) { //go through list of every direction light and set corresponding uniforms in the shader

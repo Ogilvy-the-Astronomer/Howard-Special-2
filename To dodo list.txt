@@ -7,8 +7,8 @@ Very Difficult & probably not very helpful -  VR, AI, scenes, saving,
 
 1. Test Sound - done
 2. Keyboard - done
-2a. Collisions
-3. Exceptions
+2a. Collisions - done (no collision response tho)
+3. Exceptions - done
 4. Platforms
 5. Text
 6. Post processing
