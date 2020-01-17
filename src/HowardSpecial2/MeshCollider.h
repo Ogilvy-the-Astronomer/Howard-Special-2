@@ -5,27 +5,25 @@
 struct VertexBuffer;
 struct Mesh;
 struct BoxCollider;
-
+/**
+ * a static collider for checking mesh vs boxes
+ */
 struct MeshCollider : public Component {
-	MeshCollider();
-	MeshCollider(glm::vec3 _dimensions);
-	MeshCollider(glm::vec3 _dimensions, glm::vec3 _offset);
+	MeshCollider(); ///< default constructor
+	MeshCollider(glm::vec3 _dimensions); ///< constructor giving dimension values
+	MeshCollider(glm::vec3 _dimensions, glm::vec3 _offset); ///< consturctor giving dimension and offset values
 
-	MeshCollider(std::shared_ptr<Mesh> _mesh);
-	MeshCollider(std::shared_ptr<Mesh> _mesh, glm::vec3 _dimensions);
-	MeshCollider(std::shared_ptr<Mesh> _mesh, glm::vec3 _dimensions, glm::vec3 _offset);
-	bool TriTriIntersect(std::shared_ptr<GameObject> _other);
-	bool TriBoxIntersect(std::shared_ptr<GameObject> _other);
+	bool TriTriIntersect(std::shared_ptr<GameObject> _other); ///< mesh to mesh collision (not used because it's inefficient)
+	bool TriBoxIntersect(std::shared_ptr<GameObject> _other); ///< box to mesh collision
 
-	bool isColliding(std::shared_ptr<GameObject> _other);
-	bool isColliding(std::shared_ptr<GameObject> _other, glm::vec3 _position);
-	std::shared_ptr<GameObject> isColliding();
+	bool isColliding(std::shared_ptr<GameObject> _other, glm::vec3 _position); ///< returns if this object is colliding with another at the given position
+	std::shared_ptr<GameObject> isColliding(); ///< returns which object is colliding with this one
 	
-	void CollisionResponse();
-	void OnStart();
+	void CollisionResponse(); ///< "kludge" collision response to other mesh because this mesh is static
+	void OnStart(); 
 
-	glm::vec3 dimensions;
-	glm::vec3 offset;
+	glm::vec3 dimensions; ///< box dimensions
+	glm::vec3 offset; ///< box offset
 private:
-	std::shared_ptr<VertexBuffer> shape;
+	std::shared_ptr<VertexBuffer> shape; ///< the shape of the mesh this component is attached to
 };

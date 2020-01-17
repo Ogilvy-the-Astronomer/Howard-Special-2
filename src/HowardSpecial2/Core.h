@@ -25,9 +25,9 @@ struct BoxCollider;
  */
 struct Core : private NonCopyable {
 	Core();
-	SDL_Window *graphicsContext;
-	ALCcontext *soundContext;
-	ALCdevice *device;
+	SDL_Window *graphicsContext; ///< the screen
+	ALCcontext *soundContext; ///< the sound "screen"
+	ALCdevice *device; ///< audio playback device
 	int window_h; ///<window height
 	int window_w; ///<window width
 	std::shared_ptr<GameObject> mainCamera; ///<reference to main camera
@@ -39,22 +39,23 @@ struct Core : private NonCopyable {
 	std::shared_ptr<GameObject> AddObject(); ///<create an object and add it to the list
 	template <class T>
 	std::vector<std::shared_ptr<T>> GetComponents(); ///<get a list of all specified components
-	void Start();
+	void Start(); ///< calls start function on all objects
 	void Stop(); ///< shut down dependencies 
 	void Update(); ///<go through all gameobjects and update all their components
 	void Display(); ///< go through all gameobjects and update all their components and also renders shadows
 	std::shared_ptr<Core> Initialize(); ///<intialize dependencies 
-	std::shared_ptr<Keyboard> keyboard;
+	std::shared_ptr<Keyboard> keyboard; ///< input handler (does mouse input to)
 
 	std::shared_ptr<ShaderProgram> shadowRender; ///<shader that renders the shadow map
 	//std::shared_ptr<ShaderProgram> depthMapRender; ///<shader that renders the shadow map
 	std::vector<std::shared_ptr<RenderTexture>> depthTextures; ///<list of 2d depth maps
 	std::vector<std::shared_ptr<DepthCubemap>> depthCubeTextures; ///<list of depth cube maps
 
+	float fps;
 private:
 	std::weak_ptr<Core> self; ///<reference to self
-	Uint32 currentTicks;
-	Uint32 lastTicks;
+	Uint32 currentTicks; ///< total amount of tick since startup
+	Uint32 lastTicks; ///< ticks last frame
 	int lowestfps = 0;
 	int framecount = 0;
 };

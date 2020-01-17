@@ -1,0 +1,96 @@
+\hypertarget{struct_core}{}\doxysection{Core Struct Reference}
+\label{struct_core}\index{Core@{Core}}
+
+
+{\ttfamily \#include $<$Core.\+h$>$}
+
+Inheritance diagram for Core\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{struct_core}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_core_a029fbcb5b48fc5336e36a7dd418a16f3}\label{struct_core_a029fbcb5b48fc5336e36a7dd418a16f3}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_game_object}{Game\+Object}} $>$ \mbox{\hyperlink{struct_core_a029fbcb5b48fc5336e36a7dd418a16f3}{Add\+Object}} ()
+\begin{DoxyCompactList}\small\item\em create an object and add it to the list \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_a1a3d72a75b90f7e5ae7e28e289564bdf}\label{struct_core_a1a3d72a75b90f7e5ae7e28e289564bdf}} 
+{\footnotesize template$<$class T $>$ }\\std\+::vector$<$ std\+::shared\+\_\+ptr$<$ T $>$ $>$ \mbox{\hyperlink{struct_core_a1a3d72a75b90f7e5ae7e28e289564bdf}{Get\+Components}} ()
+\begin{DoxyCompactList}\small\item\em get a list of all specified components \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_a44f0db8bca5b6fd85f3948250287bdbd}\label{struct_core_a44f0db8bca5b6fd85f3948250287bdbd}} 
+void \mbox{\hyperlink{struct_core_a44f0db8bca5b6fd85f3948250287bdbd}{Start}} ()
+\begin{DoxyCompactList}\small\item\em calls start function on all objects \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_acab57c44acf4231e8310d93310667990}\label{struct_core_acab57c44acf4231e8310d93310667990}} 
+void \mbox{\hyperlink{struct_core_acab57c44acf4231e8310d93310667990}{Stop}} ()
+\begin{DoxyCompactList}\small\item\em shut down dependencies \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_a9df5de6c1267b6784abef0ad3ff28b81}\label{struct_core_a9df5de6c1267b6784abef0ad3ff28b81}} 
+void \mbox{\hyperlink{struct_core_a9df5de6c1267b6784abef0ad3ff28b81}{Update}} ()
+\begin{DoxyCompactList}\small\item\em go through all gameobjects and update all their components \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_ac743e368fd0fb49d5f4c65b7c7ed6466}\label{struct_core_ac743e368fd0fb49d5f4c65b7c7ed6466}} 
+void \mbox{\hyperlink{struct_core_ac743e368fd0fb49d5f4c65b7c7ed6466}{Display}} ()
+\begin{DoxyCompactList}\small\item\em go through all gameobjects and update all their components and also renders shadows \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_ab62f686765accb870bbde07184b52bef}\label{struct_core_ab62f686765accb870bbde07184b52bef}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_core}{Core}} $>$ \mbox{\hyperlink{struct_core_ab62f686765accb870bbde07184b52bef}{Initialize}} ()
+\begin{DoxyCompactList}\small\item\em intialize dependencies \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_core_af25bafc66483f86999c9807eba3d11d4}\label{struct_core_af25bafc66483f86999c9807eba3d11d4}} 
+S\+D\+L\+\_\+\+Window $\ast$ \mbox{\hyperlink{struct_core_af25bafc66483f86999c9807eba3d11d4}{graphics\+Context}}
+\begin{DoxyCompactList}\small\item\em the screen \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_af8db9829e7bb1d7224c9ff634b7bd37d}\label{struct_core_af8db9829e7bb1d7224c9ff634b7bd37d}} 
+A\+L\+Ccontext $\ast$ \mbox{\hyperlink{struct_core_af8db9829e7bb1d7224c9ff634b7bd37d}{sound\+Context}}
+\begin{DoxyCompactList}\small\item\em the sound \char`\"{}screen\char`\"{} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_a6f2ea5ba2bc332fa92e94a4e45efb936}\label{struct_core_a6f2ea5ba2bc332fa92e94a4e45efb936}} 
+A\+L\+Cdevice $\ast$ \mbox{\hyperlink{struct_core_a6f2ea5ba2bc332fa92e94a4e45efb936}{device}}
+\begin{DoxyCompactList}\small\item\em audio playback device \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_a088de77139cf0517e3e6703d69c18864}\label{struct_core_a088de77139cf0517e3e6703d69c18864}} 
+int \mbox{\hyperlink{struct_core_a088de77139cf0517e3e6703d69c18864}{window\+\_\+h}}
+\begin{DoxyCompactList}\small\item\em window height \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_a0b60afec054fbd60ae735fdc13a1bb9e}\label{struct_core_a0b60afec054fbd60ae735fdc13a1bb9e}} 
+int \mbox{\hyperlink{struct_core_a0b60afec054fbd60ae735fdc13a1bb9e}{window\+\_\+w}}
+\begin{DoxyCompactList}\small\item\em window width \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_ac421b2ba0468385795985d6012ddb5a7}\label{struct_core_ac421b2ba0468385795985d6012ddb5a7}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_game_object}{Game\+Object}} $>$ \mbox{\hyperlink{struct_core_ac421b2ba0468385795985d6012ddb5a7}{main\+Camera}}
+\begin{DoxyCompactList}\small\item\em reference to main camera \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_af55a74c44a68f55cf547f8995a907b22}\label{struct_core_af55a74c44a68f55cf547f8995a907b22}} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_game_object}{Game\+Object}} $>$ $>$ \mbox{\hyperlink{struct_core_af55a74c44a68f55cf547f8995a907b22}{game\+Objects}}
+\begin{DoxyCompactList}\small\item\em list of game objects \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_aa34477fbafd33a2ad067ab47b7e0b8ad}\label{struct_core_aa34477fbafd33a2ad067ab47b7e0b8ad}} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_point_light}{Point\+Light}} $>$ $>$ \mbox{\hyperlink{struct_core_aa34477fbafd33a2ad067ab47b7e0b8ad}{lights}}
+\begin{DoxyCompactList}\small\item\em list of point lights \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_accd686f28befa6bf13c281e37495022f}\label{struct_core_accd686f28befa6bf13c281e37495022f}} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_renderer}{Renderer}} $>$ $>$ \mbox{\hyperlink{struct_core_accd686f28befa6bf13c281e37495022f}{renderers}}
+\begin{DoxyCompactList}\small\item\em list of renderers (visible objects) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_a29099689ef3bfe9197894c54646ba5ad}\label{struct_core_a29099689ef3bfe9197894c54646ba5ad}} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_box_collider}{Box\+Collider}} $>$ $>$ \mbox{\hyperlink{struct_core_a29099689ef3bfe9197894c54646ba5ad}{box\+Colliders}}
+\begin{DoxyCompactList}\small\item\em list of renderers (visible objects) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_ae4fae751d223b544c02426d11dad0248}\label{struct_core_ae4fae751d223b544c02426d11dad0248}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_resources}{Resources}} $>$ \mbox{\hyperlink{struct_core_ae4fae751d223b544c02426d11dad0248}{resources}}
+\begin{DoxyCompactList}\small\item\em list of resources (textures, meshes, sounds, etc) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_a3a1e6811bac5265ca98206c15a7bae3d}\label{struct_core_a3a1e6811bac5265ca98206c15a7bae3d}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_keyboard}{Keyboard}} $>$ \mbox{\hyperlink{struct_core_a3a1e6811bac5265ca98206c15a7bae3d}{keyboard}}
+\begin{DoxyCompactList}\small\item\em input handler (does mouse input to) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_a2a9931cc9bfd9f6667e60a2cb08b779a}\label{struct_core_a2a9931cc9bfd9f6667e60a2cb08b779a}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_shader_program}{Shader\+Program}} $>$ \mbox{\hyperlink{struct_core_a2a9931cc9bfd9f6667e60a2cb08b779a}{shadow\+Render}}
+\begin{DoxyCompactList}\small\item\em shader that renders the shadow map \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_abcc24a958f963bd462e4bb2b28557481}\label{struct_core_abcc24a958f963bd462e4bb2b28557481}} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_render_texture}{Render\+Texture}} $>$ $>$ \mbox{\hyperlink{struct_core_abcc24a958f963bd462e4bb2b28557481}{depth\+Textures}}
+\begin{DoxyCompactList}\small\item\em list of 2d depth maps \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_a85df19ac22fff0fe268b1f311e9d3251}\label{struct_core_a85df19ac22fff0fe268b1f311e9d3251}} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_depth_cubemap}{Depth\+Cubemap}} $>$ $>$ \mbox{\hyperlink{struct_core_a85df19ac22fff0fe268b1f311e9d3251}{depth\+Cube\+Textures}}
+\begin{DoxyCompactList}\small\item\em list of depth cube maps \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_core_afb710421b73cc2852b13c7a35beee444}\label{struct_core_afb710421b73cc2852b13c7a35beee444}} 
+float {\bfseries fps}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The core of the engine with it\textquotesingle{}s crucial functionalities 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Howard\+Special2/Core.\+h\item 
+src/\+Howard\+Special2/Core.\+cpp\end{DoxyCompactItemize}

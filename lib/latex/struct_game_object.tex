@@ -1,0 +1,57 @@
+\hypertarget{struct_game_object}{}\doxysection{Game\+Object Struct Reference}
+\label{struct_game_object}\index{GameObject@{GameObject}}
+
+
+{\ttfamily \#include $<$Game\+Object.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_game_object_abd9b6e0bff313ff5d2e8d34a8b58fded}\label{struct_game_object_abd9b6e0bff313ff5d2e8d34a8b58fded}} 
+{\footnotesize template$<$class T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_game_object_abd9b6e0bff313ff5d2e8d34a8b58fded}{Add\+Component}} ()
+\begin{DoxyCompactList}\small\item\em default add component function \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_game_object_a7526f58c45aa3f3a4d5908aea22e6ba8}\label{struct_game_object_a7526f58c45aa3f3a4d5908aea22e6ba8}} 
+{\footnotesize template$<$class T , class A $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_game_object_a7526f58c45aa3f3a4d5908aea22e6ba8}{Add\+Component}} (A a)
+\begin{DoxyCompactList}\small\item\em add component with 1 parameter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_game_object_a84d7c489d4348c71b379d4160dfee8aa}\label{struct_game_object_a84d7c489d4348c71b379d4160dfee8aa}} 
+{\footnotesize template$<$class T , class A , class B $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_game_object_a84d7c489d4348c71b379d4160dfee8aa}{Add\+Component}} (A a, B b)
+\begin{DoxyCompactList}\small\item\em add component with 1 parameter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_game_object_ac4f5970fe39e63be231def720ecfc8ab}\label{struct_game_object_ac4f5970fe39e63be231def720ecfc8ab}} 
+{\footnotesize template$<$class T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_game_object_ac4f5970fe39e63be231def720ecfc8ab}{Get\+Component}} ()
+\begin{DoxyCompactList}\small\item\em get component of type in object \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_game_object_a183daa7a9d262fea2be514ff79568630}\label{struct_game_object_a183daa7a9d262fea2be514ff79568630}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_transform}{Transform}} $>$ \mbox{\hyperlink{struct_game_object_a183daa7a9d262fea2be514ff79568630}{Get\+Transform}} ()
+\begin{DoxyCompactList}\small\item\em shortcut function to get the transform component of an object \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_game_object_af12957f4f52adecf1c1503f54bbd7047}\label{struct_game_object_af12957f4f52adecf1c1503f54bbd7047}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_core}{Core}} $>$ \mbox{\hyperlink{struct_game_object_af12957f4f52adecf1c1503f54bbd7047}{Get\+Core}} ()
+\begin{DoxyCompactList}\small\item\em shortcut function to get the engine core \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_game_object_a1bd14aa169f501f94f1721943d716535}\label{struct_game_object_a1bd14aa169f501f94f1721943d716535}} 
+void \mbox{\hyperlink{struct_game_object_a1bd14aa169f501f94f1721943d716535}{Update}} ()
+\begin{DoxyCompactList}\small\item\em update all components \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_game_object_a554078170496d6fc31af134e76e1e1bd}\label{struct_game_object_a554078170496d6fc31af134e76e1e1bd}} 
+void {\bfseries Render} ()
+\item 
+\mbox{\Hypertarget{struct_game_object_aa27714b4172ebff2f7cddcf63b325ac7}\label{struct_game_object_aa27714b4172ebff2f7cddcf63b325ac7}} 
+void \mbox{\hyperlink{struct_game_object_aa27714b4172ebff2f7cddcf63b325ac7}{Start}} ()
+\begin{DoxyCompactList}\small\item\em start all components \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_game_object_a11f37105246ef10282bacc56d5e734d4}\label{struct_game_object_a11f37105246ef10282bacc56d5e734d4}} 
+uint32\+\_\+t \mbox{\hyperlink{struct_game_object_a11f37105246ef10282bacc56d5e734d4}{id}}
+\begin{DoxyCompactList}\small\item\em game object id \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_game_object_acd0789873af2006e142a579250891ce8}\label{struct_game_object_acd0789873af2006e142a579250891ce8}} 
+struct {\bfseries Core}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+a game object, which acts like a container and manager of all the components attached to 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Howard\+Special2/Game\+Object.\+h\item 
+src/\+Howard\+Special2/Game\+Object.\+cpp\end{DoxyCompactItemize}

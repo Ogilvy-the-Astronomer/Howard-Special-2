@@ -1,0 +1,66 @@
+\hypertarget{struct_box_collider}{}\doxysection{Box\+Collider Struct Reference}
+\label{struct_box_collider}\index{BoxCollider@{BoxCollider}}
+
+
+{\ttfamily \#include $<$Box\+Collider.\+h$>$}
+
+Inheritance diagram for Box\+Collider\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{struct_box_collider}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_box_collider_a3dde4c914b8ed8c3641547d223cb6348}\label{struct_box_collider_a3dde4c914b8ed8c3641547d223cb6348}} 
+\mbox{\hyperlink{struct_box_collider_a3dde4c914b8ed8c3641547d223cb6348}{Box\+Collider}} (glm\+::vec3 \+\_\+dimensions)
+\begin{DoxyCompactList}\small\item\em construct box collider with given dimensions \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_box_collider_abe2b64b388a920fb89e0dc1a3cc1fb95}\label{struct_box_collider_abe2b64b388a920fb89e0dc1a3cc1fb95}} 
+\mbox{\hyperlink{struct_box_collider_abe2b64b388a920fb89e0dc1a3cc1fb95}{Box\+Collider}} (glm\+::vec3 \+\_\+dimensions, glm\+::vec3 \+\_\+offset)
+\begin{DoxyCompactList}\small\item\em construct box collider with given offset and dimensions \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_box_collider_ac2e3273602c713aeda103bc231859c7f}\label{struct_box_collider_ac2e3273602c713aeda103bc231859c7f}} 
+void \mbox{\hyperlink{struct_box_collider_ac2e3273602c713aeda103bc231859c7f}{Build\+Dimensionsfrom\+Mesh}} ()
+\begin{DoxyCompactList}\small\item\em get box dimensions from mesh vertices \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_box_collider_a3b5c9f006da470ef8b78235472fb7cbc}\label{struct_box_collider_a3b5c9f006da470ef8b78235472fb7cbc}} 
+void \mbox{\hyperlink{struct_box_collider_a3b5c9f006da470ef8b78235472fb7cbc}{Build\+Dimensionsfrom\+Mesh}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_mesh}{Mesh}} $>$ mesh)
+\begin{DoxyCompactList}\small\item\em get box dimensions from given mesh vertices \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_box_collider_aa6ac701de1d584bcae8d280cf3b77e24}\label{struct_box_collider_aa6ac701de1d584bcae8d280cf3b77e24}} 
+void \mbox{\hyperlink{struct_box_collider_aa6ac701de1d584bcae8d280cf3b77e24}{On\+Update}} ()
+\begin{DoxyCompactList}\small\item\em update called every frame \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_box_collider_a24a65833c4a4b23bf8fa1c5550023f92}\label{struct_box_collider_a24a65833c4a4b23bf8fa1c5550023f92}} 
+bool \mbox{\hyperlink{struct_box_collider_a24a65833c4a4b23bf8fa1c5550023f92}{is\+Colliding}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_box_collider}{Box\+Collider}} $>$ other)
+\begin{DoxyCompactList}\small\item\em checks if object is colliding with other object \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_box_collider_a018b4c583ca77a5b98049efdd1b1f617}\label{struct_box_collider_a018b4c583ca77a5b98049efdd1b1f617}} 
+bool \mbox{\hyperlink{struct_box_collider_a018b4c583ca77a5b98049efdd1b1f617}{is\+Colliding}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_box_collider}{Box\+Collider}} $>$ other, glm\+::vec3 position)
+\begin{DoxyCompactList}\small\item\em checks if object is colliding with other object at given position \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_box_collider_a887fb8ce4763f27e8efa2a8bc3c341f3}\label{struct_box_collider_a887fb8ce4763f27e8efa2a8bc3c341f3}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_box_collider}{Box\+Collider}} $>$ \mbox{\hyperlink{struct_box_collider_a887fb8ce4763f27e8efa2a8bc3c341f3}{is\+Colliding}} ()
+\begin{DoxyCompactList}\small\item\em returns the first object this object is colliding with \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_box_collider_a60232471a408c42d08c37c717fdce203}\label{struct_box_collider_a60232471a408c42d08c37c717fdce203}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_box_collider}{Box\+Collider}} $>$ \mbox{\hyperlink{struct_box_collider_a60232471a408c42d08c37c717fdce203}{is\+Colliding}} (glm\+::vec3 \+\_\+position)
+\begin{DoxyCompactList}\small\item\em returns the first object this object is colliding with \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_box_collider_a8e69821a3fd74c8a8f971e87bf47948e}\label{struct_box_collider_a8e69821a3fd74c8a8f971e87bf47948e}} 
+void \mbox{\hyperlink{struct_box_collider_a8e69821a3fd74c8a8f971e87bf47948e}{Collision\+Response}} ()
+\begin{DoxyCompactList}\small\item\em \char`\"{}cludge\char`\"{} method collision response \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_box_collider_a3a399b7b26f32455c73ec7343b677471}\label{struct_box_collider_a3a399b7b26f32455c73ec7343b677471}} 
+bool \mbox{\hyperlink{struct_box_collider_a3a399b7b26f32455c73ec7343b677471}{Tri\+Tri\+Intersect}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_game_object}{Game\+Object}} $>$ \+\_\+other)
+\begin{DoxyCompactList}\small\item\em checks exact mesh to mesh collision with other object (unused (because it\textquotesingle{}s really bad for performance) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_box_collider_a7b5ed2433c7e91bc71b7f28bd02a3e23}\label{struct_box_collider_a7b5ed2433c7e91bc71b7f28bd02a3e23}} 
+glm\+::vec3 \mbox{\hyperlink{struct_box_collider_a7b5ed2433c7e91bc71b7f28bd02a3e23}{dimensions}}
+\begin{DoxyCompactList}\small\item\em collider box dimensions \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_box_collider_aa26d806daf7054880bbb0d4d8ef2e2c7}\label{struct_box_collider_aa26d806daf7054880bbb0d4d8ef2e2c7}} 
+glm\+::vec3 \mbox{\hyperlink{struct_box_collider_aa26d806daf7054880bbb0d4d8ef2e2c7}{offset}}
+\begin{DoxyCompactList}\small\item\em collider box offset \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The boxcollider component which detects collisions with S\+AT 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Howard\+Special2/Box\+Collider.\+h\item 
+src/\+Howard\+Special2/Box\+Collider.\+cpp\end{DoxyCompactItemize}

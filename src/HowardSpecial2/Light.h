@@ -1,29 +1,33 @@
 #pragma once
 #include <glm/glm.hpp>
 #include "Component.h"
-//TODO: make pointlight derive from dir light
+/**
+ * a point light which shines light in all directions
+ */
 struct PointLight : public Component {
-	PointLight();
+	PointLight(); ///< default constructor
 	void OnUpdate();
 
-	glm::vec3 emissive;
-	glm::vec3 ambient;
-	glm::vec3 specular;
-	glm::vec3 diffuse;
+	glm::vec3 emissive; ///< creates darkness behind objects
+	glm::vec3 ambient; ///< a flat value added around the light
+	glm::vec3 specular; ///< the shine of an object because of the light
+	glm::vec3 diffuse; ///< the colour of the light
 
-	float constant;
-	float linear;
-	float quadratic;
+	float constant; ///< constant attenuation value
+	float linear; ///< linear attenuation value
+	float quadratic; ///< quadratic attenuation value
 	
-	glm::mat4 view;
+	glm::mat4 view; ///< point light view matrix
 };
-
+/**
+ * a directional light which shines light in one direction
+ */
 struct DirectionalLight : public Component {
 	DirectionalLight();
 
-	glm::vec3 emissive;
-	glm::vec3 ambient;
-	glm::vec3 specular;
-	glm::vec3 diffuse;
+	glm::vec3 emissive; ///< creates darkness behind objects
+	glm::vec3 ambient; ///< a flat value added around the light
+	glm::vec3 specular; ///< the shine of an object because of the light
+	glm::vec3 diffuse; ///< the colour of the light
 };
 

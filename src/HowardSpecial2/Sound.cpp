@@ -4,26 +4,26 @@
 
 Sound::Sound(){
 	bufferId = 0;
-	alGenBuffers(1, &bufferId);
+	alGenBuffers(1, &bufferId); //generate sound buffer id
 
 	ALenum format = 0;
 	ALsizei freq = 0;
 	std::vector<char> bufferData;
-	load_ogg("../src/game/models/dixie_horn.ogg", bufferData, format, freq);
+	load_ogg("../src/game/models/dixie_horn.ogg", bufferData, format, freq); //load file into a buffer
 
-	alBufferData(bufferId, format, &bufferData.at(0), static_cast<ALsizei>(bufferData.size()), freq);
+	alBufferData(bufferId, format, &bufferData.at(0), static_cast<ALsizei>(bufferData.size()), freq); //attach the buffer to the buffer id
 }
 
 Sound::Sound(std::string path){
 	bufferId = 0;
-	alGenBuffers(1, &bufferId);
+	alGenBuffers(1, &bufferId); //generate sound buffer id
 
 	ALenum format = 0;
 	ALsizei freq = 0;
 	std::vector<char> bufferData;
-	load_ogg(path, bufferData, format, freq);
+	load_ogg(path, bufferData, format, freq); //load file into a buffer
 
-	alBufferData(bufferId, format, &bufferData.at(0), static_cast<ALsizei>(bufferData.size()), freq);
+	alBufferData(bufferId, format, &bufferData.at(0), static_cast<ALsizei>(bufferData.size()), freq); //attach the buffer to the buffer id
 }
 
 Sound::~Sound(){
@@ -32,14 +32,14 @@ Sound::~Sound(){
 
 void Sound::load(std::string path){
 	bufferId = 0;
-	alGenBuffers(1, &bufferId);
+	alGenBuffers(1, &bufferId); //generate sound buffer id
 
 	ALenum format = 0;
 	ALsizei freq = 0;
 	std::vector<char> bufferData;
-	load_ogg(path, bufferData, format, freq);
+	load_ogg(path, bufferData, format, freq); //load file into a buffer
 
-	alBufferData(bufferId, format, &bufferData.at(0), static_cast<ALsizei>(bufferData.size()), freq);
+	alBufferData(bufferId, format, &bufferData.at(0), static_cast<ALsizei>(bufferData.size()), freq); //attach the buffer to the buffer id
 }
 
 void Sound::load_ogg(const std::string & fileName, std::vector<char>& buffer, ALenum & format, ALsizei & freq){
@@ -47,8 +47,7 @@ void Sound::load_ogg(const std::string & fileName, std::vector<char>& buffer, AL
 	int sampleRate = 0;
 	short* output = NULL;
 
-	size_t samples = stb_vorbis_decode_filename(
-		fileName.c_str(), &channels, &sampleRate, &output);
+	size_t samples = stb_vorbis_decode_filename(fileName.c_str(), &channels, &sampleRate, &output); //vorbis loads the file 
 
 	if (samples == -1)
 	{
@@ -65,7 +64,7 @@ void Sound::load_ogg(const std::string & fileName, std::vector<char>& buffer, AL
 	}
 	else
 	{
-		format = AL_FORMAT_STEREO16;
+		//format = AL_FORMAT_STEREO16;
 
 		// Force format to be mono (Useful for positional audio)
 		format = AL_FORMAT_MONO16;

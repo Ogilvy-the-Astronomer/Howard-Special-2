@@ -1,0 +1,60 @@
+\hypertarget{struct_mesh_collider}{}\doxysection{Mesh\+Collider Struct Reference}
+\label{struct_mesh_collider}\index{MeshCollider@{MeshCollider}}
+
+
+{\ttfamily \#include $<$Mesh\+Collider.\+h$>$}
+
+Inheritance diagram for Mesh\+Collider\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{struct_mesh_collider}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_mesh_collider_ad7fdf5eb86b61c6edae3dfb48ea3ea03}\label{struct_mesh_collider_ad7fdf5eb86b61c6edae3dfb48ea3ea03}} 
+\mbox{\hyperlink{struct_mesh_collider_ad7fdf5eb86b61c6edae3dfb48ea3ea03}{Mesh\+Collider}} ()
+\begin{DoxyCompactList}\small\item\em default constructor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_mesh_collider_a07e8d51e44852158094a8b585286e2c5}\label{struct_mesh_collider_a07e8d51e44852158094a8b585286e2c5}} 
+\mbox{\hyperlink{struct_mesh_collider_a07e8d51e44852158094a8b585286e2c5}{Mesh\+Collider}} (glm\+::vec3 \+\_\+dimensions)
+\begin{DoxyCompactList}\small\item\em constructor giving dimension values \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_mesh_collider_a851bb99a5eaf0ee13d9b09561e03bb6b}\label{struct_mesh_collider_a851bb99a5eaf0ee13d9b09561e03bb6b}} 
+\mbox{\hyperlink{struct_mesh_collider_a851bb99a5eaf0ee13d9b09561e03bb6b}{Mesh\+Collider}} (glm\+::vec3 \+\_\+dimensions, glm\+::vec3 \+\_\+offset)
+\begin{DoxyCompactList}\small\item\em consturctor giving dimension and offset values \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_mesh_collider_a0f95e359a01519c8657f68970815eb04}\label{struct_mesh_collider_a0f95e359a01519c8657f68970815eb04}} 
+bool \mbox{\hyperlink{struct_mesh_collider_a0f95e359a01519c8657f68970815eb04}{Tri\+Tri\+Intersect}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_game_object}{Game\+Object}} $>$ \+\_\+other)
+\begin{DoxyCompactList}\small\item\em mesh to mesh collision (not used because it\textquotesingle{}s inefficient) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_mesh_collider_a08aa553871c82651ecbc38e1d24059d7}\label{struct_mesh_collider_a08aa553871c82651ecbc38e1d24059d7}} 
+bool \mbox{\hyperlink{struct_mesh_collider_a08aa553871c82651ecbc38e1d24059d7}{Tri\+Box\+Intersect}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_game_object}{Game\+Object}} $>$ \+\_\+other)
+\begin{DoxyCompactList}\small\item\em box to mesh collision \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_mesh_collider_af4386077afaf260069f4094ac3d2127e}\label{struct_mesh_collider_af4386077afaf260069f4094ac3d2127e}} 
+bool \mbox{\hyperlink{struct_mesh_collider_af4386077afaf260069f4094ac3d2127e}{is\+Colliding}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_game_object}{Game\+Object}} $>$ \+\_\+other, glm\+::vec3 \+\_\+position)
+\begin{DoxyCompactList}\small\item\em returns if this object is colliding with another at the given position \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_mesh_collider_a740224b2d22a1fa0daa7b96675287480}\label{struct_mesh_collider_a740224b2d22a1fa0daa7b96675287480}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_game_object}{Game\+Object}} $>$ \mbox{\hyperlink{struct_mesh_collider_a740224b2d22a1fa0daa7b96675287480}{is\+Colliding}} ()
+\begin{DoxyCompactList}\small\item\em returns which object is colliding with this one \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_mesh_collider_a781579c2ce1272e0f845faa2c0f98cd9}\label{struct_mesh_collider_a781579c2ce1272e0f845faa2c0f98cd9}} 
+void \mbox{\hyperlink{struct_mesh_collider_a781579c2ce1272e0f845faa2c0f98cd9}{Collision\+Response}} ()
+\begin{DoxyCompactList}\small\item\em \char`\"{}kludge\char`\"{} collision response to other mesh because this mesh is static \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_mesh_collider_a232589071f4e7a56d82e8f91ae49f9a3}\label{struct_mesh_collider_a232589071f4e7a56d82e8f91ae49f9a3}} 
+void \mbox{\hyperlink{struct_mesh_collider_a232589071f4e7a56d82e8f91ae49f9a3}{On\+Start}} ()
+\begin{DoxyCompactList}\small\item\em start function called at the beginning of the game loop \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_mesh_collider_a1316c21af90859786f4c80bf2dca06fc}\label{struct_mesh_collider_a1316c21af90859786f4c80bf2dca06fc}} 
+glm\+::vec3 \mbox{\hyperlink{struct_mesh_collider_a1316c21af90859786f4c80bf2dca06fc}{dimensions}}
+\begin{DoxyCompactList}\small\item\em box dimensions \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_mesh_collider_a645d7b7013d55fabe8b08a44dede7983}\label{struct_mesh_collider_a645d7b7013d55fabe8b08a44dede7983}} 
+glm\+::vec3 \mbox{\hyperlink{struct_mesh_collider_a645d7b7013d55fabe8b08a44dede7983}{offset}}
+\begin{DoxyCompactList}\small\item\em box offset \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+a static collider for checking mesh vs boxes 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Howard\+Special2/Mesh\+Collider.\+h\item 
+src/\+Howard\+Special2/Mesh\+Collider.\+cpp\end{DoxyCompactItemize}

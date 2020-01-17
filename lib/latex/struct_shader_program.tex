@@ -1,0 +1,54 @@
+\hypertarget{struct_shader_program}{}\doxysection{Shader\+Program Struct Reference}
+\label{struct_shader_program}\index{ShaderProgram@{ShaderProgram}}
+
+
+{\ttfamily \#include $<$Shader\+Program.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_shader_program_abb515227032a61eef897c233ca5112d7}\label{struct_shader_program_abb515227032a61eef897c233ca5112d7}} 
+\mbox{\hyperlink{struct_shader_program_abb515227032a61eef897c233ca5112d7}{Shader\+Program}} (std\+::string vert, std\+::string frag)
+\begin{DoxyCompactList}\small\item\em constructor taking in paths for the vertex and fragment shader sources \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_shader_program_ab7db09442f0d94ca04b4bb36e2b42989}\label{struct_shader_program_ab7db09442f0d94ca04b4bb36e2b42989}} 
+void \mbox{\hyperlink{struct_shader_program_ab7db09442f0d94ca04b4bb36e2b42989}{Draw}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_mesh}{Mesh}} $>$ vertext\+Array)
+\begin{DoxyCompactList}\small\item\em draws the specified mesh \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_shader_program_af4d4c9927fd7bab7312ef351cb452908}\label{struct_shader_program_af4d4c9927fd7bab7312ef351cb452908}} 
+void \mbox{\hyperlink{struct_shader_program_af4d4c9927fd7bab7312ef351cb452908}{Set\+Uniform}} (std\+::string uniform, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_texture}{Texture}} $>$ texture)
+\begin{DoxyCompactList}\small\item\em set texture uniform \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_shader_program_a033d68a486a3641ec2069f0299029ce4}\label{struct_shader_program_a033d68a486a3641ec2069f0299029ce4}} 
+void \mbox{\hyperlink{struct_shader_program_a033d68a486a3641ec2069f0299029ce4}{Set\+Uniform}} (std\+::string uniform, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_depth_cubemap}{Depth\+Cubemap}} $>$ texture)
+\begin{DoxyCompactList}\small\item\em set cube map uniform \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_shader_program_a09836d7346703da2f0a78f853dafe9f2}\label{struct_shader_program_a09836d7346703da2f0a78f853dafe9f2}} 
+void \mbox{\hyperlink{struct_shader_program_a09836d7346703da2f0a78f853dafe9f2}{Set\+Uniform}} (std\+::string uniform, glm\+::vec4 value)
+\begin{DoxyCompactList}\small\item\em set vec4 uniform \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_shader_program_ace79910a017bd894d36e49dbc36f93e5}\label{struct_shader_program_ace79910a017bd894d36e49dbc36f93e5}} 
+void \mbox{\hyperlink{struct_shader_program_ace79910a017bd894d36e49dbc36f93e5}{Set\+Uniform}} (std\+::string uniform, glm\+::vec3 value)
+\begin{DoxyCompactList}\small\item\em set vec3 uniform \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_shader_program_a6983ffe28ab005284f4fe0bda7320630}\label{struct_shader_program_a6983ffe28ab005284f4fe0bda7320630}} 
+void \mbox{\hyperlink{struct_shader_program_a6983ffe28ab005284f4fe0bda7320630}{Set\+Uniform}} (std\+::string uniform, glm\+::mat4 value)
+\begin{DoxyCompactList}\small\item\em set matrix uniform \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_shader_program_ac5691c9e899d113e7979bd86f1152e4b}\label{struct_shader_program_ac5691c9e899d113e7979bd86f1152e4b}} 
+void \mbox{\hyperlink{struct_shader_program_ac5691c9e899d113e7979bd86f1152e4b}{Set\+Uniform}} (std\+::string uniform, float value)
+\begin{DoxyCompactList}\small\item\em set float uniform \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_shader_program_a38189188c9f3adc0ffe5bee27975ba29}\label{struct_shader_program_a38189188c9f3adc0ffe5bee27975ba29}} 
+void \mbox{\hyperlink{struct_shader_program_a38189188c9f3adc0ffe5bee27975ba29}{Set\+Uniform}} (std\+::string uniform, int value)
+\begin{DoxyCompactList}\small\item\em set integer uniform \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_shader_program_a3e2b99da355f50d12fe10f46daa3f21d}\label{struct_shader_program_a3e2b99da355f50d12fe10f46daa3f21d}} 
+void \mbox{\hyperlink{struct_shader_program_a3e2b99da355f50d12fe10f46daa3f21d}{print\+Shader\+Info\+Log}} (G\+Luint obj)
+\begin{DoxyCompactList}\small\item\em print what\textquotesingle{}s wrong with the shader \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_shader_program_a4b7100f903f7f1b9fc5ee3092d1ff925}\label{struct_shader_program_a4b7100f903f7f1b9fc5ee3092d1ff925}} 
+void \mbox{\hyperlink{struct_shader_program_a4b7100f903f7f1b9fc5ee3092d1ff925}{print\+Program\+Info\+Log}} (G\+Luint obj)
+\begin{DoxyCompactList}\small\item\em print what\textquotesingle{}s wrong with the program \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_shader_program_a5b2653f0b69e26a9b867b1a7a3aec2ef}\label{struct_shader_program_a5b2653f0b69e26a9b867b1a7a3aec2ef}} 
+G\+Luint {\bfseries Get\+Id} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class representing an opengl shader program 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Howard\+Special2/Shader\+Program.\+h\item 
+src/\+Howard\+Special2/Shader\+Program.\+cpp\end{DoxyCompactItemize}

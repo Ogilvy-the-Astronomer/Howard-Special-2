@@ -1,0 +1,63 @@
+\hypertarget{struct_renderer}{}\doxysection{Renderer Struct Reference}
+\label{struct_renderer}\index{Renderer@{Renderer}}
+
+
+{\ttfamily \#include $<$Renderer.\+h$>$}
+
+Inheritance diagram for Renderer\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{struct_renderer}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_renderer_af5f6e87ebbd8f0a6c6a3ee632c291dca}\label{struct_renderer_af5f6e87ebbd8f0a6c6a3ee632c291dca}} 
+\mbox{\hyperlink{struct_renderer_af5f6e87ebbd8f0a6c6a3ee632c291dca}{Renderer}} (std\+::string \+\_\+shape, std\+::string \+\_\+texture)
+\begin{DoxyCompactList}\small\item\em consturct the renderer with textur and mesh provided at paths \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_renderer_a889f414eb6ffdd5490d65e370255d66f}\label{struct_renderer_a889f414eb6ffdd5490d65e370255d66f}} 
+void {\bfseries On\+Display} ()
+\item 
+\mbox{\Hypertarget{struct_renderer_ae8e17b60d5ffbc5369f8de423f52580f}\label{struct_renderer_ae8e17b60d5ffbc5369f8de423f52580f}} 
+void \mbox{\hyperlink{struct_renderer_ae8e17b60d5ffbc5369f8de423f52580f}{On\+Update}} ()
+\begin{DoxyCompactList}\small\item\em update the component and draw it to the screen \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_renderer_aff9ff3459db81423a290e019a25c5032}\label{struct_renderer_aff9ff3459db81423a290e019a25c5032}} 
+void \mbox{\hyperlink{struct_renderer_aff9ff3459db81423a290e019a25c5032}{Set\+Mesh}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_mesh}{Mesh}} $>$ \+\_\+mesh)
+\begin{DoxyCompactList}\small\item\em set the object mesh \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_renderer_abaca4266adf1d1afd940059dd0052022}\label{struct_renderer_abaca4266adf1d1afd940059dd0052022}} 
+void \mbox{\hyperlink{struct_renderer_abaca4266adf1d1afd940059dd0052022}{Set\+Texture}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_texture}{Texture}} $>$ \+\_\+texture)
+\begin{DoxyCompactList}\small\item\em set the object texture \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_renderer_ad921080086a3ec2dde1ac696d62e1668}\label{struct_renderer_ad921080086a3ec2dde1ac696d62e1668}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_shader_program}{Shader\+Program}} $>$ \mbox{\hyperlink{struct_renderer_ad921080086a3ec2dde1ac696d62e1668}{shader}} = std\+::make\+\_\+shared$<$\mbox{\hyperlink{struct_shader_program}{Shader\+Program}}$>$(\char`\"{}../shaders/shadowing.\+vert\char`\"{}, \char`\"{}../shaders/shadowing.\+frag\char`\"{})
+\begin{DoxyCompactList}\small\item\em shader used to draw the object \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_renderer_a0aff2191d0d44792e0379ca82fd25ca6}\label{struct_renderer_a0aff2191d0d44792e0379ca82fd25ca6}} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_render_texture}{Render\+Texture}} $>$ $>$ \mbox{\hyperlink{struct_renderer_a0aff2191d0d44792e0379ca82fd25ca6}{depth\+Textures}}
+\begin{DoxyCompactList}\small\item\em list of 2d shadow maps \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_renderer_a1c0a6f7d6fc6a45c0562ef530a04b55f}\label{struct_renderer_a1c0a6f7d6fc6a45c0562ef530a04b55f}} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_depth_cubemap}{Depth\+Cubemap}} $>$ $>$ \mbox{\hyperlink{struct_renderer_a1c0a6f7d6fc6a45c0562ef530a04b55f}{depth\+Cube\+Textures}}
+\begin{DoxyCompactList}\small\item\em list of shadow cubemaps \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_renderer_acd0789873af2006e142a579250891ce8}\label{struct_renderer_acd0789873af2006e142a579250891ce8}} 
+struct {\bfseries Core}
+\item 
+\mbox{\Hypertarget{struct_renderer_a1d32e60d54ca2f46b0ad2755dfd46ddc}\label{struct_renderer_a1d32e60d54ca2f46b0ad2755dfd46ddc}} 
+struct {\bfseries Box\+Collider}
+\item 
+\mbox{\Hypertarget{struct_renderer_aaaae15c51f238be96cee829dbe079147}\label{struct_renderer_aaaae15c51f238be96cee829dbe079147}} 
+struct {\bfseries Mesh\+Collider}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The renderer component which has the visual properties of the object and the functionality to draw it to the screen 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Howard\+Special2/Renderer.\+h\item 
+src/\+Howard\+Special2/Renderer.\+cpp\end{DoxyCompactItemize}

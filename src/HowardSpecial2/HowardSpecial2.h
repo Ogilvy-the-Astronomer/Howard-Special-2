@@ -21,3 +21,5 @@
 #include "BoxCollider.h"
 #include "Exception.h"
 #include "MeshCollider.h"
+#include "TextRenderer.h"
+#include "Rigidbody.h"

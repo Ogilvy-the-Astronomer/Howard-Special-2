@@ -52,10 +52,16 @@ add_library(HowardSpecial2
 	src/HowardSpecial2/Exception.cpp
 	src/HowardSpecial2/MeshCollider.h
 	src/HowardSpecial2/MeshCollider.cpp
+	src/HowardSpecial2/TextRenderer.h
+	src/HowardSpecial2/TextRenderer.cpp
+	src/HowardSpecial2/Rigidbody.h
+	src/HowardSpecial2/Rigidbody.cpp
 )
 target_link_libraries(HowardSpecial2 SDL2 opengl32 openal32 glew32)
 
 add_executable(game
 	src/game/main.cpp
+	src/game/playerController.h
+	src/game/playerController.cpp
 )
 target_link_libraries(game HowardSpecial2)

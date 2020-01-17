@@ -5,11 +5,14 @@
 #include <string>
 #include "Texture.h"
 
+/**
+ * texture that can be drawn to by the camera
+ */
 struct RenderTexture : public Texture
 {
 public:
-	GLuint rtFBO;
-	RenderTexture();
-	RenderTexture(int _o);
+	GLuint rtFBO; ///< frame buffer object id
+	RenderTexture(); ///< constructor for depth maps
+	RenderTexture(int _o); ///< regular constructor
 	~RenderTexture();
 };

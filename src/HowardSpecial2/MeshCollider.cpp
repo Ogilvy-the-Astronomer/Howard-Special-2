@@ -9,7 +9,7 @@
 #include "Core.h"
 #include <iostream>
 #include "TriBoxOverlap.h"
-//#include "TriTriOverlap.h"
+#include "Rigidbody.h"
 
 MeshCollider::MeshCollider(){
 	dimensions = glm::vec3(1.0f);
@@ -26,23 +26,7 @@ MeshCollider::MeshCollider(glm::vec3 _dimensions, glm::vec3 _offset){
 	offset = _offset;
 }
 
-MeshCollider::MeshCollider(std::shared_ptr<Mesh> _mesh){
-	shape = _mesh->GetBuffers(0);
-}
-
-MeshCollider::MeshCollider(std::shared_ptr<Mesh> _mesh, glm::vec3 _dimensions){
-	shape = _mesh->GetBuffers(0);
-	dimensions = _dimensions;
-	offset = glm::vec3(0.0f);
-}
-
-MeshCollider::MeshCollider(std::shared_ptr<Mesh> _mesh, glm::vec3 _dimensions, glm::vec3 _offset){
-	shape = _mesh->GetBuffers(0);
-	dimensions = _dimensions;
-	offset = _offset;
-}
-
-bool MeshCollider::TriTriIntersect(std::shared_ptr<GameObject> _other) {
+bool MeshCollider::TriTriIntersect(std::shared_ptr<GameObject> _other) { //mesh to mesh collision, disabled due to troubles with TriTriOverlap header
 	/*
 	int vertexCount = shape->GetDataSize() / shape->GetComponents();
 	int otherVertexCount = _other->GetComponent<Renderer>()->shape->GetVertexCount() / 3;
@@ -81,18 +65,18 @@ bool MeshCollider::TriTriIntersect(std::shared_ptr<GameObject> _other) {
 	return false;
 }
 
-bool MeshCollider::TriBoxIntersect(std::shared_ptr<GameObject> _other){
-	std::shared_ptr<BoxCollider> bc = _other->GetComponent<BoxCollider>();
-	if (bc) {
-		int vertexCount = shape->GetDataSize() / shape->GetComponents();
-		glm::mat4 model = GetGameObject()->GetTransform()->GetModel();
-		glm::vec3 t = _other->GetTransform()->position;
+bool MeshCollider::TriBoxIntersect(std::shared_ptr<GameObject> _other){ //checks if the mesh collides with other object
+	std::shared_ptr<BoxCollider> bc = _other->GetComponent<BoxCollider>(); 
+	if (bc) { //check if the other object has a box collider component just to be safe
+		int vertexCount = shape->GetDataSize() / shape->GetComponents(); //get the amount of vertices in this object
+		glm::mat4 model = GetGameObject()->GetTransform()->GetModel(); //get the model matrix
+		glm::vec3 t = _other->GetTransform()->position; //get the other object position
 		glm::vec4 tri1Vert1;
 		glm::vec4 tri1Vert2;
 		glm::vec4 tri1Vert3;
-		float boxCenter[] = { t.x + offset.x, t.y + offset.y, t.z + offset.z };
-		float boxHalfSize[] = { bc->dimensions.x / 2,  bc->dimensions.y / 2,  bc->dimensions.z / 2 };
-		for (int i = 0; i < vertexCount / 3; i++) {
+		float boxCenter[] = { t.x + offset.x, t.y + offset.y, t.z + offset.z }; //create the box center from the other object's stuff
+		float boxHalfSize[] = { bc->dimensions.x / 2,  bc->dimensions.y / 2,  bc->dimensions.z / 2 }; //create the box dimensions from the other object's stuff
+		for (int i = 0; i < vertexCount / 3; i++) { //go through every vertex and check if it's colliding with the box
 			tri1Vert1 = model * glm::vec4(shape->GetData(i, 0, 0), shape->GetData(0, 1), shape->GetData(i, 0, 2), 1);
 			tri1Vert2 = model * glm::vec4(shape->GetData(i, 1, 0), shape->GetData(1, 1), shape->GetData(i, 1, 2), 1);
 			tri1Vert3 = model * glm::vec4(shape->GetData(i, 2, 0), shape->GetData(2, 1), shape->GetData(i, 2, 2), 1);
@@ -108,17 +92,18 @@ bool MeshCollider::TriBoxIntersect(std::shared_ptr<GameObject> _other){
 	return false;
 }
 
-bool MeshCollider::isColliding(std::shared_ptr<GameObject> _other, glm::vec3 _position){
+bool MeshCollider::isColliding(std::shared_ptr<GameObject> _other, glm::vec3 _position){ //same as above but using given position
 	std::shared_ptr<BoxCollider> bc = _other->GetComponent<BoxCollider>();
 	if (bc) {
 		int vertexCount = shape->GetDataSize() / shape->GetComponents();
 		glm::mat4 model = GetGameObject()->GetTransform()->GetModel();
 		glm::vec3 t = _other->GetTransform()->position + _position;
+		glm::vec3 s = _other->GetTransform()->scale * 2.0f;
 		glm::vec4 tri1Vert1;
 		glm::vec4 tri1Vert2;
 		glm::vec4 tri1Vert3;
 		float boxCenter[] = { t.x + offset.x, t.y + offset.y, t.z + offset.z };
-		float boxHalfSize[] = { bc->dimensions.x / 2,  bc->dimensions.y / 2,  bc->dimensions.z / 2 };
+		float boxHalfSize[] = { s.x * bc->dimensions.x / 2, s.y * bc->dimensions.y / 2, s.z * bc->dimensions.z / 2 };
 		for (int i = 0; i < vertexCount / 3; i++) {
 			tri1Vert1 = model * glm::vec4(shape->GetData(i, 0, 0), shape->GetData(i, 0, 1), shape->GetData(i, 0, 2), 1);
 			tri1Vert2 = model * glm::vec4(shape->GetData(i, 1, 0), shape->GetData(i, 1, 1), shape->GetData(i, 1, 2), 1);
@@ -134,8 +119,8 @@ bool MeshCollider::isColliding(std::shared_ptr<GameObject> _other, glm::vec3 _po
 	}
 	return false;
 }
-
-std::shared_ptr<GameObject> MeshCollider::isColliding(){
+//TODO: add vector varient of this function
+std::shared_ptr<GameObject> MeshCollider::isColliding(){ //check collisions vs every object in the scene and return the first collision
 	std::vector<std::shared_ptr<BoxCollider>> others = GetCore()->boxColliders;
 	std::shared_ptr<GameObject> rtn;
 	for (int i = 0; i < (int)others.size(); i++) {
@@ -149,7 +134,7 @@ std::shared_ptr<GameObject> MeshCollider::isColliding(){
 	return nullptr;
 }
 
-void MeshCollider::CollisionResponse(){
+void MeshCollider::CollisionResponse(){ //kludge the colliding object
 	std::shared_ptr<GameObject> other = isColliding();
 	if (other) {
 		float amount = 0.1f;

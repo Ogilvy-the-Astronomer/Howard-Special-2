@@ -1,6 +1,6 @@
 #pragma once
 /**
- * A virtual struct that cannot be copied
+ * An abstract struct that cannot be copied
  */
 struct NonCopyable {
 protected:

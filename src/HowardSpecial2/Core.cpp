@@ -19,7 +19,7 @@ Core::Core()
 {
 	window_h = 600;
 	window_w = 600;
-	graphicsContext = SDL_CreateWindow("Triangle", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL); //create the program window
+	graphicsContext = SDL_CreateWindow("Howard Special 2 Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL); //create the program window
 
 	if (!SDL_GL_CreateContext(graphicsContext)) { //throw exceptions if something goes wrong
 		throw Exception("graphics context didn't get created properly");
@@ -118,20 +118,20 @@ void Core::Display(){
 	SDL_WarpMouseInWindow(NULL, window_w / 2, window_h / 2);
 
 	currentTicks = SDL_GetTicks();
-	float fps = glm::round(1000.0f / (currentTicks - lastTicks));
+	fps = glm::round(1000.0f / (currentTicks - lastTicks));
 	/* For getting average fps
 	lowestfps += fps;
 	framecount++;
 	*/
-	std::string tickDif = std::to_string(fps);
-	SDL_SetWindowTitle(graphicsContext, tickDif.c_str());
+	//std::string tickDif = std::to_string(fps);
+	//SDL_SetWindowTitle(graphicsContext, tickDif.c_str());
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f); //clear the screen red
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the color and depth buffer
 
 	glEnable(GL_DEPTH_TEST); //enable depth testing
 	//glDisable(GL_CULL_FACE); //disable face culling for more accurate shadows
 
-	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 90.0f); //create the projection matrix for the light
+	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 150.0f); //create the projection matrix for the light
 
 	for (int i = 0; i < (int)lights.size(); i++) {//go through every point light
 		glm::vec3 pos = lights[i]->GetGameObject()->GetTransform()->position; //get the light position
@@ -173,7 +173,7 @@ void Core::Display(){
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); //unbind the framebuffer
 		}
 	}
-	//glEnable(GL_CULL_FACE); //reset values to default
+	glEnable(GL_CULL_FACE); //reset values to default
 	glViewport(0, 0, window_h, window_w);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the color and depth buffer
 

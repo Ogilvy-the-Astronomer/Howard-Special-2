@@ -1,7 +1,7 @@
 #include "Keyboard.h"
 #include "Core.h"
 
-bool Keyboard::GetKey(SDL_Scancode key){
+bool Keyboard::GetKey(SDL_Scancode key){ //check if the key is in the list of keys currently pressed
 	SDL_Keycode Key = SDL_GetKeyFromScancode(key);
 	auto it = keys.begin();
 	while (it != keys.end()) {
@@ -15,7 +15,7 @@ bool Keyboard::GetKey(SDL_Scancode key){
 	return false;
 }
 
-bool Keyboard::GetKey(SDL_Keycode key){
+bool Keyboard::GetKey(SDL_Keycode key){//check if the key is in the list of keys currently pressed
 	auto it = keys.begin();
 	while (it != keys.end()) {
 		if (key == *it) {
@@ -28,7 +28,7 @@ bool Keyboard::GetKey(SDL_Keycode key){
 	return false;
 }
 
-bool Keyboard::GetKeyDown(SDL_Scancode key) {
+bool Keyboard::GetKeyDown(SDL_Scancode key) {//check if the key is in the list of keys just pressed
 	SDL_Keycode Key = SDL_GetKeyFromScancode(key);
 	auto it = keysDown.begin();
 	while (it != keysDown.end()) {
@@ -42,7 +42,7 @@ bool Keyboard::GetKeyDown(SDL_Scancode key) {
 	return false;
 }
 
-bool Keyboard::GetKeyDown(SDL_Keycode key){
+bool Keyboard::GetKeyDown(SDL_Keycode key){ //check if the key is in the list of keys just pressed
 	auto it = keysDown.begin();
 	while (it != keysDown.end()) {
 		if (key == *it) {
@@ -55,7 +55,7 @@ bool Keyboard::GetKeyDown(SDL_Keycode key){
 	return false;
 }
 
-bool Keyboard::GetKeyUp(SDL_Scancode key) {
+bool Keyboard::GetKeyUp(SDL_Scancode key) { //check if the key is in the list of keys just released
 	SDL_Keycode Key = SDL_GetKeyFromScancode(key);
 	auto it = keysUp.begin();
 	while (it != keysUp.end()) {
@@ -69,7 +69,7 @@ bool Keyboard::GetKeyUp(SDL_Scancode key) {
 	return false;
 }
 
-bool Keyboard::GetKeyUp(SDL_Keycode key){
+bool Keyboard::GetKeyUp(SDL_Keycode key){//check if the key is in the list of keys just released
 	auto it = keysUp.begin();
 	while (it != keysUp.end()) {
 		if (key == *it) {
@@ -89,15 +89,15 @@ glm::vec2 Keyboard::GetMouseMovement() {
 }
 
 void Keyboard::Update(){
-	keysDown.clear();
+	keysDown.clear(); //clear the list of keys prssed and keys released
 	keysUp.clear();
 	SDL_Event event = { 0 }; //sdl events variable
 
 	while (SDL_PollEvent(&event)) { //go through list of sdl events
-		if (event.type == SDL_QUIT) { //end the game if hit escape or close the window then exit the game
-			//quit = true;
+		if (event.type == SDL_QUIT) { 
+			
 		}
-		if (event.type == SDL_KEYDOWN) {
+		if (event.type == SDL_KEYDOWN) { //if a key is down, check if it's currently in the list of keys pressed and add it if it isn't
 			bool alreadyPressed = false;
 			auto it = keys.begin();
 			while (it != keys.end()) {
@@ -111,7 +111,7 @@ void Keyboard::Update(){
 				keys.push_back(event.key.keysym.sym);
 			}
 		}
-		if (event.type == SDL_KEYUP) {
+		if (event.type == SDL_KEYUP) { //if a key is released, add it to the list of keys released and remove it from the list of keys pressed
 			keysUp.push_back(event.key.keysym.sym);
 
 			auto it = keys.begin();

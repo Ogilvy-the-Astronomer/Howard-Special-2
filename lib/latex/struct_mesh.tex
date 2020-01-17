@@ -1,0 +1,43 @@
+\hypertarget{struct_mesh}{}\doxysection{Mesh Struct Reference}
+\label{struct_mesh}\index{Mesh@{Mesh}}
+
+
+{\ttfamily \#include $<$Mesh.\+h$>$}
+
+Inheritance diagram for Mesh\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{struct_mesh}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_mesh_aa60b7cba7ac633f498840bbd72b6c4c0}\label{struct_mesh_aa60b7cba7ac633f498840bbd72b6c4c0}} 
+{\bfseries Mesh} (std\+::string \mbox{\hyperlink{struct_resource_a9d2af35bfd103fdc3f82a1bb8733a09d}{path}})
+\item 
+\mbox{\Hypertarget{struct_mesh_a8dc7310e0ac49b3446fb1be5b5c4c84e}\label{struct_mesh_a8dc7310e0ac49b3446fb1be5b5c4c84e}} 
+void \mbox{\hyperlink{struct_mesh_a8dc7310e0ac49b3446fb1be5b5c4c84e}{load}} (std\+::string \mbox{\hyperlink{struct_resource_a9d2af35bfd103fdc3f82a1bb8733a09d}{path}})
+\begin{DoxyCompactList}\small\item\em load a mesh from a path \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_mesh_afa7e74c41d84a1b475705df5fe612377}\label{struct_mesh_afa7e74c41d84a1b475705df5fe612377}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_vertex_buffer}{Vertex\+Buffer}} $>$ \mbox{\hyperlink{struct_mesh_afa7e74c41d84a1b475705df5fe612377}{Get\+Buffers}} (int \+\_\+pos)
+\begin{DoxyCompactList}\small\item\em get data from the mesh (useful for collisions) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_mesh_af6ad2e2ee755bfa30b10cb922d72283c}\label{struct_mesh_af6ad2e2ee755bfa30b10cb922d72283c}} 
+void {\bfseries Set\+Buffer} (std\+::string attribute, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_vertex_buffer}{Vertex\+Buffer}} $>$ buffer)
+\item 
+\mbox{\Hypertarget{struct_mesh_a758600ac8220bd5213398bc97255bfdd}\label{struct_mesh_a758600ac8220bd5213398bc97255bfdd}} 
+int \mbox{\hyperlink{struct_mesh_a758600ac8220bd5213398bc97255bfdd}{Get\+Vertex\+Count}} ()
+\begin{DoxyCompactList}\small\item\em useful for collisions \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_mesh_a74b5c52dc17428c95d4e9c33457454c8}\label{struct_mesh_a74b5c52dc17428c95d4e9c33457454c8}} 
+G\+Luint {\bfseries Get\+Id} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+A struct for vertex arrays 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Howard\+Special2/Mesh.\+h\item 
+src/\+Howard\+Special2/Mesh.\+cpp\end{DoxyCompactItemize}
