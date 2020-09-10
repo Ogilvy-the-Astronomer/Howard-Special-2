@@ -118,7 +118,8 @@ void Core::Display(){
 	SDL_WarpMouseInWindow(NULL, window_w / 2, window_h / 2);
 
 	currentTicks = SDL_GetTicks();
-	fps = glm::round(1000.0f / (currentTicks - lastTicks));
+	deltaT = currentTicks - lastTicks;
+	fps = glm::round(1000.0f / deltaT);
 	/* For getting average fps
 	lowestfps += fps;
 	framecount++;

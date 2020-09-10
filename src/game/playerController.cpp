@@ -4,7 +4,9 @@ void PlayerController::OnUpdate(){
 	glm::vec3 camVel;
 	if (Input->GetKey(SDL_SCANCODE_W)) camVel -= glm::vec3(camera->GetTransform()->forward.x, 0.0f, camera->GetTransform()->forward.z)  * 0.2f;
 	if (Input->GetKey(SDL_SCANCODE_S)) camVel += glm::vec3(camera->GetTransform()->forward.x, 0.0f, camera->GetTransform()->forward.z) * 0.2f;
-	if (Input->GetKey(SDL_SCANCODE_A)) camVel -= glm::vec3(camera->GetTransform()->right.x, 0.0f, camera->GetTransform()->right.z) * 0.2f;
+	if (Input->GetKey(SDL_SCANCODE_A)) {
+		camVel -= glm::vec3(camera->GetTransform()->right.x, 0.0f, camera->GetTransform()->right.z) * 0.2f;
+	}
 	if (Input->GetKey(SDL_SCANCODE_D)) camVel += glm::vec3(camera->GetTransform()->right.x, 0.0f, camera->GetTransform()->right.z)* 0.2f;
 	if (rb->velocity.y == 0 && Input->GetKeyDown(SDL_SCANCODE_SPACE)) camVel.y = 0.2f;
 	rb->velocity += camVel;
@@ -13,6 +15,10 @@ void PlayerController::OnUpdate(){
 	GetGameObject()->GetTransform()->rotation.x = glm::clamp(GetGameObject()->GetTransform()->rotation.x, -clampVal, clampVal);
 
 	camera->GetTransform()->position = rb->GetGameObject()->GetTransform()->position;
+	if(GetGameObject()->GetTransform()->position.y < -100){
+		rb->GetGameObject()->GetTransform()->position.y = 0;
+		rb->velocity.y = 0;
+	}
 }
 
 void PlayerController::OnStart(){

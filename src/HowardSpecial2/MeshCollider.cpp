@@ -98,12 +98,12 @@ bool MeshCollider::isColliding(std::shared_ptr<GameObject> _other, glm::vec3 _po
 		int vertexCount = shape->GetDataSize() / shape->GetComponents();
 		glm::mat4 model = GetGameObject()->GetTransform()->GetModel();
 		glm::vec3 t = _other->GetTransform()->position + _position;
-		glm::vec3 s = _other->GetTransform()->scale * 2.0f;
+		glm::vec3 s = _other->GetTransform()->scale;// *2.0f;
 		glm::vec4 tri1Vert1;
 		glm::vec4 tri1Vert2;
 		glm::vec4 tri1Vert3;
 		float boxCenter[] = { t.x + offset.x, t.y + offset.y, t.z + offset.z };
-		float boxHalfSize[] = { s.x * bc->dimensions.x / 2, s.y * bc->dimensions.y / 2, s.z * bc->dimensions.z / 2 };
+		float boxHalfSize[] = { s.x * bc->dimensions.x / 1.0f, s.y * bc->dimensions.y / 1.0f, s.z * bc->dimensions.z / 1.0f };
 		for (int i = 0; i < vertexCount / 3; i++) {
 			tri1Vert1 = model * glm::vec4(shape->GetData(i, 0, 0), shape->GetData(i, 0, 1), shape->GetData(i, 0, 2), 1);
 			tri1Vert2 = model * glm::vec4(shape->GetData(i, 1, 0), shape->GetData(i, 1, 1), shape->GetData(i, 1, 2), 1);
@@ -137,30 +137,33 @@ std::shared_ptr<GameObject> MeshCollider::isColliding(){ //check collisions vs e
 void MeshCollider::CollisionResponse(){ //kludge the colliding object
 	std::shared_ptr<GameObject> other = isColliding();
 	if (other) {
+		std::shared_ptr<Rigidbody> rb = other->GetComponent<Rigidbody>();
+		if (rb) return;
 		float amount = 0.1f;
 		float step = 0.1f;
 		glm::vec3 position = glm::vec3(0.0f);
 		while (true) {
-			if (!isColliding(other, position)) break;
+			if (!isColliding(other, position)) break; //base
 			position.x += amount;
-			if (!isColliding(other, position)) break;
+			if (!isColliding(other, position)) break; //x+
 			position.x -= amount;
 			position.x -= amount;
-			if (!isColliding(other, position)) break;
+			if (!isColliding(other, position)) break; //x-
 			position.x += amount;
 			position.z += amount;
-			if (!isColliding(other, position)) break;
+			if (!isColliding(other, position)) break; //z+
 			position.z -= amount;
 			position.z -= amount;
-			if (!isColliding(other, position)) break;
+			if (!isColliding(other, position)) break; //z-
 			position.z += amount;
 			position.y += amount;
-			if (!isColliding(other, position)) break;
+			if (!isColliding(other, position)) break; //y+
 			position.y -= amount;
 			position.y -= amount;
-			if (!isColliding(other, position)) break;
+			if (!isColliding(other, position)) break; //y-
 			position.y += amount;
-			amount += step;
+			amount += step; //increment step
+			std::cout << amount << std::endl;
 		}
 		other->GetTransform()->position += position;
 	}

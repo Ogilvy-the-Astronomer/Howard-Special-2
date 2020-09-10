@@ -164,11 +164,12 @@ void BoxCollider::CollisionResponse() { //repeatedly adjusts colliding object an
 	std::shared_ptr<BoxCollider> other = isColliding();
 	if (other) {
 		if (other->GetGameObject()->GetComponent<MeshCollider>()) {
-			return; //if the object is colliding with a mesh collider, exit the function because the mesh collider handles objects it's colliding with
+			//return; //if the object is colliding with a mesh collider, exit the function because the mesh collider handles objects it's colliding with
 		}
 		float amount = 0.1f;
 		float step = 0.1f;
 		glm::vec3 position = vec3(0.0f);
+		/*
 		while (true) {
 			if (!isColliding(other, position)) break;
 			position.x += amount;
@@ -191,6 +192,30 @@ void BoxCollider::CollisionResponse() { //repeatedly adjusts colliding object an
 			position.y += amount;
 			amount += step;
 		}
+		*/
+		while (true) {
+			if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
+			position.x += amount;
+			if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
+			position.x -= amount;
+			position.x -= amount;
+			if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
+			position.x += amount;
+			position.z += amount;
+			if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
+			position.z -= amount;
+			position.z -= amount;
+			if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
+			position.z += amount;
+			position.y += amount;
+			if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
+			position.y -= amount;
+			position.y -= amount;
+			if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
+			position.y += amount;
+			amount += step;
+		}
+		std::cout << "colliding" << std::endl;
 		GetGameObject()->GetTransform()->position += position;
 	}
 }
@@ -233,6 +258,8 @@ bool BoxCollider::TriTriIntersect(std::shared_ptr<GameObject> _other){ //formats
 	return false;
 }
 
+
+//!!! DANGER !!! do not use these idk why they're here but i don't wanna get rid of them in case they break something
 bool BoxCollider::isColliding(std::shared_ptr<BoxCollider> other){ //same as isColliding function above but returns true/ false with specified object
 	mat4 model = GetGameObject()->GetTransform()->GetModel();
 	vec3 Pa = GetGameObject()->GetTransform()->position;
@@ -259,7 +286,7 @@ bool BoxCollider::isColliding(std::shared_ptr<BoxCollider> other){ //same as isC
 
 bool BoxCollider::isColliding(std::shared_ptr<BoxCollider> other, glm::vec3 position) { //same as above but using given position;
 
-	mat4 model = GetGameObject()->GetTransform()->GetModel();
+	mat4 model = GetGameObject()->GetTransform()->GetModel(position);
 	vec3 Pa = GetGameObject()->GetTransform()->position + position;
 	float Wa = dimensions.x / 2;
 	float Ha = dimensions.y / 2;
@@ -274,10 +301,10 @@ bool BoxCollider::isColliding(std::shared_ptr<BoxCollider> other, glm::vec3 posi
 	float Db = other->dimensions.z / 2;
 	vec3 T = Pb - Pa;
 	if (c1 || c2 || c3 || c4 || c5 || c6 || c7 || c8 || c9 || c10 || c11 || c12 || c13 || c14 || c15) {
-		//return false;
+		return true;
 	}
 	else {
-		return true;
+		return false;
 	}
 	return nullptr;
 }

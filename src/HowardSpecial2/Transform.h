@@ -17,4 +17,5 @@ struct Transform : public Component {
 
 	void OnUpdate();
 	glm::mat4 GetModel(); ///< create model matrix from position, rotation, and scale
+	glm::mat4 GetModel(glm::vec3 _position);
 };

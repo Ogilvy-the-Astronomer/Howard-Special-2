@@ -52,6 +52,7 @@ struct Core : private NonCopyable {
 	std::vector<std::shared_ptr<DepthCubemap>> depthCubeTextures; ///<list of depth cube maps
 
 	float fps;
+	float deltaT;
 private:
 	std::weak_ptr<Core> self; ///<reference to self
 	Uint32 currentTicks; ///< total amount of tick since startup
