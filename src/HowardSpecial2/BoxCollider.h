@@ -20,7 +20,9 @@ struct BoxCollider : public Component {
 	std::shared_ptr<BoxCollider> isColliding(); ///< returns the first object this object is colliding with
 	std::shared_ptr<BoxCollider> isColliding(glm::vec3 _position);///< returns the first object this object is colliding with
 	void CollisionResponse();///< "cludge" method collision response
-	bool TriTriIntersect(std::shared_ptr<GameObject> _other);///< checks exact mesh to mesh collision with other object (unused (because it's really bad for performance)
+	bool TriTriIntersect(std::shared_ptr<GameObject> _other);
+	glm::vec3 TriTriIntersectNormal(std::shared_ptr<GameObject> _other);
+	///< checks exact mesh to mesh collision with other object (unused (because it's really bad for performance)
 
 	glm::vec3 dimensions;///< collider box dimensions
 	glm::vec3 offset; ///< collider box offset

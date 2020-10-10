@@ -10,6 +10,7 @@
 #include "MeshCollider.h"
 
 #include<vector>
+#include<glm/gtx/normal.hpp>
 #include<iostream>
 #include <stdlib.h>
 //https://www.jkh.me/files/tutorials/Separating%20Axis%20Theorem%20for%20Oriented%20Bounding%20Boxes.pdf
@@ -166,10 +167,17 @@ void BoxCollider::CollisionResponse() { //repeatedly adjusts colliding object an
 		if (other->GetGameObject()->GetComponent<MeshCollider>()) {
 			//return; //if the object is colliding with a mesh collider, exit the function because the mesh collider handles objects it's colliding with
 		}
-		float amount = 0.1f;
-		float step = 0.1f;
+		float amount = 0.05f;
+		float step = 0.01f;
 		glm::vec3 position = vec3(0.0f);
 		/*
+		if (GetGameObject()->GetComponent<Rigidbody>()) {
+			glm::vec3 mtv = TriTriIntersectNormal(other->GetGameObject());
+			if (mtv != glm::vec3(0)) {
+				GetGameObject()->GetComponent<Rigidbody>()->velocity *= mtv * 2.0f;
+				std::cout << mtv.x << " " << mtv.y << " " << mtv.z << std::endl;
+			}
+		}
 		while (true) {
 			if (!isColliding(other, position)) break;
 			position.x += amount;
@@ -192,6 +200,7 @@ void BoxCollider::CollisionResponse() { //repeatedly adjusts colliding object an
 			position.y += amount;
 			amount += step;
 		}
+
 		*/
 		while (true) {
 			if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
@@ -215,8 +224,17 @@ void BoxCollider::CollisionResponse() { //repeatedly adjusts colliding object an
 			position.y += amount;
 			amount += step;
 		}
-		std::cout << "colliding" << std::endl;
-		GetGameObject()->GetTransform()->position += position;
+		std::cout << amount << std::endl;
+		std::shared_ptr<Rigidbody> rb = GetGameObject()->GetComponent<Rigidbody>();
+		if (rb) {
+			rb->velocity += position;
+		}
+		else {
+			GetGameObject()->GetTransform()->position += position;
+		}
+		
+
+
 	}
 }
 
@@ -256,6 +274,48 @@ bool BoxCollider::TriTriIntersect(std::shared_ptr<GameObject> _other){ //formats
 		}
 	}
 	return false;
+}
+
+glm::vec3 BoxCollider::TriTriIntersectNormal(std::shared_ptr<GameObject> _other) { //formats two meshes into triangles and loops through them to check if any two triangles are colliding
+	int vertexCount = GetGameObject()->GetComponent<Renderer>()->shape->GetVertexCount() / 3;
+	int otherVertexCount = _other->GetComponent<Renderer>()->shape->GetVertexCount() / 3;
+	std::shared_ptr<VertexBuffer> shape = GetGameObject()->GetComponent<Renderer>()->shape->GetBuffers(0);
+	std::shared_ptr<VertexBuffer> otherShape = _other->GetComponent<Renderer>()->shape->GetBuffers(0);
+	glm::mat4 model = GetGameObject()->GetTransform()->GetModel();
+	glm::mat4 otherModel = _other->GetTransform()->GetModel();
+	glm::vec4 tri1Vert1;
+	glm::vec4 tri1Vert2;
+	glm::vec4 tri1Vert3;
+	glm::vec4 tri2Vert1;
+	glm::vec4 tri2Vert2;
+	glm::vec4 tri2Vert3;
+	for (int i = 0; i < vertexCount; i++) {
+		tri1Vert1 = model * glm::vec4(shape->GetData(i, 0, 0), shape->GetData(0, 1), shape->GetData(i, 0, 2), 1);
+		tri1Vert2 = model * glm::vec4(shape->GetData(i, 1, 0), shape->GetData(1, 1), shape->GetData(i, 1, 2), 1);
+		tri1Vert3 = model * glm::vec4(shape->GetData(i, 2, 0), shape->GetData(2, 1), shape->GetData(i, 2, 2), 1);
+		float tri10[] = { tri1Vert1.x, tri1Vert1.y, tri1Vert1.z };
+		float tri11[] = { tri1Vert2.x, tri1Vert2.y, tri1Vert2.z };
+		float tri12[] = { tri1Vert3.x, tri1Vert3.y, tri1Vert3.z };
+		for (int j = 0; j < otherVertexCount; j++) {
+			glm::vec4 a = glm::vec4(otherShape->GetData(j, 0, 0), otherShape->GetData(j, 0, 1), otherShape->GetData(j, 0, 2), 1);
+			glm::vec4 b = glm::vec4(otherShape->GetData(j, 1, 0), otherShape->GetData(j, 1, 1), otherShape->GetData(j, 1, 2), 1);
+
+			tri2Vert1 = otherModel * glm::vec4(otherShape->GetData(j, 0, 0), otherShape->GetData(j, 0, 1), otherShape->GetData(j, 0, 2), 1);
+			tri2Vert2 = otherModel * glm::vec4(otherShape->GetData(j, 1, 0), otherShape->GetData(j, 1, 1), otherShape->GetData(j, 1, 2), 1);
+			tri2Vert3 = otherModel * glm::vec4(otherShape->GetData(j, 2, 0), otherShape->GetData(j, 2, 1), otherShape->GetData(j, 2, 2), 1);
+			float tri20[] = { tri2Vert1.x, tri2Vert1.y, tri2Vert1.z };
+			float tri21[] = { tri2Vert2.x, tri2Vert2.y, tri2Vert2.z };
+			float tri22[] = { tri2Vert3.x, tri2Vert3.y, tri2Vert3.z };
+			if (NoDivTriTriIsect(tri10, tri11, tri12, tri20, tri21, tri22)) {
+				glm::vec3 a = tri2Vert1;
+				glm::vec3 b = tri2Vert2;
+				glm::vec3 c = tri2Vert3;
+				glm::vec3 rtn = glm::triangleNormal(a,b,c);
+				return rtn;
+			}
+		}
+	}
+	return {};
 }
 
 

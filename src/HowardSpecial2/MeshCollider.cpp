@@ -166,6 +166,7 @@ void MeshCollider::CollisionResponse(){ //kludge the colliding object
 			std::cout << amount << std::endl;
 		}
 		other->GetTransform()->position += position;
+		std::cout << "kludge" << std::endl;
 	}
 }
 
