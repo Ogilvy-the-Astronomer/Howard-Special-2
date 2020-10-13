@@ -31,4 +31,5 @@ void Rigidbody::OnUpdate(){
 	GetGameObject()->GetTransform()->rotation += torque; //adjust rotation by torque
 	velocity.x *= 1.0f - friction; //reduce lateral velocity by friction
 	velocity.z *= 1.0f - friction;
+ 
 }

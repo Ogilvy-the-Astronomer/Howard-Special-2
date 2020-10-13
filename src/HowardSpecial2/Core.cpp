@@ -17,8 +17,8 @@
 
 Core::Core()
 {
-	window_h = 600;
-	window_w = 600;
+	window_h = 900;
+	window_w = 1600;
 	graphicsContext = SDL_CreateWindow("Howard Special 2 Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL); //create the program window
 
 	if (!SDL_GL_CreateContext(graphicsContext)) { //throw exceptions if something goes wrong
@@ -54,7 +54,7 @@ Core::Core()
 	resources = std::make_shared<Resources>(); //create a list for resources (textures, sounds, meshes, etc)
 	resources->resources.clear(); //empty the list
 
-	shadowRender = std::make_shared<ShaderProgram>("../shaders/shadows.vert", "../shaders/shadows.frag"); //create the shader for rendering the scene to the shadowmap
+	shadowRender = std::make_shared<ShaderProgram>("../shaders/shadow_mapper.vert", "../shaders/shadow_mapper.frag"); //create the shader for rendering the scene to the shadowmap
 	keyboard = std::make_shared<Keyboard>();
 }
 
@@ -88,7 +88,7 @@ void Core::Start() {
 	//glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 
-	for (int i = 0; i < (int)gameObjects.size(); i++) { //go through list of all gameobjects and call update on them
+	for (int i = 0; i < (int)gameObjects.size(); i++) { //go through list of all gameobjects and call start on them
 		gameObjects.at(i)->Start();
 	}
 }
@@ -126,13 +126,14 @@ void Core::Display(){
 	*/
 	//std::string tickDif = std::to_string(fps);
 	//SDL_SetWindowTitle(graphicsContext, tickDif.c_str());
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f); //clear the screen red
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //clear the screen red
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the color and depth buffer
 
 	glEnable(GL_DEPTH_TEST); //enable depth testing
 	//glDisable(GL_CULL_FACE); //disable face culling for more accurate shadows
 
-	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 150.0f); //create the projection matrix for the light
+	float farPlane = 50.0f;
+	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, farPlane); //create the projection matrix for the light
 
 	for (int i = 0; i < (int)lights.size(); i++) {//go through every point light
 		glm::vec3 pos = lights[i]->GetGameObject()->GetTransform()->position; //get the light position
@@ -148,6 +149,8 @@ void Core::Display(){
 			glActiveTexture(GL_TEXTURE0);//unassign the active texture
 			glUseProgram(shadowRender->GetId());//use the main rendering program
 			shadowRender->SetUniform("lightSpaceMatrix", cubeDirs[k]); //set the light mvp matrix for every face
+			shadowRender->SetUniform("LightPos", lights[i]->GetGameObject()->GetTransform()->position);
+			shadowRender->SetUniform("in_FarPlane", farPlane);
 			glUseProgram(shadowRender->GetId()); //set uniform unbinds the current program so rebind it
 			glBindFramebuffer(GL_FRAMEBUFFER, depthCubeTextures[i]->rtFBO); //bind the correct fbo
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + k, depthCubeTextures[i]->GetId(), 0); //assign a depth attachment to the correct face
@@ -155,7 +158,7 @@ void Core::Display(){
 			glViewport(0, 0, 2048, 2048); //resize the viewport for the shadowmap
 
 			glClear(GL_DEPTH_BUFFER_BIT); //clear the depth buffer
-			GLenum res = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+			//GLenum res = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 			//if (res != GL_FRAMEBUFFER_COMPLETE)
 			//	std::cout << "Framebuffer not complete! Value = " << res << std::endl;
 
@@ -175,12 +178,12 @@ void Core::Display(){
 		}
 	}
 	glEnable(GL_CULL_FACE); //reset values to default
-	glViewport(0, 0, window_h, window_w);
+	glViewport(0, 0, window_w, window_h);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the color and depth buffer
-
 	for (int i = 0; i < (int)gameObjects.size(); i++) { //go through list of gameobjects and call update on them, including the renderer which draws the object to the context
 		gameObjects.at(i)->Update();
 	}
+
 	glDisable(GL_DEPTH_TEST); //disable depth testing
 	SDL_GL_SwapWindow(graphicsContext); //display context to screen
 	lastTicks = currentTicks;

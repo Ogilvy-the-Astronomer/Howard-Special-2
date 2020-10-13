@@ -50,8 +50,8 @@ void Renderer::OnUpdate(){
 
 		shader->SetUniform("in_ShadowMaps[" + std::to_string(i) + "]", depthCubeTextures[i]);
 	}
-	shader->SetUniform("in_FarPlane", 150.0f);//set the near and far plane for linearizing the depth values of the shadowmap
-	shader->SetUniform("in_NearPlane", 1.0f);
+	shader->SetUniform("in_FarPlane", 50.0f);//set the near and far plane for linearizing the depth values of the shadowmap
+	//shader->SetUniform("in_NearPlane", 1.0f);
 	shader->Draw(shape); //draw the object to screen
 }
 

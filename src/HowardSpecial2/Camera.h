@@ -10,7 +10,9 @@ struct Camera : public Component {
 	glm::mat4 GetView(); ///< get view matrix
 	glm::mat4 GetProjection(); ///< get projection matrix
 	void OnUpdate();
+	void OnStart();
 private:
 	glm::mat4 projection; ///< projection matrix
+	float aspectRatio;
 	//const float clampVal = glm::radians(70.0f);
 };

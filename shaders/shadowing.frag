@@ -113,21 +113,23 @@ vec3 sampleOffsetDirections[20] = vec3[] //list of offsets for use in softening 
 
 float ShadowCalculation(vec3 fragPos, samplerCube shadowMap, vec3 lightPos){
   vec3 fragToLight = (fragPos - lightPos); //get the direction to sample the shadowmap from
+  //fragToLight = in_View * vec4(fragToLight, 1.0);
   float currentDepth = length(fragToLight); //get the depth of the current fragment
-  int samples  = 20;
-  float diskRadius = 0.15; //shadow softening radius
+  int samples = 20;
+  float diskRadius = 0.05; //shadow softening radius
   float bias = 0.001; 
   float shadow = 0;
 
   for(int i = 0; i < samples; ++i){ 
     float shadowDepth = texture(shadowMap, fragToLight + sampleOffsetDirections[i] * diskRadius).r; //get the shadow depth from the shadow map, offset by current sample offset value
-	float z = shadowDepth;// * 2.0 - 1.0; 
-    float linearShadowDepth = (2.0 * in_NearPlane * in_FarPlane) / (in_FarPlane + in_NearPlane - z * (in_FarPlane - in_NearPlane)); //change the value of the depth map depth to the same range as the current depth
+	//float z = shadowDepth * 2.0 - 1.0; 
+    //float linearShadowDepth = 2.0 * in_NearPlane * in_FarPlane / (in_FarPlane + in_NearPlane - z * (in_FarPlane - in_NearPlane)); //change the value of the depth map depth to the same range as the current depth
+	float linearShadowDepth = shadowDepth * in_FarPlane;
     if(currentDepth - bias > linearShadowDepth){//if the current depth is more than the shadow map depth, the fragment is behind an object from the lights perspective and thus is in shadow
-      shadow -= 1.0;
+      shadow -= 0.5;
 	}
   }
   shadow /= float(samples); //soften the shadow
-  
+
   return shadow;
 }

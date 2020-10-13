@@ -37,7 +37,7 @@ int main(){
 	object = core->AddObject(); //add a directional light
 	object->AddComponent<Transform>();
 	object->AddComponent<DirectionalLight>();
-	object->GetComponent<DirectionalLight>()->ambient = glm::vec3(0.7f, 0.7f, 0.7f);
+	//object->GetComponent<DirectionalLight>()->ambient = glm::vec3(1.0f);
 	object->GetTransform()->rotation = glm::vec3(glm::radians(40.0f), glm::radians(40.0f), glm::radians(40.0f));
 
 	std::shared_ptr<GameObject> middle = object = core->AddObject();
@@ -123,6 +123,25 @@ int main(){
 	object->GetTransform()->position = glm::vec3(-10.0f, 20.0f, 0.0f);
 	object->GetTransform()->scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
+	object = core->AddObject();
+	object->AddComponent<Transform>();
+	object->AddComponent<Renderer>();
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/scarecrow.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/ScarecrowTex.png"));
+	object->AddComponent<BoxCollider>();
+	object->GetTransform()->position = glm::vec3(2.0f, -6.0f, 0.0f);
+	object->GetTransform()->scale = glm::vec3(0.4f, 0.4f, 0.4f);
+
+
+	object = core->AddObject();
+	object->AddComponent<Transform>();
+	object->AddComponent<Renderer>();
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/bricks.png"));
+	object->AddComponent<BoxCollider>();
+	object->AddComponent<MeshCollider>();
+	object->GetTransform()->position = glm::vec3(1.0f, -8.0f, 6.0f);
+	object->GetTransform()->scale = glm::vec3(1.0f, 20.0f, 1.0f);
 	/*
 	object = core->AddObject(); 
 	object->AddComponent<Transform>();
@@ -142,14 +161,15 @@ int main(){
 
 	object = core->AddObject();
 	object->AddComponent<Transform>();
-	object->AddComponent<Renderer>();
-	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
-	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/dice.png"));
+	//object->AddComponent<Renderer>();
+	//object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
+	//object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/dice.png"));
 	object->AddComponent<SoundSource>();
 	object->GetComponent<SoundSource>()->SetSound(core->resources->load<Sound>("../src/game/models/dixie_horn.ogg"));
 	object->AddComponent<PointLight>();
 	object->GetComponent<PointLight>()->diffuse = glm::vec3(5.0f, 5.0f, 5.0f);
-	object->GetTransform()->position = glm::vec3(0.0f, 15.0f, 0.0f);
+	//object->GetComponent<PointLight>()->constant = 0.06f;
+	object->GetTransform()->position = glm::vec3(0.0f, -3.0f, 0.0f);
 
 	bool quit = false;
 	float rot = 0;
@@ -158,6 +178,8 @@ int main(){
 	{
 		if (kb->GetKey(SDL_SCANCODE_ESCAPE)) quit = true;
 		if (kb->GetKeyDown(SDL_SCANCODE_P)) object->GetComponent<SoundSource>()->Play(); //debug sound
+		if (kb->GetKey(SDL_SCANCODE_J)) object->GetTransform()->position.y += 0.1f;
+		if (kb->GetKey(SDL_SCANCODE_K)) object->GetTransform()->position.y -= 0.1f;
 		middle->GetTransform()->rotation.y = (rot += 0.01f);
 		tr->SetText("FPS: " + std::to_string(core->fps));
 		core->Display(); //display objects to screen

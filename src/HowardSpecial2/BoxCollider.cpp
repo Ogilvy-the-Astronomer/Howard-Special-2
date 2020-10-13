@@ -224,10 +224,15 @@ void BoxCollider::CollisionResponse() { //repeatedly adjusts colliding object an
 			position.y += amount;
 			amount += step;
 		}
-		std::cout << amount << std::endl;
+		//std::cout << amount << std::endl;
 		std::shared_ptr<Rigidbody> rb = GetGameObject()->GetComponent<Rigidbody>();
 		if (rb) {
 			rb->velocity += position;
+			std::cout << rb->velocity.y << std::endl;
+			glm::vec3 collisionNormal = TriTriIntersectNormal(other->GetGameObject());
+			if (collisionNormal.y > 0.4f) {
+				rb->velocity.y = 0.0f;
+			}
 		}
 		else {
 			GetGameObject()->GetTransform()->position += position;
