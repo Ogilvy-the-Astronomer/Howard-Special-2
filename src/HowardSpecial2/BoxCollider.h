@@ -1,5 +1,6 @@
 #pragma once
 #include<glm/glm.hpp>
+#include<vector>
 #include "Component.h"
 
 struct Mesh;
@@ -31,4 +32,6 @@ private:
 	glm::vec3 Ax;///<local x axis
 	glm::vec3 Ay;///<local y axis
 	glm::vec3 Az;///<local z axis
+
+	std::vector<std::shared_ptr<BoxCollider>> prevCollisions;
 };

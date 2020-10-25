@@ -56,6 +56,8 @@ add_library(HowardSpecial2
 	src/HowardSpecial2/TextRenderer.cpp
 	src/HowardSpecial2/Rigidbody.h
 	src/HowardSpecial2/Rigidbody.cpp
+	src/HowardSpecial2/Material.h
+	src/HowardSpecial2/Material.cpp
 )
 target_link_libraries(HowardSpecial2 SDL2 opengl32 openal32 glew32)
 

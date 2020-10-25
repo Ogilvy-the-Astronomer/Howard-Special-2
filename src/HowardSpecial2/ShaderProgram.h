@@ -5,6 +5,8 @@
 #include<vector>
 #include<memory>
 #include<fstream>
+#include "Resource.h"
+#include "NonCopyable.h"
 
 struct Texture;
 struct Mesh;
@@ -23,7 +25,7 @@ struct Sampler
 /**
  * Class representing an opengl shader program
  */
-struct ShaderProgram
+struct ShaderProgram : private NonCopyable, public Resource
 {
 private:
 	GLuint id; ///<id of the shader
@@ -31,6 +33,7 @@ private:
 public:
 	ShaderProgram();
 	ShaderProgram(std::string vert, std::string frag); ///< constructor taking in paths for the vertex and fragment shader sources
+	void load(std::string path);
 	~ShaderProgram();
 	void Draw(std::shared_ptr<Mesh> vertextArray); ///< draws the specified mesh
 	//functions for setting different types of uniforms in the shader

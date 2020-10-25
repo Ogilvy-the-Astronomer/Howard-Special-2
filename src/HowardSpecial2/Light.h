@@ -8,6 +8,8 @@ struct PointLight : public Component {
 	PointLight(); ///< default constructor
 	void OnUpdate();
 
+	void SetAll(glm::vec3 _colour);
+
 	glm::vec3 emissive; ///< creates darkness behind objects
 	glm::vec3 ambient; ///< a flat value added around the light
 	glm::vec3 specular; ///< the shine of an object because of the light
@@ -24,6 +26,8 @@ struct PointLight : public Component {
  */
 struct DirectionalLight : public Component {
 	DirectionalLight();
+
+	void SetAll(glm::vec3 _colour);
 
 	glm::vec3 emissive; ///< creates darkness behind objects
 	glm::vec3 ambient; ///< a flat value added around the light

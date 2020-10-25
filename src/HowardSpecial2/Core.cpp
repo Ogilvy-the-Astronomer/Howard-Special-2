@@ -91,6 +91,7 @@ void Core::Start() {
 	for (int i = 0; i < (int)gameObjects.size(); i++) { //go through list of all gameobjects and call start on them
 		gameObjects.at(i)->Start();
 	}
+	lastTicks = 0.0f;
 }
 
 void Core::Stop() {
@@ -120,6 +121,7 @@ void Core::Display(){
 	currentTicks = SDL_GetTicks();
 	deltaT = currentTicks - lastTicks;
 	fps = glm::round(1000.0f / deltaT);
+	deltaT *= 0.1f;
 	/* For getting average fps
 	lowestfps += fps;
 	framecount++;
@@ -132,8 +134,8 @@ void Core::Display(){
 	glEnable(GL_DEPTH_TEST); //enable depth testing
 	//glDisable(GL_CULL_FACE); //disable face culling for more accurate shadows
 
-	float farPlane = 50.0f;
-	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, farPlane); //create the projection matrix for the light
+	float farPlane = 200.0f;
+	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, farPlane); //create the projection matrix for the light
 
 	for (int i = 0; i < (int)lights.size(); i++) {//go through every point light
 		glm::vec3 pos = lights[i]->GetGameObject()->GetTransform()->position; //get the light position
