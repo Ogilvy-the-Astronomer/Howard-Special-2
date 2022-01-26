@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include<vector>
 #include "glm/vec3.hpp"
 
 struct VertexBuffer;
@@ -26,4 +27,5 @@ struct MeshCollider : public Component {
 	glm::vec3 offset; ///< box offset
 private:
 	std::shared_ptr<VertexBuffer> shape; ///< the shape of the mesh this component is attached to
+	std::vector<std::shared_ptr<GameObject>> prevCollisions;
 };

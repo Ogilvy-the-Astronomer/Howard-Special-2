@@ -12,13 +12,13 @@ Rigidbody::Rigidbody(){
 }
 
 void Rigidbody::OnUpdate(){
-	if (doGravity) { //move the object down if it's not resting
+	if (doGravity && !atRest) { //move the object down if it's not resting
 		gravity -= 0.0005f * GetCore()->deltaT;
 		velocity.y += gravity;
 	}
 	else {
 		if (!GetGameObject()->GetComponent<BoxCollider>()->isColliding(GetGameObject()->GetTransform()->position - glm::vec3(0.0f, 0.5f, 0.0f))) { //if the object will collide when moved down, enable gravity
-			doGravity = true;
+			atRest = false;
 		}
 		gravity = 0.0f; //if the object is resting get rid of negative velocity and reset the gravity
 	}

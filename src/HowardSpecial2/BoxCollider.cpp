@@ -89,7 +89,7 @@ using namespace glm; //create 15 planes of separation (3 from object 1 local axi
 
 std::shared_ptr<BoxCollider> BoxCollider::isColliding(){
 	std::vector<std::shared_ptr<BoxCollider>> others = GetCore()->boxColliders; //get a list of all other box colliders in the scene
-	vec3 Pa = GetGameObject()->GetTransform()->position; //get position
+	vec3 Pa = GetGameObject()->GetTransform()->position + offset; //get position
 	float Wa = dimensions.x / 2 * GetGameObject()->GetTransform()->scale.x; //get box width
 	float Ha = dimensions.y / 2 * GetGameObject()->GetTransform()->scale.y; //get box height
 	float Da = dimensions.z / 2 * GetGameObject()->GetTransform()->scale.z; //get box depth
@@ -128,7 +128,7 @@ std::shared_ptr<BoxCollider> BoxCollider::isColliding(){
 
 std::shared_ptr<BoxCollider> BoxCollider::isColliding(glm::vec3 _position){ //does the same as above function but uses the given position instead of the object position
 	std::vector<std::shared_ptr<BoxCollider>> others = GetCore()->boxColliders;
-	vec3 Pa = _position;
+	vec3 Pa = _position + offset;
 	float Wa = (dimensions.x / 2.0f) * (GetGameObject()->GetTransform()->scale.x);
 	float Ha = (dimensions.y / 2.0f) * (GetGameObject()->GetTransform()->scale.y);
 	float Da = (dimensions.z / 2.0f) * (GetGameObject()->GetTransform()->scale.z);
@@ -171,13 +171,13 @@ std::shared_ptr<BoxCollider> BoxCollider::isColliding(glm::vec3 _position){ //do
 
 void BoxCollider::CollisionResponse() { //repeatedly adjusts colliding object and checks collision until the object is no longer colliding
 	prevCollisions.push_back(GetGameObject()->GetComponent<BoxCollider>());
+	std::shared_ptr<Rigidbody> rb = GetGameObject()->GetComponent<Rigidbody>();
 	std::shared_ptr<BoxCollider> other = isColliding();
 	int num = 0;
 	while (other != nullptr) {
 		float amount = 0.05f;
 		float step = 0.01f;
 		glm::vec3 position = vec3(0.0f);
-		std::shared_ptr<Rigidbody> rb = GetGameObject()->GetComponent<Rigidbody>();
 		if (rb) {
 			while (true) {
 				if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
@@ -204,14 +204,15 @@ void BoxCollider::CollisionResponse() { //repeatedly adjusts colliding object an
 					position = rb->velocity * -2.0f;
 				}
 			}
+			num++;
 			rb->velocity += glm::vec3(position.x, 0.0f, position.z);
 			rb->GetGameObject()->GetTransform()->position.y += position.y;
-			num++;
 			if (position.y > 0.0f) {
-				rb->doGravity = false;
-				//rb->GetGameObject()->GetTransform()->position.y += rb->velocity.y;
+				rb->atRest = true;
 				rb->velocity.y = 0.0f;
 			}
+
+			other = isColliding();
 		}
 		else {
 			while (true) {
@@ -237,12 +238,19 @@ void BoxCollider::CollisionResponse() { //repeatedly adjusts colliding object an
 
 				amount += step;
 			}
+			num++;
 			GetGameObject()->GetTransform()->position += position;
+			if(GetGameObject()->name == std::string("Scarecrow"))
+			{
+				std::cout << GetGameObject()->name << ' ' << std::to_string(position.x) << ' ' << std::to_string(position.y) << ' ' << std::to_string(position.z) << std::endl;
+			}
 		}
 		other = isColliding();
 	}
-	
-	if(num > 0) std::cout << "collided with " << num << " things" << std::endl;
+
+	//if(num > 0) std::cout << "collided with " << num << " things" << std::endl;
+	std::string name = GetGameObject()->name;
+	if (num > 0 && name != std::string("Player")) std::cout << name << std::endl;
 }
 
 bool BoxCollider::TriTriIntersect(std::shared_ptr<GameObject> _other){ //formats two meshes into triangles and loops through them to check if any two triangles are colliding

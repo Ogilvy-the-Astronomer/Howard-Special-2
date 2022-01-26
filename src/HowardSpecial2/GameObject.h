@@ -1,14 +1,14 @@
 #pragma once
 #include<memory>
 #include<vector>
-#include <typeinfo>
+#include<typeinfo>
 #include"Component.h"
 #include"Exception.h"
 
 struct Core;
 struct Transform;
 /**
- * a game object, which acts like a container and manager of all the components attached to
+ A game object, which acts like a container and manager of all the components attached to
  */
 struct GameObject {
 	GameObject();
@@ -31,6 +31,7 @@ struct GameObject {
 	void Start(); ///< start all components
 
 	uint32_t id; ///< game object id
+	std::string name;
 	
 private:
 	friend struct Core;

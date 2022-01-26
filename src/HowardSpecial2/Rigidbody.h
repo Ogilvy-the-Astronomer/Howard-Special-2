@@ -10,10 +10,11 @@ struct Rigidbody : public Component {
 	glm::vec3 velocity; ///< value added to position each frame
 	glm::vec3 torque; ///< value added to rotation each frame
 	float friction; ///< how much velocity is reduced by each frame
+	bool doGravity; ///< whether or not this object should be effected by gravity
 
 private:
 	friend struct MeshCollider;
 	friend struct BoxCollider;
-	bool doGravity; ///< whether or not this object should be effected by gravity
+	bool atRest;
 	float gravity; ///< gravity velocity
 };

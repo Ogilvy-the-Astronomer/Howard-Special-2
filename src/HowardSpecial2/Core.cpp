@@ -62,6 +62,18 @@ std::shared_ptr<GameObject> Core::AddObject(){
 	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(); //create a game object
 	gameObject->core = self; //assign a core reference to the game object
 	gameObject->self = gameObject; //assign a reference to itself
+	gameObject->id = createdObjectCount++;
+	gameObject->name = std::string("Object: ") + std::to_string(gameObject->id);
+	gameObjects.push_back(gameObject); //add it to the list of gameobjects
+	return gameObject;
+}
+
+std::shared_ptr<GameObject> Core::AddObject(std::string _name) {
+	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(); //create a game object
+	gameObject->core = self; //assign a core reference to the game object
+	gameObject->self = gameObject; //assign a reference to itself
+	gameObject->id = createdObjectCount++;
+	gameObject->name = _name;
 	gameObjects.push_back(gameObject); //add it to the list of gameobjects
 	return gameObject;
 }

@@ -37,6 +37,7 @@ struct Core : private NonCopyable {
 	std::vector<std::shared_ptr<BoxCollider>> boxColliders; ///<list of renderers (visible objects)
 	std::shared_ptr<Resources> resources; ///<list of resources (textures, meshes, sounds, etc)
 	std::shared_ptr<GameObject> AddObject(); ///<create an object and add it to the list
+	std::shared_ptr<GameObject> AddObject(std::string _name); ///<create an object and add it to the list
 	template <class T>
 	std::vector<std::shared_ptr<T>> GetComponents(); ///<get a list of all specified components
 	void Start(); ///< calls start function on all objects
@@ -57,6 +58,7 @@ private:
 	std::weak_ptr<Core> self; ///<reference to self
 	Uint32 currentTicks; ///< total amount of tick since startup
 	Uint32 lastTicks; ///< ticks last frame
+	Uint32 createdObjectCount = 0;
 	int lowestfps = 0;
 	int framecount = 0;
 };
