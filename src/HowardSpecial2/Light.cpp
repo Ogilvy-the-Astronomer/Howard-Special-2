@@ -12,7 +12,7 @@ PointLight::PointLight(){
 	quadratic = 0.032f;
 }
 
-void PointLight::OnUpdate(){
+void PointLight::OnUpdate(float _deltaT){
 	//view = glm::lookAt(GetGameObject()->GetComponent<Transform>()->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 

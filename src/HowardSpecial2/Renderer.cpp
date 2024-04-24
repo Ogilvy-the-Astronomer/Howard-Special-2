@@ -22,7 +22,7 @@ void Renderer::OnDisplay() {
 
 }
 
-void Renderer::OnUpdate(){
+void Renderer::OnUpdate(float _deltaT){
 	cam = GetCore()->mainCamera; //get the main camera
 	//set uniforms for the projection, model, and view matrices as well as the texture
 	material->shader->SetUniform("in_Projection", cam.lock()->GetComponent<Camera>()->GetProjection());

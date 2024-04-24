@@ -17,6 +17,7 @@ struct GameObject;
 struct Camera;
 struct ShaderProgram;
 struct DepthCubemap;
+struct Cubemap;
 struct RenderTexture;
 struct Keyboard;
 struct BoxCollider;
@@ -52,10 +53,18 @@ struct Core : private NonCopyable {
 	std::vector<std::shared_ptr<RenderTexture>> depthTextures; ///<list of 2d depth maps
 	std::vector<std::shared_ptr<DepthCubemap>> depthCubeTextures; ///<list of depth cube maps
 
+	std::shared_ptr<Cubemap> skyboxTexture;
+	std::shared_ptr<ShaderProgram> skyboxShader;
+	std::shared_ptr<Mesh> cubeMesh;
+
 	float fps;
-	float deltaT;
 private:
+	float deltaT;
 	std::weak_ptr<Core> self; ///<reference to self
+	std::shared_ptr<RenderTexture> renderTarget;
+	std::shared_ptr<Mesh> renderQuad;
+	std::shared_ptr<ShaderProgram> renderShader;
+	void RenderSkybox();
 	Uint32 currentTicks; ///< total amount of tick since startup
 	Uint32 lastTicks; ///< ticks last frame
 	Uint32 createdObjectCount = 0;

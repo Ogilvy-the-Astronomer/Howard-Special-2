@@ -9,7 +9,7 @@ struct Camera : public Component {
 	Camera();
 	glm::mat4 GetView(); ///< get view matrix
 	glm::mat4 GetProjection(); ///< get projection matrix
-	void OnUpdate();
+	void OnUpdate(float _deltaT);
 	void OnStart();
 private:
 	glm::mat4 projection; ///< projection matrix

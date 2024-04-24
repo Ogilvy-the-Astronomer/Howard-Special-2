@@ -17,6 +17,7 @@
 #include "RenderTexture.h"
 #include "Light.h"
 #include "DepthCubemap.h"
+#include "Cubemap.h"
 #include "Keyboard.h"
 #include "BoxCollider.h"
 #include "Exception.h"

@@ -9,6 +9,10 @@
 #include "Rigidbody.h"
 #include "MeshCollider.h"
 
+#include "ShaderProgram.h"
+#include "Material.h"
+#include "Camera.h"
+
 #include<glm/gtx/normal.hpp>
 #include<iostream>
 #include <stdlib.h>
@@ -52,13 +56,14 @@ void BoxCollider::BuildDimensionsfromMesh(std::shared_ptr<Mesh> mesh){ //go thro
 	}
 }
 
-void BoxCollider::OnUpdate() {
+void BoxCollider::OnUpdate(float _deltaT) {
 	glm::mat4 model(1.0f); //create model matrix from scale and rotation (position breaks it)
-	std::shared_ptr<Transform> t = GetGameObject()->GetTransform();
+	const std::shared_ptr<Transform> t = GetGameObject()->GetTransform();
+	//model = glm::translate(model, t->position + offset);
 	model = glm::rotate(model, t->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 	model = glm::rotate(model, t->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
 	model = glm::rotate(model, t->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-	model = glm::scale(model, t->scale);
+	model = glm::scale(model, t->scale * dimensions);
 	//create local unit vectors from model matrix
 	Ax = glm::normalize(model * glm::vec4(1, 0, 0, 1));
 	Ay = glm::normalize(model * glm::vec4(0, 1, 0, 1));
@@ -68,6 +73,36 @@ void BoxCollider::OnUpdate() {
 	if (mc) mc->CollisionResponse();
 	else CollisionResponse();
 	
+}
+
+void BoxCollider::OnRender() {
+	if (debugMode) {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+		const std::weak_ptr<GameObject> cam = GetCore()->mainCamera; //get the main camera
+		//set uniforms for the projection, model, and view matrices as well as the texture
+		glm::mat4 model(1.0f);
+		const std::shared_ptr<Transform> t = GetGameObject()->GetTransform();
+		model = glm::translate(model, t->position + offset);
+		model = glm::rotate(model, t->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, t->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, t->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, t->scale * dimensions);
+
+		debugMat->shader->SetUniform("in_Projection", cam.lock()->GetComponent<Camera>()->GetProjection());
+		debugMat->shader->SetUniform("in_Model", model);
+		debugMat->shader->SetUniform("in_View", cam.lock()->GetComponent<Camera>()->GetView());
+
+		debugMat->shader->Draw(debugShape);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+}
+
+void BoxCollider::OnStart(){
+	debugMat = std::make_shared<Material>();
+	debugMat->shader = GetCore()->resources->load<ShaderProgram>("../shaders/simple");
+	debugShape = std::make_shared<Mesh>();
+	debugShape = GetCore()->resources->load<Mesh>("../src/HowardSpecial2/models/cube.obj");
 }
 
 using namespace glm; //create 15 planes of separation (3 from object 1 local axis, 3 from object 2 local axis, 9 from the combination of each pair of axis), then test to see if the two objects
@@ -89,12 +124,13 @@ using namespace glm; //create 15 planes of separation (3 from object 1 local axi
 
 std::shared_ptr<BoxCollider> BoxCollider::isColliding(){
 	std::vector<std::shared_ptr<BoxCollider>> others = GetCore()->boxColliders; //get a list of all other box colliders in the scene
-	vec3 Pa = GetGameObject()->GetTransform()->position + offset; //get position
-	float Wa = dimensions.x / 2 * GetGameObject()->GetTransform()->scale.x; //get box width
-	float Ha = dimensions.y / 2 * GetGameObject()->GetTransform()->scale.y; //get box height
-	float Da = dimensions.z / 2 * GetGameObject()->GetTransform()->scale.z; //get box depth
+	const vec3 Pa = GetGameObject()->GetTransform()->position + offset; //get position
+	const vec3 myScale = GetGameObject()->GetTransform()->scale;
+	const float Wa = dimensions.x / 2.0f * myScale.x; //get box width
+	const float Ha = dimensions.y / 2.0f * myScale.y; //get box height
+	const float Da = dimensions.z / 2.0f * myScale.z; //get box depth
 	
-	for (int i = 0; i < (int)others.size(); i++) { //go through every collider in the scene
+	for (int i = 0; i < (int)others.size(); i++) { //go through every collider in the scene TODO: less than that
 		std::shared_ptr<BoxCollider> other = others.at(i);
 		bool newCol = true;
 		for (int j = 0; j < (int)prevCollisions.size(); j++) {
@@ -104,14 +140,15 @@ std::shared_ptr<BoxCollider> BoxCollider::isColliding(){
 			}
 		}
 		if (newCol) { //if the collider is different to this collider
-			vec3 Pb = other->GetGameObject()->GetTransform()->position; //get other object position
-			vec3 Bx = other->Ax; //get other box local x axis
-			vec3 By = other->Ay;//get other box local y axis
-			vec3 Bz = other->Az;//get other box local z axis
-			float Wb = other->dimensions.x / 2 * other->GetGameObject()->GetTransform()->scale.x;//get other box width
-			float Hb = other->dimensions.y / 2 * other->GetGameObject()->GetTransform()->scale.y;//get other box height
-			float Db = other->dimensions.z / 2 * other->GetGameObject()->GetTransform()->scale.z;//get other box depth
-			vec3 T = Pb - Pa; //get distance between objects
+			const vec3 Pb = other->GetGameObject()->GetTransform()->position; //get other object position
+			const vec3 Bx = other->Ax; //get other box local x axis
+			const vec3 By = other->Ay;//get other box local y axis
+			const vec3 Bz = other->Az;//get other box local z axis
+			const vec3 BScale = other->GetGameObject()->GetTransform()->scale;
+			const float Wb = other->dimensions.x / 2 * BScale.x;//get other box width
+			const float Hb = other->dimensions.y / 2 * BScale.y;//get other box height
+			const float Db = other->dimensions.z / 2 * BScale.z;//get other box depth
+			const vec3 T = Pb - Pa; //get distance between objects
 			//bool a1 = c1, a2 = c2, a3 = c3, a4 = c4, a5 = c5, a6 = c6, a7 = c7, a8 = c8, a9 = c9, a10 = c10, a11 = c11, a12 = c12, a13 = c13, a14 = c14, a15 = c15;
 			if (c1 || c2 || c3 || c4 || c5 || c6 || c7 || c8 || c9 || c10 || c11 || c12 || c13 || c14 || c15) { //test if there is collision
 
@@ -128,28 +165,31 @@ std::shared_ptr<BoxCollider> BoxCollider::isColliding(){
 
 std::shared_ptr<BoxCollider> BoxCollider::isColliding(glm::vec3 _position){ //does the same as above function but uses the given position instead of the object position
 	std::vector<std::shared_ptr<BoxCollider>> others = GetCore()->boxColliders;
-	vec3 Pa = _position + offset;
-	float Wa = (dimensions.x / 2.0f) * (GetGameObject()->GetTransform()->scale.x);
-	float Ha = (dimensions.y / 2.0f) * (GetGameObject()->GetTransform()->scale.y);
-	float Da = (dimensions.z / 2.0f) * (GetGameObject()->GetTransform()->scale.z);
+	const vec3 Pa = _position + offset;
+	const vec3 myScale = GetGameObject()->GetTransform()->scale;
+	const float Wa = (dimensions.x / 2.0f) * (myScale.x);
+	const float Ha = (dimensions.y / 2.0f) * (myScale.y);
+	const float Da = (dimensions.z / 2.0f) * (myScale.z);
 
-	for (int i = 0; i < (int)others.size(); i++) {
+	for (int i = 0; i < (int)others.size(); i++) { //go through every collider in the scene TODO: less than that
 		std::shared_ptr<BoxCollider> other = others.at(i);
-		if (other != GetGameObject()->GetComponent<BoxCollider>()) {
-			vec3 Pb = other->GetGameObject()->GetTransform()->position;
-			vec3 Bx = other->Ax;
-			vec3 By = other->Ay;
-			vec3 Bz = other->Az;
-			float Wb = other->dimensions.x / 2.0f * other->GetGameObject()->GetTransform()->scale.x;
-			float Hb = other->dimensions.y / 2.0f * other->GetGameObject()->GetTransform()->scale.y;
-			float Db = other->dimensions.z / 2.0f * other->GetGameObject()->GetTransform()->scale.z;
-			vec3 T = Pb - Pa;
-			//bool a1 = c1, a2 = c2, a3 = c3, a4 = c4, a5 = c5, a6 = c6, a7 = c7, a8 = c8, a9 = c9, a10 = c10, a11 = c11, a12 = c12, a13 = c13, a14 = c14, a15 = c15;
+		if (other != GetGameObject()->GetComponent<BoxCollider>()){
+			const vec3 Pb = other->GetGameObject()->GetTransform()->position;
+			const vec3 Bx = other->Ax;
+			const vec3 By = other->Ay;
+			const vec3 Bz = other->Az;
+			const vec3 BScale = other->GetGameObject()->GetTransform()->scale;
+			const float Wb = other->dimensions.x / 2.0f * BScale.x;
+			const float Hb = other->dimensions.y / 2.0f * BScale.y;
+			const float Db = other->dimensions.z / 2.0f * BScale.z;
+			const vec3 T = Pb - Pa;
 			if (c1 || c2 || c3 || c4 || c5 || c6 || c7 || c8 || c9 || c10 || c11 || c12 || c13 || c14 || c15) {
-
+				continue;
 			}
 			else {
-				return other;
+				return other; 
+				//TODO: figure out what is was about
+				/*
 				std::shared_ptr<MeshCollider> complex = other->GetGameObject()->GetComponent<MeshCollider>();
 				if (complex) {
 					if (complex->isColliding(GetGameObject(), glm::vec3(0.0f))) {
@@ -162,6 +202,7 @@ std::shared_ptr<BoxCollider> BoxCollider::isColliding(glm::vec3 _position){ //do
 				else {
 					return other;
 				}
+				*/
 			}
 		}
 
@@ -169,97 +210,90 @@ std::shared_ptr<BoxCollider> BoxCollider::isColliding(glm::vec3 _position){ //do
 	return nullptr;
 }
 
+bool BoxCollider::IsCollidingWithObject(std::shared_ptr<BoxCollider> _other, const glm::vec3 _position){
+	const vec3 Pa = _position + offset; //get position
+	const vec3 myScale = GetGameObject()->GetTransform()->scale;
+	const float Wa = dimensions.x / 2.0f * myScale.x; //get box width
+	const float Ha = dimensions.y / 2.0f * myScale.y; //get box height
+	const float Da = dimensions.z / 2.0f * myScale.z; //get box depth
+
+	const vec3 Pb = _other->GetGameObject()->GetTransform()->position; //get other object position
+	const vec3 Bx = _other->Ax; //get other box local x axis
+	const vec3 By = _other->Ay;//get other box local y axis
+	const vec3 Bz = _other->Az;//get other box local z axis
+	const vec3 BScale = _other->GetGameObject()->GetTransform()->scale;
+	const float Wb = _other->dimensions.x / 2 * BScale.x;//get other box width
+	const float Hb = _other->dimensions.y / 2 * BScale.y;//get other box height
+	const float Db = _other->dimensions.z / 2 * BScale.z;//get other box depth
+	const vec3 T = Pb - Pa; //get distance between objects
+	//bool a1 = c1, a2 = c2, a3 = c3, a4 = c4, a5 = c5, a6 = c6, a7 = c7, a8 = c8, a9 = c9, a10 = c10, a11 = c11, a12 = c12, a13 = c13, a14 = c14, a15 = c15;
+	if (c1 || c2 || c3 || c4 || c5 || c6 || c7 || c8 || c9 || c10 || c11 || c12 || c13 || c14 || c15) { //test if there is collision
+		return false;
+	}
+	else {
+		return true; //if there is no separation, return true
+	}
+}
+
 void BoxCollider::CollisionResponse() { //repeatedly adjusts colliding object and checks collision until the object is no longer colliding
 	prevCollisions.push_back(GetGameObject()->GetComponent<BoxCollider>());
 	std::shared_ptr<Rigidbody> rb = GetGameObject()->GetComponent<Rigidbody>();
-	std::shared_ptr<BoxCollider> other = isColliding();
-	int num = 0;
+	glm::vec3 myPos = GetGameObject()->GetTransform()->position;
+	std::shared_ptr<BoxCollider> other = isColliding(myPos);
+
+	if (other == nullptr)
+		return;
+
+	float amount = collisionResponseStep;
+	glm::vec3 position = vec3(0.0f);
+
 	while (other != nullptr) {
-		float amount = 0.05f;
-		float step = 0.01f;
-		glm::vec3 position = vec3(0.0f);
+		while (true) {
+			if (!IsCollidingWithObject(other, myPos + position)) break; //base
+			position.x += amount;
+			if (!IsCollidingWithObject(other, myPos + position)) break; //x+
+			position.x -= amount;
+			position.x -= amount;
+			if (!IsCollidingWithObject(other, myPos + position)) break; //x-
+			position.x += amount;
+			position.z += amount;
+			if (!IsCollidingWithObject(other, myPos + position)) break; //z+
+			position.z -= amount;
+			position.z -= amount;
+			if (!IsCollidingWithObject(other, myPos + position)) break; //z-
+			position.z += amount;
+			position.y += amount;
+			if (!IsCollidingWithObject(other, myPos + position)) break; //y+
+			position.y -= amount;
+			position.y -= amount;
+			if (!IsCollidingWithObject(other, myPos + position)) break; //y-
+			position.y += amount;
+			amount += collisionResponseStep;
+		}
+			
+		GetGameObject()->GetTransform()->position += position;
 		if (rb) {
-			while (true) {
-				if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
-				position.x += amount;
-				if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
-				position.x -= amount;
-				position.x -= amount;
-				if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
-				position.x += amount;
-				position.z += amount;
-				if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
-				position.z -= amount;
-				position.z -= amount;
-				if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
-				position.z += amount;
-				position.y += amount;
-				if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
-				position.y -= amount;
-				position.y -= amount;
-				if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
-				position.y += amount;
-				amount += step;
-				if (amount > 2.0f) {
-					position = rb->velocity * -2.0f;
-				}
-			}
-			num++;
-			rb->velocity += glm::vec3(position.x, 0.0f, position.z);
-			rb->GetGameObject()->GetTransform()->position.y += position.y;
 			if (position.y > 0.0f) {
 				rb->atRest = true;
 				rb->velocity.y = 0.0f;
 			}
-
-			other = isColliding();
 		}
-		else {
-			while (true) {
-				if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
-				position.x += amount;
-				if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
-				position.x -= amount;
-				position.x -= amount;
-				if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
-				position.x += amount;
-				position.z += amount;
-				if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
-				position.z -= amount;
-				position.z -= amount;
-				if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
-				position.z += amount;
-				position.y += amount;
-				if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
-				position.y -= amount;
-				position.y -= amount;
-				if (!isColliding(GetGameObject()->GetTransform()->position + position)) break;
-				position.y += amount;
 
-				amount += step;
-			}
-			num++;
-			GetGameObject()->GetTransform()->position += position;
-			if(GetGameObject()->name == std::string("Scarecrow"))
-			{
-				std::cout << GetGameObject()->name << ' ' << std::to_string(position.x) << ' ' << std::to_string(position.y) << ' ' << std::to_string(position.z) << std::endl;
-			}
-		}
-		other = isColliding();
+		prevCollisions.push_back(other);
+		myPos = GetGameObject()->GetTransform()->position;
+		other = isColliding(myPos);
+		amount = collisionResponseStep;
 	}
-
-	//if(num > 0) std::cout << "collided with " << num << " things" << std::endl;
-	std::string name = GetGameObject()->name;
-	if (num > 0 && name != std::string("Player")) std::cout << name << std::endl;
+	prevCollisions.clear();
 }
 
 bool BoxCollider::TriTriIntersect(std::shared_ptr<GameObject> _other){ //formats two meshes into triangles and loops through them to check if any two triangles are colliding
-	int vertexCount = GetGameObject()->GetComponent<Renderer>()->shape->GetVertexCount() / 3;
-	int otherVertexCount = _other->GetComponent<Renderer>()->shape->GetVertexCount() / 3;
-	std::shared_ptr<VertexBuffer> shape = GetGameObject()->GetComponent<Renderer>()->shape->GetBuffers(0);
-	std::shared_ptr<VertexBuffer> otherShape = _other->GetComponent<Renderer>()->shape->GetBuffers(0);
-	glm::mat4 model = GetGameObject()->GetTransform()->GetModel();
-	glm::mat4 otherModel = _other->GetTransform()->GetModel();
+	const int vertexCount = GetGameObject()->GetComponent<Renderer>()->shape->GetVertexCount() / 3;
+	const int otherVertexCount = _other->GetComponent<Renderer>()->shape->GetVertexCount() / 3;
+	const std::shared_ptr<VertexBuffer> shape = GetGameObject()->GetComponent<Renderer>()->shape->GetBuffers(0);
+	const std::shared_ptr<VertexBuffer> otherShape = _other->GetComponent<Renderer>()->shape->GetBuffers(0);
+	const glm::mat4 model = GetGameObject()->GetTransform()->GetModel();
+	const glm::mat4 otherModel = _other->GetTransform()->GetModel();
 	glm::vec4 tri1Vert1;
 	glm::vec4 tri1Vert2;
 	glm::vec4 tri1Vert3;
@@ -274,8 +308,8 @@ bool BoxCollider::TriTriIntersect(std::shared_ptr<GameObject> _other){ //formats
 		float tri11[] = { tri1Vert2.x, tri1Vert2.y, tri1Vert2.z };
 		float tri12[] = { tri1Vert3.x, tri1Vert3.y, tri1Vert3.z };
 		for (int j = 0; j < otherVertexCount; j++) {
-			glm::vec4 a = glm::vec4(otherShape->GetData(j, 0, 0), otherShape->GetData(j, 0, 1), otherShape->GetData(j, 0, 2), 1);
-			glm::vec4 b = glm::vec4(otherShape->GetData(j, 1, 0), otherShape->GetData(j, 1, 1), otherShape->GetData(j, 1, 2), 1);
+			const glm::vec4 a = glm::vec4(otherShape->GetData(j, 0, 0), otherShape->GetData(j, 0, 1), otherShape->GetData(j, 0, 2), 1);
+			const glm::vec4 b = glm::vec4(otherShape->GetData(j, 1, 0), otherShape->GetData(j, 1, 1), otherShape->GetData(j, 1, 2), 1);
 
 			tri2Vert1 = otherModel * glm::vec4(otherShape->GetData(j, 0, 0), otherShape->GetData(j, 0, 1), otherShape->GetData(j, 0, 2), 1);
 			tri2Vert2 = otherModel * glm::vec4(otherShape->GetData(j, 1, 0), otherShape->GetData(j, 1, 1), otherShape->GetData(j, 1, 2), 1);
@@ -292,12 +326,12 @@ bool BoxCollider::TriTriIntersect(std::shared_ptr<GameObject> _other){ //formats
 }
 
 glm::vec3 BoxCollider::TriTriIntersectNormal(std::shared_ptr<GameObject> _other) { //formats two meshes into triangles and loops through them to check if any two triangles are colliding
-	int vertexCount = GetGameObject()->GetComponent<Renderer>()->shape->GetVertexCount() / 3;
-	int otherVertexCount = _other->GetComponent<Renderer>()->shape->GetVertexCount() / 3;
-	std::shared_ptr<VertexBuffer> shape = GetGameObject()->GetComponent<Renderer>()->shape->GetBuffers(0);
-	std::shared_ptr<VertexBuffer> otherShape = _other->GetComponent<Renderer>()->shape->GetBuffers(0);
-	glm::mat4 model = GetGameObject()->GetTransform()->GetModel();
-	glm::mat4 otherModel = _other->GetTransform()->GetModel();
+	const int vertexCount = GetGameObject()->GetComponent<Renderer>()->shape->GetVertexCount() / 3;
+	const int otherVertexCount = _other->GetComponent<Renderer>()->shape->GetVertexCount() / 3;
+	const std::shared_ptr<VertexBuffer> shape = GetGameObject()->GetComponent<Renderer>()->shape->GetBuffers(0);
+	const std::shared_ptr<VertexBuffer> otherShape = _other->GetComponent<Renderer>()->shape->GetBuffers(0);
+	const glm::mat4 model = GetGameObject()->GetTransform()->GetModel();
+	const glm::mat4 otherModel = _other->GetTransform()->GetModel();
 	glm::vec4 tri1Vert1;
 	glm::vec4 tri1Vert2;
 	glm::vec4 tri1Vert3;
@@ -312,8 +346,8 @@ glm::vec3 BoxCollider::TriTriIntersectNormal(std::shared_ptr<GameObject> _other)
 		float tri11[] = { tri1Vert2.x, tri1Vert2.y, tri1Vert2.z };
 		float tri12[] = { tri1Vert3.x, tri1Vert3.y, tri1Vert3.z };
 		for (int j = 0; j < otherVertexCount; j++) {
-			glm::vec4 a = glm::vec4(otherShape->GetData(j, 0, 0), otherShape->GetData(j, 0, 1), otherShape->GetData(j, 0, 2), 1);
-			glm::vec4 b = glm::vec4(otherShape->GetData(j, 1, 0), otherShape->GetData(j, 1, 1), otherShape->GetData(j, 1, 2), 1);
+			const glm::vec4 a = glm::vec4(otherShape->GetData(j, 0, 0), otherShape->GetData(j, 0, 1), otherShape->GetData(j, 0, 2), 1);
+			const glm::vec4 b = glm::vec4(otherShape->GetData(j, 1, 0), otherShape->GetData(j, 1, 1), otherShape->GetData(j, 1, 2), 1);
 
 			tri2Vert1 = otherModel * glm::vec4(otherShape->GetData(j, 0, 0), otherShape->GetData(j, 0, 1), otherShape->GetData(j, 0, 2), 1);
 			tri2Vert2 = otherModel * glm::vec4(otherShape->GetData(j, 1, 0), otherShape->GetData(j, 1, 1), otherShape->GetData(j, 1, 2), 1);
@@ -333,53 +367,7 @@ glm::vec3 BoxCollider::TriTriIntersectNormal(std::shared_ptr<GameObject> _other)
 	return {};
 }
 
-
-//!!! DANGER !!! do not use these idk why they're here but i don't wanna get rid of them in case they break something
-bool BoxCollider::isColliding(std::shared_ptr<BoxCollider> other){ //same as isColliding function above but returns true/ false with specified object
-	mat4 model = GetGameObject()->GetTransform()->GetModel();
-	vec3 Pa = GetGameObject()->GetTransform()->position;
-	float Wa = dimensions.x / 2;
-	float Ha = dimensions.y / 2;
-	float Da = dimensions.z / 2;
-
-	vec3 Pb = other->GetGameObject()->GetTransform()->position;
-	vec3 Bx = other->Ax;
-	vec3 By = other->Ay;
-	vec3 Bz = other->Az;
-	float Wb = other->dimensions.x / 2;
-	float Hb = other->dimensions.y / 2;
-	float Db = other->dimensions.z / 2;
-	vec3 T = Pb - Pa;
-	if (c1 && c2 && c3 && c4 && c5 && c6 && c7 && c8 && c9 && c10 && c11 && c12 && c13 && c14 && c15) {
-		return true;
-	}
-	else {
-		return false;
-	}
-	return false;
-}
-
-bool BoxCollider::isColliding(std::shared_ptr<BoxCollider> other, glm::vec3 position) { //same as above but using given position;
-
-	mat4 model = GetGameObject()->GetTransform()->GetModel(position);
-	vec3 Pa = GetGameObject()->GetTransform()->position + position;
-	float Wa = dimensions.x / 2;
-	float Ha = dimensions.y / 2;
-	float Da = dimensions.z / 2;
-
-	vec3 Pb = other->GetGameObject()->GetTransform()->position;
-	vec3 Bx = other->Ax;
-	vec3 By = other->Ay;
-	vec3 Bz = other->Az;
-	float Wb = other->dimensions.x / 2;
-	float Hb = other->dimensions.y / 2;
-	float Db = other->dimensions.z / 2;
-	vec3 T = Pb - Pa;
-	if (c1 || c2 || c3 || c4 || c5 || c6 || c7 || c8 || c9 || c10 || c11 || c12 || c13 || c14 || c15) {
-		return true;
-	}
-	else {
-		return false;
-	}
-	return nullptr;
+void BoxCollider::ToggleDebugMode()
+{
+	debugMode = !debugMode;
 }

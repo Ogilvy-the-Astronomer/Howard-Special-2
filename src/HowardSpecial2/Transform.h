@@ -15,7 +15,7 @@ struct Transform : public Component {
 	glm::vec3 forward; ///< forward vector
 	glm::vec3 right; ///< right vector
 
-	void OnUpdate();
+	void OnUpdate(float _deltaT);
 	glm::mat4 GetModel(); ///< create model matrix from position, rotation, and scale
 	glm::mat4 GetModel(glm::vec3 _position);
 };

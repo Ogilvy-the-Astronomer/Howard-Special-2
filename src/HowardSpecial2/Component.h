@@ -7,7 +7,7 @@ struct Core;
  * a virtual component for other components to inherit from 
  */
 struct Component {
-	virtual void OnUpdate(); ///< update function called every frame
+	virtual void OnUpdate(float _deltaT); ///< update function called every frame
 	virtual void OnRender();
 	virtual void OnStart(); ///<start function called at the beginning of the game loop
 	std::shared_ptr<GameObject> GetGameObject(); ///< get the gameobject the component is attached to

@@ -2,7 +2,7 @@
 #include "Component.h"
 #include "GameObject.h"
 
-void Component::OnUpdate(){
+void Component::OnUpdate(float _deltaT){
 }
 
 void Component::OnRender(){

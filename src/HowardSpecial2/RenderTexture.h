@@ -13,6 +13,6 @@ struct RenderTexture : public Texture
 public:
 	GLuint rtFBO; ///< frame buffer object id
 	RenderTexture(); ///< constructor for depth maps
-	RenderTexture(int _o); ///< regular constructor
+	RenderTexture(int _h, int _w); ///< regular constructor
 	~RenderTexture();
 };

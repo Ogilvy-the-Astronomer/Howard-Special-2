@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "RenderTexture.h"
 #include "ShaderProgram.h"
+#include "Cubemap.h"
 #include "DepthCubemap.h"
 #include "Keyboard.h"
 #include "BoxCollider.h"
@@ -98,6 +99,21 @@ void Core::Start() {
 
 	//enable face culling for performance and depth testing for shadow maps
 	//glEnable(GL_CULL_FACE);
+	renderTarget = std::make_shared<RenderTexture>(window_h, window_w);
+	renderQuad = resources->load<Mesh>("../src/game/models/quad2.obj"); //TODO: not this
+	renderShader = resources->load<ShaderProgram>("../shaders/rendtex");
+
+	cubeMesh = resources->load<Mesh>("../src/game/models/cube.obj");
+	std::vector<std::string> faces {
+		"../src/game/textures/skybox/skybox0.jpg", 
+		"../src/game/textures/skybox/skybox1.jpg", 
+		"../src/game/textures/skybox/skybox2.jpg", 
+		"../src/game/textures/skybox/skybox3.jpg", 
+		"../src/game/textures/skybox/skybox5.jpg", 
+		"../src/game/textures/skybox/skybox4.jpg"};
+	skyboxTexture = std::make_shared<Cubemap>(faces);
+	skyboxShader = resources->load<ShaderProgram>("../shaders/skybox");
+
 	glEnable(GL_DEPTH_TEST);
 
 	for (int i = 0; i < (int)gameObjects.size(); i++) { //go through list of all gameobjects and call start on them
@@ -122,7 +138,7 @@ void Core::Stop() {
 void Core::Update(){
 	keyboard->Update();
 	for (int i = 0; i < (int)gameObjects.size(); i++) { //go through list of all gameobjects and call update on them
-		gameObjects.at(i)->Update();
+		gameObjects.at(i)->Update(deltaT);
 	}
 }
 
@@ -134,23 +150,18 @@ void Core::Display(){
 	deltaT = currentTicks - lastTicks;
 	fps = glm::round(1000.0f / deltaT);
 	deltaT *= 0.1f;
-	/* For getting average fps
-	lowestfps += fps;
-	framecount++;
-	*/
-	//std::string tickDif = std::to_string(fps);
-	//SDL_SetWindowTitle(graphicsContext, tickDif.c_str());
+
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //clear the screen red
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the color and depth buffer
 
 	glEnable(GL_DEPTH_TEST); //enable depth testing
 	//glDisable(GL_CULL_FACE); //disable face culling for more accurate shadows
 
-	float farPlane = 200.0f;
-	glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, farPlane); //create the projection matrix for the light
+	constexpr float farPlane = 200.0f;
+	const glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, farPlane); //create the projection matrix for the light
 
 	for (int i = 0; i < (int)lights.size(); i++) {//go through every point light
-		glm::vec3 pos = lights[i]->GetGameObject()->GetTransform()->position; //get the light position
+		const glm::vec3 pos = lights[i]->GetGameObject()->GetTransform()->position; //get the light position
 		std::vector<glm::mat4> cubeDirs; //create a list of 6 view-projection matrices for each face of the cubemap, multiplying the projection matrix by each of the 6 view matrices
 		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 		cubeDirs.push_back(lightProjection * glm::lookAt(pos, pos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f,-1.0f, 0.0f)));
@@ -193,13 +204,39 @@ void Core::Display(){
 	}
 	glEnable(GL_CULL_FACE); //reset values to default
 	glViewport(0, 0, window_w, window_h);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the color and depth buffer
-	for (int i = 0; i < (int)gameObjects.size(); i++) { //go through list of gameobjects and call update on them, including the renderer which draws the object to the context
-		gameObjects.at(i)->Update();
-	}
 
+	glBindFramebuffer(GL_FRAMEBUFFER, renderTarget->rtFBO);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the color and depth buffer
+	RenderSkybox();
+	for (int i = 0; i < (int)gameObjects.size(); i++) { //go through list of gameobjects and call update on them, including the renderer which draws the object to the context
+		gameObjects.at(i)->Update(deltaT);
+		gameObjects.at(i)->Render();
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	
+	//quad stuff yes I need to wrap this
 	glDisable(GL_DEPTH_TEST); //disable depth testing
+	glDisable(GL_CULL_FACE);
+	renderShader->SetUniform("in_Texture", renderTarget);
+	renderShader->Draw(renderQuad);
+	
+
 	SDL_GL_SwapWindow(graphicsContext); //display context to screen
 	lastTicks = currentTicks;
+}
+
+void Core::RenderSkybox() {
+	glDepthMask(GL_FALSE);
+	glDisable(GL_CULL_FACE);
+	skyboxShader->SetUniform("in_Projection", mainCamera->GetComponent<Camera>()->GetProjection());
+	skyboxShader->SetUniform("in_Skybox", skyboxTexture);
+	skyboxShader->SetUniform("in_View", glm::mat4(glm::mat3(mainCamera->GetComponent<Camera>()->GetView())));
+
+	skyboxShader->Draw(cubeMesh);
+
+	glDepthMask(GL_TRUE);
+	glEnable(GL_CULL_FACE);
+
 }
 

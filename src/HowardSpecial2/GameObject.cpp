@@ -20,14 +20,16 @@ std::shared_ptr<Core> GameObject::GetCore()
 	return core.lock(); //return reference to core
 }
 
-void GameObject::Update(){
+void GameObject::Update(float _deltaT){
 	for(int i = 0; i < (int)components.size(); i++){
-		components.at(i)->OnUpdate(); //update all components in the game object
+		components.at(i)->OnUpdate(_deltaT); //update all components in the game object
 	}
 }
 
-void GameObject::Render()
-{
+void GameObject::Render(){
+	for (int i = 0; i < (int)components.size(); i++) {
+		components.at(i)->OnRender(); //update all components in the game object
+	}
 }
 
 void GameObject::Start(){

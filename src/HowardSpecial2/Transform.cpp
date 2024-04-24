@@ -8,7 +8,7 @@ Transform::Transform()
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);
 }
 
-void Transform::OnUpdate(){
+void Transform::OnUpdate(float _deltaT){
 	glm::mat4 f(1.0f); //get the forward vector
 	f = glm::rotate(f, rotation.y, glm::vec3(0, 1, 0));
 	glm::mat4 r = glm::rotate(f, 1.5708f, glm::vec3(0, 1, 0));

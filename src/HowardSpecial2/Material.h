@@ -7,6 +7,7 @@ struct ShaderProgram;
 
 struct Material {
 	friend struct Renderer;
+	friend struct BoxCollider;
 	Material();
 	glm::vec3 ambient;
 	glm::vec3 specular;

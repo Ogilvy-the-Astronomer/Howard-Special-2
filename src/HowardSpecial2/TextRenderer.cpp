@@ -22,7 +22,7 @@ TextRenderer::TextRenderer(){
 	}
 }
 
-void TextRenderer::OnUpdate(){
+void TextRenderer::OnUpdate(float _deltaT){
 	shader->SetUniform("in_Projection", projection); //set the projection in the shader
 	glm::vec3 pos = GetGameObject()->GetTransform()->position; //get the beginning position of the text
 	glm::vec3 posMod;

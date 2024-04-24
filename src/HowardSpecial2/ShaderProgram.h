@@ -12,6 +12,7 @@ struct Texture;
 struct Mesh;
 struct RenderTexture;
 struct DepthCubemap;
+struct Cubemap;
 
 /**
  * A sampler for storing textures
@@ -38,6 +39,7 @@ public:
 	void Draw(std::shared_ptr<Mesh> vertextArray); ///< draws the specified mesh
 	//functions for setting different types of uniforms in the shader
 	void SetUniform(std::string uniform, std::shared_ptr<Texture> texture); ///< set texture uniform
+	void SetUniform(std::string uniform, std::shared_ptr<Cubemap> texture); ///< set texture uniform
 	void SetUniform(std::string uniform, std::shared_ptr<DepthCubemap> texture);///< set cube map uniform
 	void SetUniform(std::string uniform, glm::vec4 value);///< set vec4 uniform
 	void SetUniform(std::string uniform, glm::vec3 value);///< set vec3 uniform

@@ -26,7 +26,7 @@ struct GameObject {
 
 	std::shared_ptr<Transform> GetTransform(); ///< shortcut function to get the transform component of an object
 	std::shared_ptr<Core> GetCore(); ///< shortcut function to get the engine core
-	void Update(); ///< update all components
+	void Update(float _deltaT); ///< update all components
 	void Render();
 	void Start(); ///< start all components
 

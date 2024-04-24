@@ -6,7 +6,7 @@
  */
 struct PointLight : public Component {
 	PointLight(); ///< default constructor
-	void OnUpdate();
+	void OnUpdate(float _deltaT);
 
 	void SetAll(glm::vec3 _colour);
 

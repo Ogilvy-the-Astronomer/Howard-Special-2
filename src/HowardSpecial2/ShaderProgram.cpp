@@ -1,93 +1,14 @@
 #include "ShaderProgram.h"
 #include "Mesh.h"
 #include "Texture.h"
+#include "Cubemap.h"
 #include "DepthCubemap.h"
 #include "Exception.h"
 
 
 
 ShaderProgram::ShaderProgram() {
-	/*
-	std::string vertShader;
-	std::string fragShader;
 
-	std::ifstream file("../shaders/simple.vert");
-
-	if (!file.is_open()) {
-		throw Exception("couldn't open simple vertex shader");
-	}
-	else {
-		while (!file.eof()) {
-			std::string line;
-			std::getline(file, line);
-			vertShader += line + "\n";
-		}
-	}
-	file.close();
-
-	file.open("../shaders/simple.frag");
-
-	if (!file.is_open()) {
-		throw Exception("couldn't open simple fragment shader");
-	}
-	else {
-		while (!file.eof()) {
-			std::string line;
-			std::getline(file, line);
-			fragShader += line + "\n";
-		}
-	}
-	file.close();
-
-	const char *vertex = vertShader.c_str();
-	const char *fragment = fragShader.c_str();
-
-	GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShaderId, 1, &vertex, NULL);
-	glCompileShader(vertexShaderId);
-	GLint success = 0;
-	glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		printShaderInfoLog(id);
-		throw Exception("vertex shader couldn't compile");
-	}
-
-	GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShaderId, 1, &fragment, NULL);
-	glCompileShader(fragmentShaderId);
-	glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		printShaderInfoLog(id);
-		throw Exception("fragment shader couldn't compile");
-	}
-
-	id = glCreateProgram();
-	glAttachShader(id, vertexShaderId);
-	glAttachShader(id, fragmentShaderId);
-	// Ensure the VAO "position" attribute stream gets set as the first position
-	// during the link.
-	glBindAttribLocation(id, 0, "in_Position");
-	glBindAttribLocation(id, 1, "in_TexCoord");
-
-	if (glGetError() != GL_NO_ERROR) {
-		throw Exception("shader machine broke");
-	}
-	// Perform the link and check for failure
-	glLinkProgram(id);
-	glGetProgramiv(id, GL_LINK_STATUS, &success);
-	if (!success)
-	{
-		throw Exception("shader coudln't link");
-	}
-	// Detach and destroy the shader objects. These are no longer needed
-	// because we now have a complete shader program.
-	glDetachShader(id, vertexShaderId);
-	glDeleteShader(vertexShaderId);
-	glDetachShader(id, fragmentShaderId);
-	glDeleteShader(fragmentShaderId);
-	*/
 }
 
 ShaderProgram::ShaderProgram(std::string vert, std::string frag)
@@ -374,6 +295,39 @@ void ShaderProgram::SetUniform(std::string uniform, std::shared_ptr<Texture> tex
 }
 
 void ShaderProgram::SetUniform(std::string uniform, std::shared_ptr<DepthCubemap> texture)
+{
+	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
+
+	if (uniformId == -1)
+	{
+		throw Exception("coudln't get uniform: " + uniform);
+	}
+
+	for (size_t i = 0; i < samplers.size(); i++)
+	{
+		if (samplers.at(i).id == uniformId)
+		{
+			samplers.at(i).texture = texture;
+
+			glUseProgram(id);
+			glUniform1i(uniformId, i);
+			glUseProgram(0);
+			return;
+		}
+	}
+
+	Sampler s;
+	s.id = uniformId;
+	s.type = GL_TEXTURE_CUBE_MAP;
+	s.texture = texture;
+	samplers.push_back(s);
+
+	glUseProgram(id);
+	glUniform1i(uniformId, samplers.size() - 1);
+	glUseProgram(0);
+}
+
+void ShaderProgram::SetUniform(std::string uniform, std::shared_ptr<Cubemap> texture)
 {
 	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
 

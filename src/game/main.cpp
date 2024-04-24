@@ -29,32 +29,33 @@ int main(){
 	player->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/Bricks.png"));
 	player->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
 	player->AddComponent<BoxCollider>(glm::vec3(1.0f, 1.0f, 1.0f));
+	player->AddComponent<SoundSource>();
+	player->GetComponent<SoundSource>()->SetSound(core->resources->load<Sound>("../src/game/sounds/walk.ogg"));
+	//core->mainCamera->GetComponent<SoundSource>()->volume = 2.25f;
 	core->mainCamera->GetComponent<PlayerController>()->rb = player->AddComponent<Rigidbody>();
+	core->mainCamera->GetComponent<PlayerController>()->audioSource = player->GetComponent<SoundSource>();
 	core->mainCamera->GetComponent<PlayerController>()->rb->friction = 1.0f;
-	//core->mainCamera->GetComponent<PlayerController>()->rb->doGravity = false;
-	player->GetTransform()->position.y = -7.0f;
+	player->GetTransform()->position.y = 5.0f;
 
 
 	//create the game world 
 	std::shared_ptr<GameObject> object;
 
-	object = core->AddObject(); //add a directional light
+	object = core->AddObject("Light"); //add a directional light
 	object->AddComponent<Transform>();
 	object->AddComponent<DirectionalLight>();
 	object->GetComponent<DirectionalLight>()->SetAll(glm::vec3(0.0f));
-	object->GetComponent<DirectionalLight>()->ambient = (glm::vec3(0.2f));
+	object->GetComponent<DirectionalLight>()->ambient = (glm::vec3(1.2f));
 	object->GetTransform()->rotation = glm::vec3(glm::radians(40.0f), glm::radians(40.0f), glm::radians(40.0f));
-	object->GetTransform()->position.y += 5.0f;
+	object->GetTransform()->position.y += 15.0f;
 
 	std::shared_ptr<GameObject> middle = object = core->AddObject();
 	object->AddComponent<Transform>();
-	object->AddComponent<Renderer>();
-	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
-	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/dice.png"));
-	object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
-	//object->AddComponent<BoxCollider>();
-	//object->AddComponent<MeshCollider>();
-	object->GetTransform()->position = glm::vec3(5.0f, 0.0f, 0.0f);
+	//object->AddComponent<Renderer>();
+	//object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
+	//object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/dice.png"));
+	//object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
+	object->GetTransform()->position = glm::vec3(5.0f, 10.0f, 0.0f);
 	object->GetTransform()->scale.x = 2.0f;
 
 	object = core->AddObject();
@@ -65,81 +66,52 @@ int main(){
 	object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
 	object->AddComponent<BoxCollider>();
 	object->AddComponent<MeshCollider>();
-	object->GetTransform()->position = glm::vec3(0.0f, -11.5f, 0.0f);
+	object->GetTransform()->position = glm::vec3(0.0f, -1.6f, 0.0f);
 	object->GetTransform()->scale = glm::vec3(200.0f, 3.0f, 200.0f);
 
-	for (int i = 0; i < 0; i++) {
-		object = core->AddObject();
-		object->AddComponent<Transform>();
-		object->AddComponent<Renderer>();
-		object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
-		object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/bricks.png"));
-		object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
-		object->AddComponent<BoxCollider>();
-		object->AddComponent<MeshCollider>();
-		object->GetTransform()->position = glm::vec3(25.0f, -5.0f, 10.0f*i - 15.0f);
-		object->GetTransform()->scale = glm::vec3(10.0f, 10.0f, 10.0f);
+	object = core->AddObject("Terrain");
+	object->AddComponent<Transform>();
+	object->AddComponent<Renderer>();
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/mountains.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/grass2.png"));
+	object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
+	object->GetTransform()->position = glm::vec3(0.0f, -1.5f, 0.0f);
+	object->GetTransform()->scale = glm::vec3(200.0f, 200.0f, 200.0f);
 
-		object = core->AddObject();
-		object->AddComponent<Transform>();
-		object->AddComponent<Renderer>();
-		object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
-		object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/bricks.png"));
-		object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
-		object->AddComponent<BoxCollider>();
-		object->AddComponent<MeshCollider>();
-		object->GetTransform()->position = glm::vec3(-25.0f, -5.0f, 10.0f*i - 15.0f);
-		object->GetTransform()->scale = glm::vec3(10.0f, 10.0f, 10.0f);
+	object = core->AddObject("Wall");
+	object->AddComponent<Transform>();
+	object->AddComponent<Renderer>();
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/bricks.png"));
+	object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
+	object->AddComponent<BoxCollider>();
+	object->AddComponent<MeshCollider>();
+	object->GetTransform()->position = glm::vec3(0.0f, 1.0f, 2.0f);
+	object->GetTransform()->scale = glm::vec3(20.0f, 1.0f, 1.0f);
+	object->GetTransform()->rotation = glm::vec3(0, 45.0f, 0.0f);
 
-		object = core->AddObject();
-		object->AddComponent<Transform>();
-		object->AddComponent<Renderer>();
-		object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
-		object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/bricks.png"));
-		object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
-		object->AddComponent<BoxCollider>();
-		object->AddComponent<MeshCollider>();
-		object->GetTransform()->position = glm::vec3(10.0f*i - 15.0f, -5.0f, 25.0f);
-		object->GetTransform()->scale = glm::vec3(10.0f, 10.0f, 10.0f);
+	object = core->AddObject("Wall 2");
+	object->AddComponent<Transform>();
+	object->AddComponent<Renderer>();
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/bricks.png"));
+	object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
+	object->AddComponent<BoxCollider>();
+	object->AddComponent<MeshCollider>();
+	object->GetTransform()->position = glm::vec3(2.0f, 1.0f, 1.0f);
+	object->GetTransform()->scale = glm::vec3(1.0f, 20.0f, 2.0f);
 
-		object = core->AddObject();
-		object->AddComponent<Transform>();
-		object->AddComponent<Renderer>();
-		object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
-		object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/bricks.png"));
-		object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
-		object->AddComponent<BoxCollider>();
-		object->AddComponent<MeshCollider>();
-		object->GetTransform()->position = glm::vec3(10.0f*i - 15.0f, -5.0f, -25.0f);
-		object->GetTransform()->scale = glm::vec3(10.0f, 10.0f, 10.0f);
-	}
+	object = core->AddObject("Castle");
+	object->AddComponent<Transform>();
+	object->AddComponent<Renderer>();
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/castle2.obj"));
+	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/castle.png"));
+	object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
+	object->GetTransform()->position = glm::vec3(45.0f, 1.1f, 0.0f);
+	object->GetTransform()->scale = glm::vec3(5.0f, 5.0f, 5.0f);
 
-	for (int i = 0; i < 2; i++) {
-		object = core->AddObject();
-		object->AddComponent<Transform>();
-		object->AddComponent<Renderer>();
-		object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
-		object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/bricks.png"));
-		object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
-		object->AddComponent<BoxCollider>();
-		object->AddComponent<MeshCollider>();
-		object->GetTransform()->position = glm::vec3(11.0f + i * -20.0f, -9.5f, 0.0f);
-		object->GetTransform()->scale = glm::vec3(1.0f, 1.75f*(i + 1.0f), 25.0f);
-	}
 
-	for (int i = 0; i < 2; i++) {
-		object = core->AddObject();
-		object->AddComponent<Transform>();
-		object->AddComponent<Renderer>();
-		object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
-		object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/bricks.png"));
-		object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
-		object->AddComponent<BoxCollider>();
-		object->AddComponent<MeshCollider>();
-		object->GetTransform()->position = glm::vec3(0.0f, -9.5f, 11.0f + i * -20.0f);
-		object->GetTransform()->scale = glm::vec3(25.0f, 1.75f * (i + 1.0f), 1.0f);
-	}
-
+	/*
 	object = core->AddObject("Dalek");
 	object->AddComponent<Transform>();
 	object->AddComponent<Renderer>();
@@ -149,32 +121,23 @@ int main(){
 	object->AddComponent<BoxCollider>();
 	object->GetTransform()->position = glm::vec3(-10.0f, 2.0f, 0.0f);
 	object->GetTransform()->scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	*/
 
 	object = core->AddObject("Scarecrow");
 	object->AddComponent<Transform>();
 	object->AddComponent<Renderer>();
-	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/scarecrow.obj"));
+	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/scarecrow2.obj"));
 	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/ScarecrowTex.png"));
 	object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
 	object->GetComponent<Renderer>()->material->specular = glm::vec3(2.0f);
 	object->AddComponent<BoxCollider>();
-	object->GetComponent<BoxCollider>()->offset = glm::vec3(0.0f, -3.5f, 0.0f);
+	object->GetComponent<BoxCollider>()->offset = glm::vec3(0.0f, 1.5f, 0.0f);
+	object->GetComponent<BoxCollider>()->dimensions = glm::vec3(5.0f, 5.5f, 5.0f);
 	object->AddComponent<Rigidbody>();
 	object->GetComponent<Rigidbody>()->friction = 0.02f;
-	object->GetTransform()->position = glm::vec3(2.0f, -6.0f, 0.0f);
+	object->GetTransform()->position = glm::vec3(2.0f, 4.0f, 0.0f);
 	object->GetTransform()->scale = glm::vec3(0.4f, 0.4f, 0.4f);
 
-
-	object = core->AddObject();
-	object->AddComponent<Transform>();
-	object->AddComponent<Renderer>();
-	object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
-	object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/bricks.png"));
-	object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
-	object->AddComponent<BoxCollider>();
-	//object->AddComponent<MeshCollider>();
-	object->GetTransform()->position = glm::vec3(1.0f, -8.0f, 6.0f);
-	object->GetTransform()->scale = glm::vec3(1.0f, 20.0f, 1.0f);
 
 	object = core->AddObject();
 	object->AddComponent<Transform>();
@@ -192,27 +155,32 @@ int main(){
 
 	object = core->AddObject();
 	object->AddComponent<Transform>();
-	//object->AddComponent<Renderer>();
-	//object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
-	//object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/dice.png"));
 	object->AddComponent<SoundSource>();
-	object->GetComponent<SoundSource>()->SetSound(core->resources->load<Sound>("../src/game/models/dixie_horn.ogg"));
+	object->GetComponent<SoundSource>()->SetSound(core->resources->load<Sound>("../src/game/sounds/birds.ogg"));
+	object->GetComponent<SoundSource>()->loop = true;
+	object->GetComponent<SoundSource>()->volume = 0.3f;
+	object->GetComponent<SoundSource>()->Play();
 	object->AddComponent<PointLight>();
 	object->GetComponent<PointLight>()->SetAll(glm::vec3(3.0f));
 	object->GetComponent<PointLight>()->emissive = glm::vec3(0.0f);
-	object->GetTransform()->position = glm::vec3(0.0f, -3.0f, 0.0f);
+	//object->AddComponent<Renderer>();
+	//object->GetComponent<Renderer>()->SetMesh(core->resources->load<Mesh>("../src/game/models/cube.obj"));
+	//object->GetComponent<Renderer>()->SetTexture(core->resources->load<Texture>("../src/game/textures/bricks.png"));
+	//object->GetComponent<Renderer>()->SetShader(core->resources->load<ShaderProgram>("../shaders/default"));
+	object->GetTransform()->position = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	bool quit = false;
-	float rot = 0;
+	float rot = 0, rotX = 0, rotY = 0;
 	core->Start();
 	while (!quit) {
 		if (kb->GetKey(SDL_SCANCODE_ESCAPE)) quit = true;
 		if (kb->GetKeyDown(SDL_SCANCODE_P)) object->GetComponent<SoundSource>()->Play(); //debug sound
-		if (kb->GetKey(SDL_SCANCODE_J)) object->GetTransform()->position.y += 0.1f;
-		if (kb->GetKey(SDL_SCANCODE_K)) object->GetTransform()->position.y -= 0.1f;
-		middle->GetTransform()->rotation.y = (rot += 0.01f);
-		tr->SetText("FPS: " + std::to_string(core->fps));
-		tr2->SetText(std::to_string(player->GetComponent<Rigidbody>()->velocity.y));
+		rot+=0.001f;
+		rotX = glm::cos((rot)) * 15.0f;
+		rotY = glm::sin((rot)) * 15.0f;
+		object->GetTransform()->position = glm::vec3(rotX, 15.0f, rotY);
+		tr->SetText("FPS: " + std::to_string((int)core->fps));
+		tr2->SetText(std::to_string(player->GetTransform()->position.y));
 		core->Display(); //display objects to screen
 	}
 

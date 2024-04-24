@@ -10,7 +10,7 @@ struct Sprite;
  */
 struct TextRenderer : public Component {
 	TextRenderer(); ///< constructor
-	void OnUpdate();
+	void OnUpdate(float _deltaT);
 	int sprite_h; ///< height of each sprite in the sprite sheet
 	int sprite_w; ///< width of each sprite in the sprite sheet
 	void SetMesh(std::shared_ptr<Mesh> _mesh); ///< set the mesh (should just be a quad)

@@ -25,7 +25,7 @@ DepthCubemap::DepthCubemap(){
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 
-	GLenum res = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	const GLenum res = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if (res != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "Framebuffer not complete! Value = " << res <<std::endl;
 

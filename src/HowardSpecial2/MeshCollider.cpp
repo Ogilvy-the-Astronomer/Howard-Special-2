@@ -68,9 +68,9 @@ bool MeshCollider::TriTriIntersect(std::shared_ptr<GameObject> _other) { //mesh 
 bool MeshCollider::TriBoxIntersect(std::shared_ptr<GameObject> _other){ //checks if the mesh collides with other object
 	std::shared_ptr<BoxCollider> bc = _other->GetComponent<BoxCollider>(); 
 	if (bc) { //check if the other object has a box collider component just to be safe
-		int vertexCount = shape->GetDataSize() / shape->GetComponents(); //get the amount of vertices in this object
-		glm::mat4 model = GetGameObject()->GetTransform()->GetModel(); //get the model matrix
-		glm::vec3 t = _other->GetTransform()->position; //get the other object position
+		const int vertexCount = shape->GetDataSize() / shape->GetComponents(); //get the amount of vertices in this object
+		const glm::mat4 model = GetGameObject()->GetTransform()->GetModel(); //get the model matrix
+		const glm::vec3 t = _other->GetTransform()->position; //get the other object position
 		glm::vec4 tri1Vert1;
 		glm::vec4 tri1Vert2;
 		glm::vec4 tri1Vert3;
@@ -93,11 +93,11 @@ bool MeshCollider::TriBoxIntersect(std::shared_ptr<GameObject> _other){ //checks
 }
 
 bool MeshCollider::isColliding(std::shared_ptr<GameObject> _other, glm::vec3 _position){ //same as above but using given position
-	std::shared_ptr<BoxCollider> bc = _other->GetComponent<BoxCollider>();
+	const std::shared_ptr<BoxCollider> bc = _other->GetComponent<BoxCollider>();
 	if (bc) {
-		int vertexCount = shape->GetDataSize() / shape->GetComponents();
-		glm::mat4 model = GetGameObject()->GetTransform()->GetModel();
-		glm::vec3 t = _other->GetTransform()->position + _position;
+		const int vertexCount = shape->GetDataSize() / shape->GetComponents();
+		const glm::mat4 model = GetGameObject()->GetTransform()->GetModel();
+		const glm::vec3 t = _other->GetTransform()->position + _position;
 		glm::vec3 s = _other->GetTransform()->scale;// *2.0f;
 		glm::vec4 tri1Vert1;
 		glm::vec4 tri1Vert2;
@@ -119,7 +119,7 @@ bool MeshCollider::isColliding(std::shared_ptr<GameObject> _other, glm::vec3 _po
 	}
 	return false;
 }
-//TODO: add vector varient of this function
+//TODO: add vector variant of this function
 std::shared_ptr<GameObject> MeshCollider::isColliding(){ //check collisions vs every object in the scene and return the first collision
 	std::vector<std::shared_ptr<BoxCollider>> others = GetCore()->boxColliders;
 	std::shared_ptr<GameObject> rtn;

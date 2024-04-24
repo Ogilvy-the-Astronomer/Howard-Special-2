@@ -15,7 +15,7 @@ struct Renderer : public Component{
 	Renderer();
 	Renderer(std::string _shape, std::string _texture); ///< consturct the renderer with textur and mesh provided at paths
 	void OnDisplay();
-	void OnUpdate(); ///< update the component and draw it to the screen
+	void OnUpdate(float _deltaT); ///< update the component and draw it to the screen
 	//std::shared_ptr<ShaderProgram> shader = std::make_shared<ShaderProgram>("../shaders/default.vert", "../shaders/default.frag"); ///< shader used to draw the object
 	void SetMesh(std::shared_ptr<Mesh> _mesh); ///< set the object mesh
 	void SetTexture(std::shared_ptr<Texture> _texture); ///< set the object texture
